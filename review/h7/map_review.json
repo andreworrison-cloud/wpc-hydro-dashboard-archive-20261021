@@ -1,0 +1,102 @@
+{
+  "valid_end": "2026-10-18T00:00:00Z",
+  "audit_snapshot": "2026-10-18T14:02:01.951477+00:00",
+  "output_pixels": [
+    4000,
+    2538
+  ],
+  "projection": "EPSG:3857",
+  "resampling": "bilinear values; nearest mask",
+  "legend_edges_pp": [
+    -100,
+    -20,
+    -10,
+    -5,
+    -2,
+    -1,
+    1,
+    2,
+    5,
+    10,
+    20,
+    100
+  ],
+  "legend_colors": [
+    "#6f3b16",
+    "#98541f",
+    "#bd793e",
+    "#d8aa72",
+    "#ecd3ae",
+    "#f6f5ee",
+    "#cce9ee",
+    "#94cddc",
+    "#55a8c6",
+    "#267ba8",
+    "#125479"
+  ],
+  "near_zero_bin": "-1 to +1 pp",
+  "missing": "gray",
+  "sources": {
+    "rsm_0-10cm/20261018": {
+      "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-10cm/20261018_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
+      "sha256": "a599bb98bcbbc4b53f6b4bcbbc2829cc7d4faf3cc641c35982ccfee46cb40d59"
+    },
+    "rsm_0-10cm/20261017": {
+      "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-10cm/20261017_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
+      "sha256": "30379127008d2d59c3d055262717caaea1af249a8102f64c00a975fa06a312d1"
+    },
+    "rsm_0-2m_diff7day/20261018": {
+      "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-2m_diff7day/20261018_0000_sport_lis_rsm0-2m_diff7day_conus3km_float_wgs84.tif",
+      "sha256": "045213934c057e43ce885776676d12d076f954480f993123130cae864331cf8f"
+    },
+    "rsm_0-2m_diff14day/20261018": {
+      "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-2m_diff14day/20261018_0000_sport_lis_rsm0-2m_diff14day_conus3km_float_wgs84.tif",
+      "sha256": "ede23e8b7fb55a399a488430a62b751cbe6dc82d10d8d9ba2dfb4a13b6d35a00"
+    }
+  },
+  "boundary_sha256": "6f23ed91fce2c25d57c01d83225342ba40258e9571c486c3999bd827c80d193b",
+  "products": {
+    "shallow_24h": {
+      "start": "17 Oct 2026 00Z",
+      "end": "18 Oct 2026 00Z",
+      "provenance": "Derived: exact-date NASA SPoRT RSM endpoint subtraction",
+      "min_pp": -36.72200012207031,
+      "max_pp": 52.38199806213379,
+      "valid_cells": 1290511
+    },
+    "deep_7day": {
+      "start": "11 Oct 2026 00Z",
+      "end": "18 Oct 2026 00Z",
+      "provenance": "NASA SPoRT native 7-day change product",
+      "min_pp": -16.020000457763672,
+      "max_pp": 29.854999542236328,
+      "valid_cells": 1290511
+    },
+    "deep_14day": {
+      "start": "04 Oct 2026 00Z",
+      "end": "18 Oct 2026 00Z",
+      "provenance": "NASA SPoRT native 14-day change product \u00b7 Secondary context",
+      "min_pp": -16.389999389648438,
+      "max_pp": 32.32875061035156,
+      "valid_cells": 1290511
+    }
+  },
+  "shallow_extremes": [
+    {
+      "kind": "Strongest drying",
+      "latitude": 25.855000000000015,
+      "longitude": -81.06500000000003,
+      "start_rsm_percent": 98.56400299072266,
+      "end_rsm_percent": 61.842002868652344,
+      "change_pp": -36.72200012207031
+    },
+    {
+      "kind": "Strongest wetting",
+      "latitude": 25.345000000000013,
+      "longitude": -80.25500000000002,
+      "start_rsm_percent": 29.312002182006836,
+      "end_rsm_percent": 81.69400024414062,
+      "change_pp": 52.38199806213379
+    }
+  ]
+}
