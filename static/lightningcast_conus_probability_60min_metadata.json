@@ -5,29 +5,29 @@
   "display_label": "CIMSS/SSEC LightningCast \u2014 Probability of Lightning in Next 60 Minutes",
   "source_product": "LightningCast CONUS probability contour vectors (RealEarth v2 ABI+MRMS preferred; v1 fallback)",
   "source_attribution": "LightningCast data courtesy CIMSS/SSEC",
-  "scan_time_utc": "2026-10-18T16:51:18Z",
+  "scan_time_utc": "2026-10-18T17:01:18Z",
   "source_scan_times_utc": {
-    "GOES-East": "2026-10-18T16:51:17Z",
-    "GOES-West": "2026-10-18T16:51:18Z"
+    "GOES-East": "2026-10-18T17:01:17Z",
+    "GOES-West": "2026-10-18T17:01:18Z"
   },
   "source_time_offset_minutes": 0.02,
-  "forecast_window_start_utc": "2026-10-18T16:51:18Z",
-  "forecast_window_end_utc": "2026-10-18T17:51:17Z",
-  "fetched_at_utc": "2026-10-18T16:58:04Z",
-  "frame_age_minutes_at_fetch": 6.8,
+  "forecast_window_start_utc": "2026-10-18T17:01:18Z",
+  "forecast_window_end_utc": "2026-10-18T18:01:17Z",
+  "fetched_at_utc": "2026-10-18T17:08:10Z",
+  "frame_age_minutes_at_fetch": 6.89,
   "frame_selection": {
     "policy": "newest clean near-time East/West frame pair within freshness and offset windows",
     "selected_frame_clean": true,
-    "selected_frame_age_minutes": 6.8,
-    "selected_east_frame_utc": "2026-10-18T16:51:17Z",
-    "selected_west_frame_utc": "2026-10-18T16:51:18Z",
-    "selected_east_age_minutes": 6.8,
-    "selected_west_age_minutes": 6.78,
+    "selected_frame_age_minutes": 6.89,
+    "selected_east_frame_utc": "2026-10-18T17:01:17Z",
+    "selected_west_frame_utc": "2026-10-18T17:01:18Z",
+    "selected_east_age_minutes": 6.89,
+    "selected_west_age_minutes": 6.87,
     "selected_frame_offset_minutes": 0.02,
     "maximum_frame_offset_minutes": 5.0,
     "newest_exact_common_frame_utc": null,
-    "newest_east_frame_utc": "2026-10-18T16:51:17Z",
-    "newest_west_frame_utc": "2026-10-18T16:51:18Z",
+    "newest_east_frame_utc": "2026-10-18T17:01:17Z",
+    "newest_west_frame_utc": "2026-10-18T17:01:18Z",
     "skipped_dirty_frames": {
       "GOES-East": [],
       "GOES-West": []
@@ -46,8 +46,8 @@
   ],
   "standard_threshold_note": "10%, 30%, 50%, 70%, and 90% are standard LightningCast probability categories; a frame may validly contain zero contours at any category.",
   "source_urls": {
-    "GOES-East": "https://realearth.ssec.wisc.edu/api/shapes?products=PLTG-abi-mrms-GOESEastRadC_20261018_165117",
-    "GOES-West": "https://realearth.ssec.wisc.edu/api/shapes?products=PLTG-abi-mrms-GOESWestRadC_20261018_165118"
+    "GOES-East": "https://realearth.ssec.wisc.edu/api/shapes?products=PLTG-abi-mrms-GOESEastRadC_20261018_170117",
+    "GOES-West": "https://realearth.ssec.wisc.edu/api/shapes?products=PLTG-abi-mrms-GOESWestRadC_20261018_170118"
   },
   "source_permission": "CIMSS/SSEC permission obtained by the WPC dashboard project owner for direct server pulls and dashboard display.",
   "satellite_ownership": {
@@ -160,11 +160,11 @@
       "refresh_seconds": null,
       "frame_count": 1,
       "selected_frame_contours": {
-        "10": 68,
-        "30": 49,
-        "50": 38,
+        "10": 87,
+        "30": 48,
+        "50": 29,
         "70": 21,
-        "90": 14
+        "90": 17
       },
       "threshold_colors_observed": {
         "10": [],
@@ -182,29 +182,29 @@
       "fetch": {
         "source_transport": "realearth_geojson",
         "product_id": "PLTG-abi-mrms-GOESEastRadC",
-        "latest_time_utc": "2026-10-18T16:51:17Z",
+        "latest_time_utc": "2026-10-18T17:01:17Z",
         "latest_endpoint": "https://realearth.ssec.wisc.edu/api/latest?products=PLTG-abi-mrms-GOESEastRadC",
-        "shapes_endpoint": "https://realearth.ssec.wisc.edu/api/shapes?products=PLTG-abi-mrms-GOESEastRadC_20261018_165117",
+        "shapes_endpoint": "https://realearth.ssec.wisc.edu/api/shapes?products=PLTG-abi-mrms-GOESEastRadC_20261018_170117",
         "latest_fetch": {
           "http_status": 200,
           "bytes_downloaded": 48,
-          "download_seconds": 0.281,
+          "download_seconds": 0.304,
           "download_attempt": 1,
           "last_modified": null,
           "etag": null,
-          "sha256": "3aacd014050218e413f7f32df4bf9d20e6188c986892ab9afaaaab235d42eb98"
+          "sha256": "7dd3572d12ef75c7bbb8d0f5e1d44ce8871b146b6908c22048c786eef5c0dd2f"
         },
         "shapes_fetch": {
           "http_status": 200,
-          "bytes_downloaded": 168713,
-          "download_seconds": 0.27,
+          "bytes_downloaded": 174950,
+          "download_seconds": 0.333,
           "download_attempt": 1,
           "last_modified": null,
           "etag": null,
-          "sha256": "1b81494f2de860cfcf811d64a8ce1a3452da278fe880fc70ab74ac247d56fc2d"
+          "sha256": "d9d9456319d9445eaa7a8fa7d3222aec9a73c2b96bacdee000780b57568799ed"
         },
         "candidate_role": "primary",
-        "candidate_age_minutes": 6.8,
+        "candidate_age_minutes": 6.89,
         "candidate_products_considered": [
           "PLTG-abi-mrms-GOESEastRadC",
           "PLTGGOESEastRadC"
@@ -217,7 +217,7 @@
       "refresh_seconds": null,
       "frame_count": 1,
       "selected_frame_contours": {
-        "10": 2,
+        "10": 1,
         "30": 0,
         "50": 0,
         "70": 0,
@@ -239,29 +239,29 @@
       "fetch": {
         "source_transport": "realearth_geojson",
         "product_id": "PLTG-abi-mrms-GOESWestRadC",
-        "latest_time_utc": "2026-10-18T16:51:18Z",
+        "latest_time_utc": "2026-10-18T17:01:18Z",
         "latest_endpoint": "https://realearth.ssec.wisc.edu/api/latest?products=PLTG-abi-mrms-GOESWestRadC",
-        "shapes_endpoint": "https://realearth.ssec.wisc.edu/api/shapes?products=PLTG-abi-mrms-GOESWestRadC_20261018_165118",
+        "shapes_endpoint": "https://realearth.ssec.wisc.edu/api/shapes?products=PLTG-abi-mrms-GOESWestRadC_20261018_170118",
         "latest_fetch": {
           "http_status": 200,
           "bytes_downloaded": 48,
-          "download_seconds": 0.43,
+          "download_seconds": 0.227,
           "download_attempt": 1,
           "last_modified": null,
           "etag": null,
-          "sha256": "59b23a84de0beeb00de46b7390522dc30cb03359dd0b57e0433986a0a9dcbef4"
+          "sha256": "b98747051fe8b8a952e4c47293bd4bc3afc1f944f8d0be279dfe7e2d2d121c6b"
         },
         "shapes_fetch": {
           "http_status": 200,
-          "bytes_downloaded": 993,
-          "download_seconds": 0.241,
+          "bytes_downloaded": 589,
+          "download_seconds": 0.19,
           "download_attempt": 1,
           "last_modified": null,
           "etag": null,
-          "sha256": "8285c2387945435a790360f632e9428bcc9d3bbea54360e9726a76a454f5f28c"
+          "sha256": "9439a3d3c5d94db6b337b22dec71c505de4983c97155071ba34c90c4cb48b0ce"
         },
         "candidate_role": "primary",
-        "candidate_age_minutes": 6.78,
+        "candidate_age_minutes": 6.87,
         "candidate_products_considered": [
           "PLTG-abi-mrms-GOESWestRadC",
           "PLTGGOESWestRadC"
@@ -276,14 +276,14 @@
     "has_visible_pixels": true,
     "source_contours_by_satellite_and_threshold": {
       "East": {
-        "10": 68,
-        "30": 49,
-        "50": 38,
+        "10": 87,
+        "30": 48,
+        "50": 29,
         "70": 21,
-        "90": 14
+        "90": 17
       },
       "West": {
-        "10": 2,
+        "10": 1,
         "30": 0,
         "50": 0,
         "70": 0,
@@ -292,14 +292,14 @@
     },
     "selected_contours_by_satellite_and_threshold": {
       "East": {
-        "10": 65,
-        "30": 48,
-        "50": 35,
+        "10": 83,
+        "30": 44,
+        "50": 27,
         "70": 21,
-        "90": 14
+        "90": 17
       },
       "West": {
-        "10": 2,
+        "10": 1,
         "30": 0,
         "50": 0,
         "70": 0,
@@ -307,38 +307,38 @@
       }
     },
     "rendered_contour_lines_by_threshold": {
-      "10": 41,
-      "30": 34,
-      "50": 30,
-      "70": 17,
-      "90": 11
+      "10": 49,
+      "30": 35,
+      "50": 23,
+      "70": 18,
+      "90": 12
     },
     "source_color_mismatches": [],
     "ownership_longitude": -106.1,
     "storm_object_summary": {
       "West": {
-        "source_object_count": 2,
-        "retained_object_count": 2,
+        "source_object_count": 1,
+        "retained_object_count": 1,
         "rejected_object_count": 0,
         "retained_threshold_families": {
-          "10": 2
+          "10": 1
         },
-        "retained_closed_contours": 0,
-        "retained_total_contours": 2
+        "retained_closed_contours": 1,
+        "retained_total_contours": 1
       },
       "East": {
-        "source_object_count": 52,
-        "retained_object_count": 51,
-        "rejected_object_count": 1,
+        "source_object_count": 63,
+        "retained_object_count": 61,
+        "rejected_object_count": 2,
         "retained_threshold_families": {
-          "10,30": 13,
-          "10": 25,
-          "10,30,50,70": 5,
+          "10": 36,
           "10,30,50": 5,
-          "10,30,50,70,90": 3
+          "10,30,50,70,90": 8,
+          "10,30,50,70": 5,
+          "10,30": 7
         },
-        "retained_closed_contours": 182,
-        "retained_total_contours": 183
+        "retained_closed_contours": 192,
+        "retained_total_contours": 192
       },
       "cross_satellite_family_swaps": [],
       "cross_satellite_family_splitting": false,
@@ -346,5 +346,5 @@
     }
   },
   "leaflet_png": "lightningcast_conus_probability_60min.png",
-  "generated_time_utc": "2026-10-18T16:58:06Z"
+  "generated_time_utc": "2026-10-18T17:08:11Z"
 }
