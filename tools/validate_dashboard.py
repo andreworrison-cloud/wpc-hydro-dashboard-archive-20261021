@@ -36,7 +36,7 @@ errors = []
 
 # Current registry total includes all existing dashboard data/config entries,
 # basemaps, and the two validated NASA NLDAS-3 static land-surface layers.
-EXPECTED_LAYER_COUNT = 153
+EXPECTED_LAYER_COUNT = 151
 LIGHTNINGCAST_LAYER_ID = "lightningcast-probability-60min"
 
 # Preserve the exact operational menu order. Dashboard Utilities is rendered
@@ -88,8 +88,6 @@ required_labels = [
     "GOES GLM Controlled Mosaic — Convective Trend (15 min)",
     "CIMSS/SSEC LightningCast — Probability of Lightning in Next 60 Minutes",
     "NWM Soil Saturation (0-40cm)",
-    "NLDAS-2 Noah Relative Soil Moisture (0-10 cm)",
-    "NLDAS-2 Noah Relative Soil Moisture (0-100 cm)",
     "NASA SPoRT-LIS Relative Soil Moisture (0–10 cm)",
 "NASA SPoRT-LIS Relative Soil Moisture (0–200 cm)",
 "NASA SPoRT-LIS VSM Percentile (0–10 cm)",
@@ -195,8 +193,6 @@ if antecedent_start >= 0 and rap_start > antecedent_start:
     antecedent_block = app[antecedent_start:rap_start]
     antecedent_labels = [
         "NWM Soil Saturation (0-40cm)",
-        "NLDAS-2 Noah Relative Soil Moisture (0-10 cm)",
-        "NLDAS-2 Noah Relative Soil Moisture (0-100 cm)",
         "NASA SPoRT-LIS Relative Soil Moisture (0–10 cm)",
 "NASA SPoRT-LIS Relative Soil Moisture (0–200 cm)",
 "NASA SPoRT-LIS VSM Percentile (0–10 cm)",
@@ -952,20 +948,10 @@ for fragment in required_mrms_flash_fragments:
             f"Missing MRMS FLASH 24-hour integration fragment: {fragment}"
         )
 
-# Confirm the new NLDAS files, metadata, legends, and time boxes are wired in.
-required_nldas_fragments = [
-    "static/nldas_rsm_0_10cm.png",
-    "static/nldas_rsm_0_100cm.png",
-    "static/nldas_rsm_metadata.json",
-    "fetchNLDASRSMMetadata",
-    "nldas-rsm-010-time-box",
-    "nldas-rsm-0100-time-box",
-    "nldasRsm010LegendHTML",
-    "nldasRsm0100LegendHTML",
-]
-for fragment in required_nldas_fragments:
-    if fragment not in app:
-        errors.append(f"Missing NLDAS RSM integration fragment: {fragment}")
+# Retired NLDAS-2 overlays must not reappear or keep polling stale products.
+for fragment in ("nldas-rsm-010", "nldasRsm", "fetchNLDASRSMMetadata", "static/nldas_rsm_"):
+    if fragment in app:
+        errors.append(f"Retired NLDAS-2 dashboard integration remains: {fragment}")
 
 if "NASA SPoRT-LIS Volumetric Soil Moisture Percentile (0–100 cm)" not in app:
     errors.append("Updated SPoRT-LIS legend heading is missing.")
@@ -1539,10 +1525,6 @@ if "rapTimeControl" in app or "const legendControl" in app:
     errors.append("Legacy separate legend/time controls are still active.")
 if ".legend-dock" not in css or ".legend-dock.is-collapsed" not in css:
     errors.append("Responsive legend-dock styles are missing.")
-if "nldas-rsm-v1" not in index:
-    errors.append(
-        "Frontend cache-busting token for NLDAS RSM integration is missing."
-    )
 if "glm-v1" not in index and "glm-v2" not in index:
     errors.append(
         "Frontend cache-busting token for GOES GLM integration is missing."

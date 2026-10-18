@@ -1,10 +1,7 @@
 name: Fetch NLDAS-2 Noah Relative Soil Moisture
 
 on:
-  schedule:
-    # NLDAS-2 is posted as delayed daily blocks. Four checks per day
-    # catch a newly posted block without creating hourly duplicate commits.
-    - cron: '45 2,8,14,20 * * *'
+  # Retired from the dashboard; retain manual execution for reproducibility.
   workflow_dispatch:
 
 permissions:
