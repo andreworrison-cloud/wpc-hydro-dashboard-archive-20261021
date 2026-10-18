@@ -64,16 +64,21 @@ if(typeof window!=='undefined')window.createQPEFFGLayers = function ({map, metad
             const next=await response.json();validate(next);
             if (next.active && qpeFFGDisplayState(next,now()).visible && next.active.generation!==loadedGeneration) {
                 // Wait for every download, hash, and decode before changing anything on the map.
-                const results=await Promise.allSettled(hours.map(async h => {
+                const results=[];
+                for (const h of hours) { try {
+                    const value=await (async()=>{
                     const asset=next.active.assets[h], assetURL=new URL(asset.path,new URL('.',url));
                     const r=await fetch(assetURL,{signal:controller.signal});if(!r.ok)throw Error('FFG image unavailable');
                     const data=await r.arrayBuffer(), hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',data)),v=>v.toString(16).padStart(2,'0')).join('');
                     if(hash!==asset.sha256)throw Error('FFG image checksum mismatch');
-                    const blobURL=URL.createObjectURL(new Blob([data],{type:'image/png'}));staged.push(blobURL);
-                    const decoded=new Image();decoded.src=blobURL;await decoded.decode();
-                    if(decoded.naturalWidth!==4000||decoded.naturalHeight!==2538)throw Error('Invalid FFG image dimensions');
+                    const blob=new Blob([data],{type:'image/png'});
+                    const decoded=await createImageBitmap(blob);
+                    const correct=decoded.width===4000 && decoded.height===2538;decoded.close();
+                    if(!correct)throw Error('Invalid QPE FFG image dimensions');
+                    const blobURL=URL.createObjectURL(blob);staged.push(blobURL);
                     return [h,L.imageOverlay(blobURL,[[24,-126],[50,-66]],{pane,opacity:layers[h].options.opacity,interactive:false,className:'qpe-ffg-raster'})];
-                }));
+                    })();results.push({status:'fulfilled',value});
+                } catch(reason) {results.push({status:'rejected',reason});break;} }
                 const error=results.find(r=>r.status==='rejected');if(error)throw error.reason;
                 hours.forEach(h=>layers[h].clearLayers());
                 results.forEach(r=>{images[r.value[0]]=r.value[1];});
@@ -82,7 +87,7 @@ if(typeof window!=='undefined')window.createQPEFFGLayers = function ({map, metad
             }
             // An unavailable upstream pointer must not discard a still-valid local generation.
             if (!next.active && metadata?.active) {failed=true;} else {metadata=next;failed=false;}
-        } catch(error) {failed=true;console.warn('RFC FFG refresh retained prior validated product:',error.message);}
+        } catch(error) {failed=true;console.warn('QPE FFG refresh retained prior validated product:',error.message);}
         finally {staged.forEach(u=>URL.revokeObjectURL(u));clearTimeout(timeout);busy=false;sync();}
     }
     function legendHTML() {
