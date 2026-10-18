@@ -4,32 +4,32 @@
   "collection": "history-year",
   "year": 2023,
   "label": "NIFC/WFIGS 2023 Historical Wildfire Perimeters",
-  "generated_utc": "2026-10-11T06:02:53Z",
+  "generated_utc": "2026-10-18T06:02:24Z",
   "source_layer_url": "https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Interagency_Perimeters/FeatureServer/0",
   "source_item_id": "5e72b1699bf74eefb3f3aff6f4ba5511",
   "source_service_label": "WFIGS Interagency Fire Perimeters",
-  "source_last_edit_epoch_ms": 1791697350904,
-  "source_last_edit_utc": "2026-10-11T05:42:30Z",
+  "source_last_edit_epoch_ms": 1792302787134,
+  "source_last_edit_utc": "2026-10-18T05:53:07Z",
   "year_definition": "attr_FireDiscoveryDateTime calendar year in UTC",
   "fixed_where_clause": "attr_IncidentTypeCategory = 'WF' AND attr_FireDiscoveryDateTime >= TIMESTAMP '2023-01-01 00:00:00' AND attr_FireDiscoveryDateTime < TIMESTAMP '2024-01-01 00:00:00'",
   "relative_date_query_used": false,
-  "source_object_id_count": 4819,
-  "source_object_id_sha256": "4750872af4b78fee1c16c15c2b631e0fc36ae7a8d54b7e1e708bf8261f6c7c70",
-  "source_year_signature": "2286e98ebd3dd51bde2111264b3d35e36685a0716a05bd99201df494ce1c085a",
+  "source_object_id_count": 4820,
+  "source_object_id_sha256": "65f5f184b1a753595d87ce9d6c0efb1068d199d5ca5351664fe0b9f4bd0a021d",
+  "source_year_signature": "5b5e32a588ee9f8e3c355f2a2064712b01632268595bca1384fd37b37c5ca84a",
   "source_year_statistics": {
     "statistics_available": true,
-    "max_poly_date_current_epoch_ms": 1759871492292,
-    "max_poly_date_current_utc": "2025-10-07T21:11:32Z",
+    "max_poly_date_current_epoch_ms": 1792091821572,
+    "max_poly_date_current_utc": "2026-10-15T19:17:01Z",
     "max_attr_modified_epoch_ms": 1791557288730,
     "max_attr_modified_utc": "2026-10-09T14:48:08Z"
   },
-  "source_wildfire_record_count": 4819,
+  "source_wildfire_record_count": 4820,
   "published_fire_count": 4812,
   "deduplication": {
-    "source_record_count": 4819,
+    "source_record_count": 4820,
     "unique_identity_count": 4817,
-    "duplicate_identity_groups_removed": 2,
-    "duplicate_records_removed": 2,
+    "duplicate_identity_groups_removed": 3,
+    "duplicate_records_removed": 3,
     "largest_duplicate_group": 2
   },
   "geometry_qa": {
@@ -77,7 +77,7 @@
     "missing_auto_acres": 26,
     "missing_reported_acres": 158,
     "gis_vs_auto_compared": 4526,
-    "gis_vs_auto_factor2_outliers": 1043,
+    "gis_vs_auto_factor2_outliers": 1044,
     "primary_dashboard_mapped_acres_field": "poly_GISAcres",
     "fallback_mapped_acres_field": "poly_Acres_AutoCalc"
   },
@@ -115,9 +115,9 @@
     "year": 2023,
     "annual_count": 4628,
     "bytes": 10392,
-    "sha256": "03675322a6d033aab4ac8d6dbea608fb32bd5d2793c920284b0924f0387c6b3c"
+    "sha256": "8270c5e492e2a5506194a512c7b89ae4fe88a6c3390273fa69d94ca8e6201d64"
   },
-  "chunk_count": 139,
+  "chunk_count": 140,
   "chunks": [
     {
       "id": "AK_N55_W135",
@@ -1797,17 +1797,30 @@
       "sha256": "08dba926984a16bf24218ad4441bb0b225bcd3cb81f3f3574c224cced6ef20b2"
     },
     {
+      "id": "WA_N45_W095",
+      "href": "chunks/WA_N45_W095.geojson",
+      "feature_count": 1,
+      "bbox": [
+        -93.23579,
+        45.36363,
+        -93.23539,
+        45.36371
+      ],
+      "bytes": 1108,
+      "sha256": "9bf0655d3a8e46727d09b46d0ad30a918da062a9c8376d09d5e887ed5af14d3e"
+    },
+    {
       "id": "WA_N45_W120",
       "href": "chunks/WA_N45_W120.geojson",
-      "feature_count": 124,
+      "feature_count": 123,
       "bbox": [
         -120.04527,
         45.93967,
         -116.95378,
         49.00014
       ],
-      "bytes": 324952,
-      "sha256": "85160866b9e8353138929bc3b04fea2b36e72c6fdc9c8e857285b2766b51a6f1"
+      "bytes": 322589,
+      "sha256": "913356fa1b257bc70b728d82182b6456848fe9916032e932fd8c139622ae5d51"
     },
     {
       "id": "WA_N45_W125",
@@ -1927,7 +1940,7 @@
       "sha256": "0bb67442b031d143290101700d0c7a5eee08252bd98042bfc75c540b1afe4644"
     }
   ],
-  "total_chunk_bytes": 11552703,
+  "total_chunk_bytes": 11551448,
   "science_note": "WFIGS polygons represent mapped wildfire extent, not soil burn severity.",
   "completeness_note": "This rolling operational history intentionally uses modern WFIGS years only. NIFC documents full-history records before 2021 as incomplete."
 }
