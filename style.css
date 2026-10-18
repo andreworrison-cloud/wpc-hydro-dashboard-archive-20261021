@@ -668,3 +668,28 @@ body.sidebar-open .map-title {
 .rfc-ffg-status.retained {border-color:#ffca66;color:#ffdc94;}
 .rfc-ffg-status.expired,.rfc-ffg-status.unavailable {border-color:#ff939c;color:#ffb5bc;}
 .rfc-ffg-swatch {display:inline-block;width:22px;height:12px;margin-right:8px;border:1px solid #a9b8c2;}
+
+/* Compact, keyboard-accessible antecedent product families. */
+[data-section-id="antecedent"] .dashboard-layer-group {
+    margin: 4px 0;
+    border: 1px solid var(--sidebar-border);
+    border-radius: 6px;
+}
+[data-section-id="antecedent"] .dashboard-layer-group > summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+    list-style: none;
+    font-size: 12px;
+    font-weight: 600;
+}
+[data-section-id="antecedent"] .dashboard-layer-group > summary::-webkit-details-marker { display: none; }
+[data-section-id="antecedent"] .dashboard-layer-group > summary::before { content: "▸"; color: var(--sidebar-accent); }
+[data-section-id="antecedent"] .dashboard-layer-group[open] > summary::before { content: "▾"; }
+[data-section-id="antecedent"] .dashboard-layer-group > summary > span:first-child { flex: 1; }
+[data-section-id="antecedent"] .dashboard-layer-group > summary:focus-visible { outline: 2px solid var(--sidebar-accent); outline-offset: -2px; }
+[data-section-id="antecedent"] .dashboard-layer-group-body { padding: 0 3px 4px 9px; }

@@ -192,13 +192,13 @@ rap_start = app.find("title: 'RAP Mesoanalysis Data'")
 if antecedent_start >= 0 and rap_start > antecedent_start:
     antecedent_block = app[antecedent_start:rap_start]
     antecedent_labels = [
-        "NWM Soil Saturation (0-40cm)",
         "NASA SPoRT-LIS Relative Soil Moisture (0–10 cm)",
 "NASA SPoRT-LIS Relative Soil Moisture (0–200 cm)",
 "NASA SPoRT-LIS VSM Percentile (0–10 cm)",
 "NASA SPoRT-LIS VSM Percentile (0–40 cm)",
 "NASA SPoRT-LIS VSM Percentile (0–100 cm)",
 "NASA SPoRT-LIS VSM Percentile (0–200 cm)",
+        "NWM Soil Saturation (0-40cm)",
     ]
     antecedent_positions = [
         antecedent_block.find(label) for label in antecedent_labels
