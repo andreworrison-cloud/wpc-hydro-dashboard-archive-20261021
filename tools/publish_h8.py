@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Restore/publish durable review state using a separate atomic Git branch.
 
-Never writes the code branch or main. No force push; concurrent writers fail.
-Git history is retained. Directory retention does not bound historical storage.
+Never writes the code branch or main. Each data branch is a single snapshot.
+An exact-head force-with-lease prevents concurrent writers from losing updates.
+GitHub controls garbage collection of unreachable historical objects.
 """
 import argparse
 import hashlib
@@ -20,6 +21,7 @@ from datetime import datetime,timezone,timedelta
 
 BRANCH='data/qpe-ffg'
 MARKER='QPE_FFG_DATA_BRANCH.json'
+MAX_SNAPSHOT_BYTES=512*1024*1024
 IDENTITY={'schema_version':1,'purpose':'Window-fixed QPE FFG pairs and display assets'}
 
 def git(repo,*args,env=None):
@@ -110,6 +112,8 @@ def publish(repo,target,state_file):
         if p.is_file():
             if rel.parts[0] not in ('public','science',MARKER):raise ValueError('Unexpected publication file')
             if not any(part.startswith('.') for part in rel.parts):files.append(str(rel))
+    if sum((target/p).stat().st_size for p in files)>MAX_SNAPSHOT_BYTES:
+        raise ValueError('Snapshot exceeds 512 MiB storage budget; prior publication preserved')
     with tempfile.TemporaryDirectory() as tmp:
         env=dict(os.environ,GIT_INDEX_FILE=str(Path(tmp)/'index'),GIT_WORK_TREE=str(target.resolve()),
                  GIT_AUTHOR_NAME='QPE FFG publisher',GIT_AUTHOR_EMAIL='rfc-ffg@users.noreply.github.com',
@@ -118,11 +122,13 @@ def publish(repo,target,state_file):
         git(repo,'add','--force','--',*files,env=env)
         tree=git(repo,'write-tree',env=env)
         parent=expected['head']
-        if parent and tree==git(repo,'rev-parse',f'{parent}^{{tree}}'):return parent
+        if parent and tree==git(repo,'rev-parse',f'{parent}^{{tree}}') and not git(repo,'cat-file','-p',parent).startswith('tree '+tree+'\nparent '):return parent
         args=['commit-tree',tree]
-        if parent:args+=['-p',parent]
+        # Deliberately omit parents: operational rasters are a rolling snapshot,
+        # not a permanent binary archive. Code history remains untouched.
         commit=git(repo,*args,'-m','Publish complete QPE FFG pairs and status',env=env)
-        git(repo,'push','origin',f'{commit}:refs/heads/{BRANCH}')
+        git(repo,'push',f'--force-with-lease=refs/heads/{BRANCH}:{parent or ""}',
+            'origin',f'{commit}:refs/heads/{BRANCH}')
         return commit
 
 def main():
