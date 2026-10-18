@@ -1,0 +1,65 @@
+name: Publish Window-Fixed QPE FFG
+on:
+  workflow_dispatch:
+    inputs:
+      initialize:
+        description: 'First creation of data branch only'
+        type: boolean
+        default: false
+  push:
+    branches: [feature/h8-production]
+    paths:
+      - '.github/workflows/publish_qpe_ffg.yml'
+      - 'tools/*h8*.py'
+      - 'qpe_ffg_layer.js'
+permissions:
+  contents: read
+concurrency:
+  group: qpe-ffg-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    env:
+      DATA_BRANCH: ${{ github.ref == 'refs/heads/main' && 'data/qpe-ffg' || 'data/qpe-ffg-review' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy>=2,<3' 'rasterio>=1.4,<2' 'Pillow>=11,<14'
+      - name: Verify pairing, durability and freshness
+        run: |
+          python tools/test_h8_review.py
+          python -m unittest discover -s tools -p 'test_publish_h8.py' -v
+          node tools/test_h8_display.cjs
+      - name: Restore authoritative state
+        env:
+          INITIALIZE: ${{ inputs.initialize || github.ref == 'refs/heads/feature/h8-production' }}
+        run: |
+          extra=()
+          if [ "$INITIALIZE" = true ]; then extra+=(--initialize); fi
+          python tools/publish_h8.py restore --branch "$DATA_BRANCH" --data-dir diagnostics/h8 --state-file "$RUNNER_TEMP/h8-state.json" "${extra[@]}"
+      - name: Ingest paired rainfall
+        id: ingest
+        continue-on-error: true
+        run: python tools/ingest_h8_review.py --output-dir diagnostics/h8/science
+      - name: Export and publish complete verified state
+        if: always() && steps.ingest.outcome != 'skipped'
+        run: |
+          python tools/export_h8.py --data-dir diagnostics/h8
+          python tools/publish_h8.py publish --branch "$DATA_BRANCH" --data-dir diagnostics/h8 --state-file "$RUNNER_TEMP/h8-state.json"
+      - name: Report ingest failure after retaining valid state
+        if: always() && steps.ingest.outcome == 'failure'
+        run: exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: h8-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            diagnostics/h8/public/**/metadata.json
+            diagnostics/h8/science/attempt.json
+          retention-days: 14

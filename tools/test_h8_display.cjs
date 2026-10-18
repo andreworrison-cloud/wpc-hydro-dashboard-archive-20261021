@@ -1,0 +1,11 @@
+const assert=require('assert/strict');
+const {qpeFFGDisplayState:state}=require('../qpe_ffg_layer.js');
+const now=Date.parse('2026-10-18T17:30:00Z');
+const m={active:{pass_number:1,qpe_end:'2026-10-18T17:00:00Z',ffg:{snapshot_time:'2026-10-18T16:00:00Z'},ffg_reference:'2026-10-18T12:00:00Z',live_age_deadline:'2026-10-18T19:00:00Z'},last_attempt:{pass1:{state:'accepted'}}};
+assert.equal(state(m,now).state,'current');assert.equal(state({...m,stale:true},now).state,'retained');
+assert.equal(state(m,Date.parse('2026-10-18T19:00:00Z')).visible,false);
+assert.equal(state(m,Date.parse('2026-10-18T16:00:00Z')).state,'unavailable');
+assert.equal(state({...m,active:{...m.active,ffg:{snapshot_time:'2026-10-18T18:00:00Z'}}},now).state,'unavailable');
+assert.equal(state({...m,active:{...m.active,pass_number:2},last_attempt:{pass2:{state:'accepted_prior_window'}}},now).label,'Pass 2 — earlier paired rainfall window');
+assert.equal(state(null,now).visible,false);
+console.log('7 H8 freshness assertions passed');
