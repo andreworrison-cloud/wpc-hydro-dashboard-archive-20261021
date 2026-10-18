@@ -15,7 +15,7 @@ import tempfile
 import io
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from tools import sport_suite, sport_rsm_suite
+from tools import sport_suite, sport_rsm_suite, sport_change_suite
 from PIL import Image
 import shutil
 
@@ -53,13 +53,15 @@ def restore(repo,target,state_file):
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def verify(target):
-    for key,module in [('percentile',sport_suite),('rsm',sport_rsm_suite)]:
+    for key,module in [('percentile',sport_suite),('rsm',sport_rsm_suite),('change',sport_change_suite)]:
         root=target/'public'/key
+        if key=='change' and not (root/'metadata.json').exists():continue # H6-to-H7 bootstrap
         m=json.loads((root/'metadata.json').read_text())
         if m.get('schema_version')!=1 or m.get('policy')!=module.POLICY:raise ValueError('Invalid SPoRT policy/schema')
         a=m.get('active')
         if not a:continue
-        module.verify(root,a,require_sources=False)
+        if key=='change':module.verify(root,a)
+        else:module.verify(root,a,require_sources=False)
         for p in a['products'].values():
             i=p['image']
             if i['crs']!='EPSG:3857' or i['resampling']!='bilinear' or [i['width'],i['height']]!=[4000,2538]:raise ValueError('Invalid display contract')
@@ -71,8 +73,10 @@ def verify(target):
 def export_public(target,destination):
     """Keep active plus one preceding generation per suite; originals stay in artifacts."""
     verify(target)
-    for key in ('percentile','rsm'):
-        source=target/'public'/key;out=destination/'public'/key;out.mkdir(parents=True)
+    for key in ('percentile','rsm','change'):
+        source=target/'public'/key
+        if key=='change' and not (source/'metadata.json').exists():continue
+        out=destination/'public'/key;out.mkdir(parents=True)
         shutil.copyfile(source/'metadata.json',out/'metadata.json')
         m=json.loads((source/'metadata.json').read_text());active=m.get('active')
         if not active:continue

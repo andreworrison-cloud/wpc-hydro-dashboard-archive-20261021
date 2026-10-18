@@ -1,0 +1,50 @@
+name: Review SPoRT H7 Changes
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'app.js'
+      - 'index.html'
+      - 'sport_change_layer.js'
+      - 'tools/sport_change_suite.py'
+      - 'tools/test_sport_change*'
+      - 'review/h7/change_ingest_evidence.json'
+      - '.github/workflows/review_sport_changes.yml'
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy>=2,<3' 'rasterio>=1.4,<2' requests pillow
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate science, retention and display contracts
+        run: |
+          python -m unittest tools.test_sport_change_suite tools.test_sport_change_publish -v
+          node --check app.js
+          node --check sport_change_layer.js
+          node --test tools/test_sport_change_display.cjs tools/test_sport_rsm_display.cjs tools/test_sport_display.cjs
+          python tools/validate_dashboard.py
+      - name: Retrieve exact current products and check source revisions
+        run: python -m tools.sport_change_suite --suite-dir diagnostics/sport-change
+      - name: Build dashboard review bundle
+        run: |
+          mkdir -p diagnostics/dashboard-review/review/sport-change
+          git archive HEAD | tar -x -C diagnostics/dashboard-review
+          cp diagnostics/sport-change/metadata.json diagnostics/dashboard-review/review/sport-change/
+          cp -R diagnostics/sport-change/generations diagnostics/dashboard-review/review/sport-change/
+          echo 'Serve this folder over HTTP; open index.html?h7Review=1. H7 remains review-only.' > diagnostics/dashboard-review/H7_REVIEW_START.txt
+      - name: Preserve review bundle and numeric source versions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sport-h7-review-${{ github.run_id }}
+          path: diagnostics/
+          retention-days: 30
