@@ -7818,59 +7818,96 @@ const dashboardSections = [
     {
         id: 'antecedent',
         title: 'Antecedent Hydrologic Conditions',
-        layers: [
-            {id: 'qpe-ffg-1-fine1', label: '1-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-            {id: 'qpe-ffg-1-fine3', label: '3-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-            {id: 'qpe-ffg-1-fine6', label: '6-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-            {id: 'qpe-ffg-1-coarse1', label: '1-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.coarse1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-            {id: 'qpe-ffg-1-coarse3', label: '3-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.coarse3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-            {id: 'qpe-ffg-1-coarse6', label: '6-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.coarse6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-            {id: 'qpe-ffg-2-fine1', label: '1-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-            {id: 'qpe-ffg-2-fine3', label: '3-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-            {id: 'qpe-ffg-2-fine6', label: '6-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-            {id: 'qpe-ffg-2-coarse1', label: '1-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.coarse1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-            {id: 'qpe-ffg-2-coarse3', label: '3-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.coarse3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-            {id: 'qpe-ffg-2-coarse6', label: '6-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.coarse6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-            {id: 'rfc-ffg-1h', label: 'RFC 1-Hour Flash Flood Guidance', layer: rfcFFG.layers[1], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
-            {id: 'rfc-ffg-3h', label: 'RFC 3-Hour Flash Flood Guidance', layer: rfcFFG.layers[3], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
-            {id: 'rfc-ffg-6h', label: 'RFC 6-Hour Flash Flood Guidance', layer: rfcFFG.layers[6], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
-            {id: 'nwm-soilsat', label: 'NWM Soil Saturation (0-40cm)', layer: nwmLayer, kind: 'raster'},
-            {id: 'sport-change-shallow24h', label: 'NASA SPoRT-LIS 24-hour shallow RSM change (0–10 cm)',
-                description: 'Signed RSM change in percentage points; warning at 48 h and hidden at 72 h from ending valid time.',
-                layer: sportChange.layers.shallow24h, kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
-                keywords: 'soil moisture wetting drying tendency antecedent RSM change'},
-            {id: 'sport-change-deep7day', label: 'NASA SPoRT-LIS 7-day deep RSM change (0–200 cm)',
-                description: 'Signed RSM change in percentage points; warning at 48 h and hidden at 72 h from ending valid time.',
-                layer: sportChange.layers.deep7day, kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
-                keywords: 'soil moisture wetting drying tendency antecedent RSM change'},
-            {id: 'sport-change-deep14day', label: 'NASA SPoRT-LIS 14-day deep RSM change (0–200 cm) · Secondary context',
-                description: 'Signed RSM change in percentage points; warning at 48 h and hidden at 72 h from ending valid time.',
-                layer: sportChange.layers.deep14day, kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
-                keywords: 'soil moisture wetting drying tendency antecedent RSM change'},
-            {id: 'sport-rsm-10', label: 'NASA SPoRT-LIS Relative Soil Moisture (0–10 cm)',
-                description: 'NASA RSM: 0% at wilting point, 100% at saturation. This differs from NLDAS percent of saturation. Age warning at 48 h; hidden at 72 h.',
-                layer: sportRSM.layers[10], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
-                keywords: 'soil moisture relative RSM saturation SPoRT LIS'},
-            {id: 'sport-rsm-200', label: 'NASA SPoRT-LIS Relative Soil Moisture (0–200 cm)',
-                description: 'NASA RSM: 0% at wilting point, 100% at saturation. This differs from NLDAS percent of saturation. Age warning at 48 h; hidden at 72 h.',
-                layer: sportRSM.layers[200], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
-                keywords: 'soil moisture relative RSM saturation SPoRT LIS'},
-            {id: 'sport-suite-10', label: 'NASA SPoRT-LIS VSM Percentile (0–10 cm)',
-                description: 'Four-depth suite. Shared valid time; warning at 48 h, hidden at 72 h. Original numerical NASA SPoRT-LIS percentiles.',
-                layer: sportSuite.layers[10], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
-                keywords: 'soil moisture wet tail percentile depth SPoRT LIS hydrology'},
-            {id: 'sport-suite-40', label: 'NASA SPoRT-LIS VSM Percentile (0–40 cm)',
-                description: 'Four-depth suite. Shared valid time; warning at 48 h, hidden at 72 h. Original numerical NASA SPoRT-LIS percentiles.',
-                layer: sportSuite.layers[40], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
-                keywords: 'soil moisture wet tail percentile depth SPoRT LIS hydrology'},
-            {id: 'sport-suite-100', label: 'NASA SPoRT-LIS VSM Percentile (0–100 cm)',
-                description: 'Four-depth suite. Shared valid time; warning at 48 h, hidden at 72 h. Original numerical NASA SPoRT-LIS percentiles.',
-                layer: sportSuite.layers[100], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
-                keywords: 'soil moisture wet tail percentile depth SPoRT LIS hydrology'},
-            {id: 'sport-suite-200', label: 'NASA SPoRT-LIS VSM Percentile (0–200 cm)',
-                description: 'Four-depth suite. Shared valid time; warning at 48 h, hidden at 72 h. Original numerical NASA SPoRT-LIS percentiles.',
-                layer: sportSuite.layers[200], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
-                keywords: 'soil moisture wet tail percentile depth SPoRT LIS hydrology'}
+        layers: [],
+        groups: [
+            {
+                id: 'sport-rsm',
+                title: 'NASA SPoRT-LIS · Relative Soil Moisture',
+                layers: [
+                    {id: 'sport-rsm-10', label: 'NASA SPoRT-LIS Relative Soil Moisture (0–10 cm)',
+                    description: 'NASA RSM: 0% at wilting point, 100% at saturation. This differs from NLDAS percent of saturation. Age warning at 48 h; hidden at 72 h.',
+                    layer: sportRSM.layers[10], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
+                    keywords: 'soil moisture relative RSM saturation SPoRT LIS'},
+                    {id: 'sport-rsm-200', label: 'NASA SPoRT-LIS Relative Soil Moisture (0–200 cm)',
+                    description: 'NASA RSM: 0% at wilting point, 100% at saturation. This differs from NLDAS percent of saturation. Age warning at 48 h; hidden at 72 h.',
+                    layer: sportRSM.layers[200], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
+                    keywords: 'soil moisture relative RSM saturation SPoRT LIS'}
+                ]
+            },
+            {
+                id: 'sport-change',
+                title: 'NASA SPoRT-LIS · Soil Moisture Change',
+                layers: [
+                    {id: 'sport-change-shallow24h', label: 'NASA SPoRT-LIS 24-hour shallow RSM change (0–10 cm)',
+                    description: 'Signed RSM change in percentage points; warning at 48 h and hidden at 72 h from ending valid time.',
+                    layer: sportChange.layers.shallow24h, kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
+                    keywords: 'soil moisture wetting drying tendency antecedent RSM change'},
+                    {id: 'sport-change-deep7day', label: 'NASA SPoRT-LIS 7-day deep RSM change (0–200 cm)',
+                    description: 'Signed RSM change in percentage points; warning at 48 h and hidden at 72 h from ending valid time.',
+                    layer: sportChange.layers.deep7day, kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
+                    keywords: 'soil moisture wetting drying tendency antecedent RSM change'},
+                    {id: 'sport-change-deep14day', label: 'NASA SPoRT-LIS 14-day deep RSM change (0–200 cm) · Secondary context',
+                    description: 'Signed RSM change in percentage points; warning at 48 h and hidden at 72 h from ending valid time.',
+                    layer: sportChange.layers.deep14day, kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
+                    keywords: 'soil moisture wetting drying tendency antecedent RSM change'}
+                ]
+            },
+            {
+                id: 'sport-percentile',
+                title: 'NASA SPoRT-LIS · VSM Percentiles',
+                layers: [
+                    {id: 'sport-suite-10', label: 'NASA SPoRT-LIS VSM Percentile (0–10 cm)',
+                    description: 'Four-depth suite. Shared valid time; warning at 48 h, hidden at 72 h. Original numerical NASA SPoRT-LIS percentiles.',
+                    layer: sportSuite.layers[10], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
+                    keywords: 'soil moisture wet tail percentile depth SPoRT LIS hydrology'},
+                    {id: 'sport-suite-40', label: 'NASA SPoRT-LIS VSM Percentile (0–40 cm)',
+                    description: 'Four-depth suite. Shared valid time; warning at 48 h, hidden at 72 h. Original numerical NASA SPoRT-LIS percentiles.',
+                    layer: sportSuite.layers[40], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
+                    keywords: 'soil moisture wet tail percentile depth SPoRT LIS hydrology'},
+                    {id: 'sport-suite-100', label: 'NASA SPoRT-LIS VSM Percentile (0–100 cm)',
+                    description: 'Four-depth suite. Shared valid time; warning at 48 h, hidden at 72 h. Original numerical NASA SPoRT-LIS percentiles.',
+                    layer: sportSuite.layers[100], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
+                    keywords: 'soil moisture wet tail percentile depth SPoRT LIS hydrology'},
+                    {id: 'sport-suite-200', label: 'NASA SPoRT-LIS VSM Percentile (0–200 cm)',
+                    description: 'Four-depth suite. Shared valid time; warning at 48 h, hidden at 72 h. Original numerical NASA SPoRT-LIS percentiles.',
+                    layer: sportSuite.layers[200], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
+                    keywords: 'soil moisture wet tail percentile depth SPoRT LIS hydrology'}
+                ]
+            },
+            {
+                id: 'nwm-soil',
+                title: 'NWM · Soil Saturation',
+                layers: [
+                    {id: 'nwm-soilsat', label: 'NWM Soil Saturation (0-40cm)', layer: nwmLayer, kind: 'raster'}
+                ]
+            },
+            {
+                id: 'rfc-guidance',
+                title: 'RFC · Flash Flood Guidance',
+                layers: [
+                    {id: 'rfc-ffg-1h', label: 'RFC 1-Hour Flash Flood Guidance', layer: rfcFFG.layers[1], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
+                    {id: 'rfc-ffg-3h', label: 'RFC 3-Hour Flash Flood Guidance', layer: rfcFFG.layers[3], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
+                    {id: 'rfc-ffg-6h', label: 'RFC 6-Hour Flash Flood Guidance', layer: rfcFFG.layers[6], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection}
+                ]
+            },
+            {
+                id: 'qpe-ffg-comparison',
+                title: 'Observed Rainfall / FFG · Comparisons',
+                layers: [
+                    {id: 'qpe-ffg-1-fine1', label: '1-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                    {id: 'qpe-ffg-1-fine3', label: '3-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                    {id: 'qpe-ffg-1-fine6', label: '6-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                    {id: 'qpe-ffg-1-coarse1', label: '1-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.coarse1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                    {id: 'qpe-ffg-1-coarse3', label: '3-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.coarse3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                    {id: 'qpe-ffg-1-coarse6', label: '6-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.coarse6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                    {id: 'qpe-ffg-2-fine1', label: '1-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                    {id: 'qpe-ffg-2-fine3', label: '3-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                    {id: 'qpe-ffg-2-fine6', label: '6-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                    {id: 'qpe-ffg-2-coarse1', label: '1-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.coarse1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                    {id: 'qpe-ffg-2-coarse3', label: '3-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.coarse3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                    {id: 'qpe-ffg-2-coarse6', label: '6-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.coarse6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection}
+                ]
+            }
         ]
     },
     {
