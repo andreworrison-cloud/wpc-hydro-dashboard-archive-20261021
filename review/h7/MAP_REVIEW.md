@@ -1,5 +1,7 @@
 # H7 dynamic antecedent wetness: initial map review
 
+**Follow-up completed:** See [Florida rainfall consistency check](FLORIDA_FOLLOWUP.md) for the matched MRMS comparison, revision checks and updated recommendation. The initial observations below are retained as review history.
+
 These are fixed audit snapshots ending 18 October 2026 at 00Z, not a live feed. Production is unchanged.
 
 | Map | Depth | Start (00Z) | End (00Z) | Origin |
