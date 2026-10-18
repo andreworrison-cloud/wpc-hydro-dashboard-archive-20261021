@@ -2235,8 +2235,6 @@ const eroCamLayers = {};
 // from appearing before the exact bounds are known.
 const NWM_IMAGE_URL = 'static/nwm_soil_saturation.png';
 const SPORT_IMAGE_URL = 'static/sport_soil_percentile.png';
-const NLDAS_RSM_0_10_IMAGE_URL = 'static/nldas_rsm_0_10cm.png';
-const NLDAS_RSM_0_100_IMAGE_URL = 'static/nldas_rsm_0_100cm.png';
 const NRCS_HSG_IMAGE_URL = 'static/nrcs_hydrologic_soil_group.png';
 const NRCS_HSG_METADATA_URL = 'static/nrcs_hydrologic_soil_group_metadata.json';
 const NRCS_HSG_LAYER_NAME = 'NRCS Hydrologic Soil Group (A–D / Dual)';
@@ -2265,17 +2263,6 @@ const sportLayer = L.imageOverlay(
     {zIndex: 10, opacity: 0, interactive: false}
 );
 
-const nldasRsm010Layer = L.imageOverlay(
-    NLDAS_RSM_0_10_IMAGE_URL,
-    soilPlaceholderBounds,
-    {zIndex: 10, opacity: 0, interactive: false}
-);
-
-const nldasRsm0100Layer = L.imageOverlay(
-    NLDAS_RSM_0_100_IMAGE_URL,
-    soilPlaceholderBounds,
-    {zIndex: 10, opacity: 0, interactive: false}
-);
 
 const nrcsHsgLayer = L.imageOverlay(
     NRCS_HSG_IMAGE_URL,
@@ -4024,7 +4011,6 @@ window.setInterval(() => {
 
 let nwmLayerReady = false;
 let sportLayerReady = false;
-let nldasRsmReady = false;
 let nrcsHsgReady = false;
 let nrcsHsgMetadata = null;
 let nlcdImperviousReady = false;
@@ -4044,7 +4030,6 @@ let eroCamCycles = { href: "Unknown", refs: "Unknown" };
 let eroValidRangeStr = "Unknown";
 let nwmValidTime = "Unknown";
 let sportValidTime = "Unknown";
-let nldasRsmValidTime = "Unknown";
 let nrcsHsgSourceVintage = "Unknown";
 let nlcdImperviousMapYear = "Unknown";
 
@@ -6012,76 +5997,6 @@ async function fetchSPoRTMetadata() {
     }
 }
 
-async function fetchNLDASRSMMetadata() {
-    try {
-        const response = await fetch(
-            'static/nldas_rsm_metadata.json?t=' + Date.now(),
-            {cache: 'no-store'}
-        );
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
-        const product010 = data.products && data.products['0_10cm'];
-        const product0100 = data.products && data.products['0_100cm'];
-
-        if (!product010 || !product0100) {
-            throw new Error('NLDAS RSM metadata missing required products');
-        }
-
-        const sharedMetadata = {
-            bounds: data.bounds,
-            image_crs: data.image_crs || data.crs,
-            render_revision: data.render_revision,
-            retrieved_time: data.retrieved_time,
-            valid_time_iso: data.valid_time_iso,
-            valid_time: data.valid_time
-        };
-
-        applySoilRasterMetadata({
-            metadata: sharedMetadata,
-            layer: nldasRsm010Layer,
-            baseUrl: product010.image || NLDAS_RSM_0_10_IMAGE_URL,
-            productName: 'NLDAS-2 Noah RSM (0-10 cm)',
-            opacity: 1.0
-        });
-
-        applySoilRasterMetadata({
-            metadata: sharedMetadata,
-            layer: nldasRsm0100Layer,
-            baseUrl: product0100.image || NLDAS_RSM_0_100_IMAGE_URL,
-            productName: 'NLDAS-2 Noah RSM (0-100 cm)',
-            opacity: 1.0
-        });
-
-        nldasRsmReady = true;
-        nldasRsmValidTime = data.valid_time || 'Unknown';
-
-        const timeBox010 = document.getElementById('nldas-rsm-010-time-box');
-        if (timeBox010 && timeBox010.style.display === 'block') {
-            timeBox010.innerHTML = `
-                <strong>NLDAS-2 Noah RSM (0-10 cm)</strong><br>
-                <span style="color: #ffeb3b;">${nldasRsmValidTime}</span>
-            `;
-        }
-
-        const timeBox0100 = document.getElementById('nldas-rsm-0100-time-box');
-        if (timeBox0100 && timeBox0100.style.display === 'block') {
-            timeBox0100.innerHTML = `
-                <strong>NLDAS-2 Noah RSM (0-100 cm)</strong><br>
-                <span style="color: #ffeb3b;">${nldasRsmValidTime}</span>
-            `;
-        }
-    } catch (error) {
-        nldasRsmReady = false;
-        nldasRsm010Layer.setOpacity(0);
-        nldasRsm0100Layer.setOpacity(0);
-        console.error('NLDAS RSM raster metadata update failed:', error);
-    }
-}
-
 async function fetchNRCSHSGMetadata() {
     try {
         const response = await fetch(
@@ -6561,7 +6476,6 @@ refreshLightningCastFromManifest({forceMetadata: true});
 refreshHRRRTLEFromManifest({forceMetadata: true});
 fetchNWMMetadata();
 // Legacy SPoRT updater retired; shared suites own publication and freshness.
-fetchNLDASRSMMetadata();
 fetchNRCSHSGMetadata();
 fetchNLCDImperviousMetadata();
 fetchNLDAS3StaticMetadata();
@@ -6575,7 +6489,6 @@ setInterval(() => {
     fetchMRMSFlash24hMetadata();
     fetchNWMMetadata();
     // Legacy SPoRT updater retired; shared suites own publication and freshness.
-    fetchNLDASRSMMetadata();
 }, 15 * 60 * 1000); 
 
 // GLM and LightningCast products are refreshed by their manifest watchers above.
@@ -6771,8 +6684,6 @@ legendDockControl.onAdd = function () {
         'hrrr-tle-time-box',
         'nwm-time-box',
         'sport-time-box',
-        'nldas-rsm-010-time-box',
-        'nldas-rsm-0100-time-box',
         'nrcs-hsg-time-box',
         'nlcd-impervious-time-box',
         'nldas3-soil-time-box',
@@ -7116,29 +7027,6 @@ const sportLegendHTML = `
     </div>
 `;
 
-function buildNLDASRSMHTML(title) {
-    return `
-        <div style="background: white; padding: 10px; border-radius: 5px; text-align: center; color: black; font-family: sans-serif; min-width: 250px;">
-            <strong style="font-size: 13px;">${title}</strong><br>
-            <div style="display: flex; margin-top: 5px; border: 1px solid #333; height: 16px;">
-                <div style="background: rgba(150,110,70,0.88); flex: 4;" title="0-40"></div>
-                <div style="background: rgba(210,190,120,0.88); flex: 1;" title="40-50"></div>
-                <div style="background: rgba(170,215,130,0.88); flex: 1;" title="50-60"></div>
-                <div style="background: rgba(90,190,120,0.88); flex: 1;" title="60-70"></div>
-                <div style="background: rgba(35,185,190,0.88); flex: 1;" title="70-80"></div>
-                <div style="background: rgba(45,125,230,0.88); flex: 1;" title="80-90"></div>
-                <div style="background: rgba(20,50,170,0.96); flex: 0.5;" title="90-95"></div>
-                <div style="background: rgba(125,0,175,1); flex: 0.5;" title="95-100"></div>
-            </div>
-            <div style="display: flex; justify-content: space-between; font-size: 9px; margin-top: 2px;">
-                <span>0</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span><span>90</span><span>95</span><span>100</span>
-            </div>
-        </div>
-    `;
-}
-
-const nldasRsm010LegendHTML = buildNLDASRSMHTML('NLDAS-2 Noah Relative Soil Moisture (0-10 cm)');
-const nldasRsm0100LegendHTML = buildNLDASRSMHTML('NLDAS-2 Noah Relative Soil Moisture (0-100 cm)');
 
 const nrcsHsgLegendHTML = `
     <div style="background:white;padding:10px;border-radius:5px;color:black;font-family:sans-serif;min-width:270px;">
@@ -7365,8 +7253,6 @@ function updateLegends() {
     if (activeLayerNames.has(MRMS_CREST_24H_LAYER_NAME)) addLegendBlock(mrmsCrest24hLegendHTML);
     if (activeLayerNames.has(MRMS_FFD_24H_LAYER_NAME)) addLegendBlock(mrmsFfd24hLegendHTML);
     if (activeLayerNames.has('NWM Soil Saturation (0-40cm)')) addLegendBlock(nwmLegendHTML);
-    if (activeLayerNames.has('NLDAS-2 Noah Relative Soil Moisture (0-10 cm)')) addLegendBlock(nldasRsm010LegendHTML);
-    if (activeLayerNames.has('NLDAS-2 Noah Relative Soil Moisture (0-100 cm)')) addLegendBlock(nldasRsm0100LegendHTML);
     if (activeLayerNames.has(NRCS_HSG_LAYER_NAME)) addLegendBlock(nrcsHsgLegendHTML);
     if (activeLayerNames.has(NLDAS3_SOIL_LAYER_NAME)) addLegendBlock(buildNLDAS3CategoricalLegendHTML('soil_texture'));
     if (activeLayerNames.has(NLDAS3_LANDCOVER_LAYER_NAME)) addLegendBlock(buildNLDAS3CategoricalLegendHTML('landcover'));
@@ -7433,8 +7319,6 @@ map.on('overlayadd', function(eventLayer) {
     const hrrrTLETimeBox = document.getElementById('hrrr-tle-time-box');
     const nwmTimeBox = document.getElementById('nwm-time-box');
     const sportTimeBox = document.getElementById('sport-time-box');
-    const nldasRsm010TimeBox = document.getElementById('nldas-rsm-010-time-box');
-    const nldasRsm0100TimeBox = document.getElementById('nldas-rsm-0100-time-box');
     const nrcsHsgTimeBox = document.getElementById('nrcs-hsg-time-box');
     const nlcdImperviousTimeBox = document.getElementById('nlcd-impervious-time-box');
     const nldas3SoilTimeBox = document.getElementById('nldas3-soil-time-box');
@@ -7556,27 +7440,7 @@ map.on('overlayadd', function(eventLayer) {
         }
     }
 
-    if (eventLayer.name === 'NLDAS-2 Noah Relative Soil Moisture (0-10 cm)') {
-        fetchNLDASRSMMetadata();
 
-        if (nldasRsm010TimeBox) {
-            nldasRsm010TimeBox.innerHTML = nldasRsmReady
-                ? `<strong>NLDAS-2 Noah RSM (0-10 cm)</strong><br><span style="color: #ffeb3b;">${nldasRsmValidTime}</span>`
-                : `<strong>NLDAS-2 Noah RSM (0-10 cm)</strong><br><span style="color: #ffeb3b;">Loading latest raster...</span>`;
-            nldasRsm010TimeBox.style.display = 'block';
-        }
-    }
-
-    if (eventLayer.name === 'NLDAS-2 Noah Relative Soil Moisture (0-100 cm)') {
-        fetchNLDASRSMMetadata();
-
-        if (nldasRsm0100TimeBox) {
-            nldasRsm0100TimeBox.innerHTML = nldasRsmReady
-                ? `<strong>NLDAS-2 Noah RSM (0-100 cm)</strong><br><span style="color: #ffeb3b;">${nldasRsmValidTime}</span>`
-                : `<strong>NLDAS-2 Noah RSM (0-100 cm)</strong><br><span style="color: #ffeb3b;">Loading latest raster...</span>`;
-            nldasRsm0100TimeBox.style.display = 'block';
-        }
-    }
 
     if (eventLayer.name === NRCS_HSG_LAYER_NAME) {
         if (!nrcsHsgReady) fetchNRCSHSGMetadata();
@@ -7722,8 +7586,6 @@ map.on('overlayremove', function(eventLayer) {
     const hrrrTLETimeBox = document.getElementById('hrrr-tle-time-box');
     const nwmTimeBox = document.getElementById('nwm-time-box');
     const sportTimeBox = document.getElementById('sport-time-box');
-    const nldasRsm010TimeBox = document.getElementById('nldas-rsm-010-time-box');
-    const nldasRsm0100TimeBox = document.getElementById('nldas-rsm-0100-time-box');
     const nrcsHsgTimeBox = document.getElementById('nrcs-hsg-time-box');
     const nlcdImperviousTimeBox = document.getElementById('nlcd-impervious-time-box');
     const nldas3SoilTimeBox = document.getElementById('nldas3-soil-time-box');
@@ -7779,13 +7641,7 @@ map.on('overlayremove', function(eventLayer) {
         if (nwmTimeBox) nwmTimeBox.style.display = 'none';
     }
 
-    if (eventLayer.name === 'NLDAS-2 Noah Relative Soil Moisture (0-10 cm)') {
-        if (nldasRsm010TimeBox) nldasRsm010TimeBox.style.display = 'none';
-    }
 
-    if (eventLayer.name === 'NLDAS-2 Noah Relative Soil Moisture (0-100 cm)') {
-        if (nldasRsm0100TimeBox) nldasRsm0100TimeBox.style.display = 'none';
-    }
     
     if (eventLayer.name === NRCS_HSG_LAYER_NAME) {
         if (nrcsHsgTimeBox) nrcsHsgTimeBox.style.display = 'none';
@@ -7946,8 +7802,6 @@ const dashboardSections = [
             {id: 'rfc-ffg-3h', label: 'RFC 3-Hour Flash Flood Guidance', layer: rfcFFG.layers[3], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
             {id: 'rfc-ffg-6h', label: 'RFC 6-Hour Flash Flood Guidance', layer: rfcFFG.layers[6], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
             {id: 'nwm-soilsat', label: 'NWM Soil Saturation (0-40cm)', layer: nwmLayer, kind: 'raster'},
-            {id: 'nldas-rsm-010', label: 'NLDAS-2 Noah Relative Soil Moisture (0-10 cm)', layer: nldasRsm010Layer, kind: 'raster'},
-            {id: 'nldas-rsm-0100', label: 'NLDAS-2 Noah Relative Soil Moisture (0-100 cm)', layer: nldasRsm0100Layer, kind: 'raster'},
             {id: 'sport-rsm-10', label: 'NASA SPoRT-LIS Relative Soil Moisture (0–10 cm)',
                 description: 'NASA RSM: 0% at wilting point, 100% at saturation. This differs from NLDAS percent of saturation. Age warning at 48 h; hidden at 72 h.',
                 layer: sportRSM.layers[10], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
