@@ -879,11 +879,11 @@ const sportRSM = window.SPoRTRSM.create({map,
 });
 window.sportRSM = sportRSM;
 
-// H7 is explicitly review-gated until durable publishing and visual qualification.
+// H7 uses durable products; the query override supports isolated review bundles.
 const h7Review = new URLSearchParams(location.search).get('h7Review') === '1';
-const sportChange = h7Review ? window.SPoRTChange.create({map,
-    metadataURL: 'review/sport-change/metadata.json', onChange: () => updateLegends()
-}) : null;
+const sportChange = window.SPoRTChange.create({map,
+    metadataURL: h7Review ? 'review/sport-change/metadata.json' : sportDataRoot + 'change/metadata.json', onChange: () => updateLegends()
+});
 window.sportChange = sportChange;
 
 // --- AUTO-TOGGLING GEOJSON STATE BORDERS ---
@@ -7811,12 +7811,18 @@ const dashboardSections = [
             {id: 'rfc-ffg-3h', label: 'RFC 3-Hour Flash Flood Guidance', layer: rfcFFG.layers[3], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
             {id: 'rfc-ffg-6h', label: 'RFC 6-Hour Flash Flood Guidance', layer: rfcFFG.layers[6], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
             {id: 'nwm-soilsat', label: 'NWM Soil Saturation (0-40cm)', layer: nwmLayer, kind: 'raster'},
-            ...(h7Review ? ['shallow24h','deep7day','deep14day'].map(key => ({
-                id: 'sport-change-' + key, label: 'NASA SPoRT-LIS ' + window.SPoRTChange.specs[key].title,
-                description: 'Signed RSM change in percentage points. Exact comparison period; freshness measured from ending valid time.',
-                layer: sportChange.layers[key], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
-                keywords: 'soil moisture wetting drying tendency antecedent RSM change'
-            })) : []),
+            {id: 'sport-change-shallow24h', label: 'NASA SPoRT-LIS 24-hour shallow RSM change (0–10 cm)',
+                description: 'Signed RSM change in percentage points; warning at 48 h and hidden at 72 h from ending valid time.',
+                layer: sportChange.layers.shallow24h, kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
+                keywords: 'soil moisture wetting drying tendency antecedent RSM change'},
+            {id: 'sport-change-deep7day', label: 'NASA SPoRT-LIS 7-day deep RSM change (0–200 cm)',
+                description: 'Signed RSM change in percentage points; warning at 48 h and hidden at 72 h from ending valid time.',
+                layer: sportChange.layers.deep7day, kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
+                keywords: 'soil moisture wetting drying tendency antecedent RSM change'},
+            {id: 'sport-change-deep14day', label: 'NASA SPoRT-LIS 14-day deep RSM change (0–200 cm) · Secondary context',
+                description: 'Signed RSM change in percentage points; warning at 48 h and hidden at 72 h from ending valid time.',
+                layer: sportChange.layers.deep14day, kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,
+                keywords: 'soil moisture wetting drying tendency antecedent RSM change'},
             {id: 'sport-rsm-10', label: 'NASA SPoRT-LIS Relative Soil Moisture (0–10 cm)',
                 description: 'NASA RSM: 0% at wilting point, 100% at saturation. This differs from NLDAS percent of saturation. Age warning at 48 h; hidden at 72 h.',
                 layer: sportRSM.layers[10], kind: 'raster', onActivate: enforceExclusiveSPoRTSelection,

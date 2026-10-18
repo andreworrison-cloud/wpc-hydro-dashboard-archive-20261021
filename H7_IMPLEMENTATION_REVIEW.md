@@ -1,6 +1,18 @@
 # H7 dynamic antecedent wetness — implementation review
 
-Status: live ingest and automated display contracts verified; review-gated dashboard integration. No production publisher or schedule has been changed.
+Status: production activation approved by Andrew on 18 October 2026. The implementation now enables three H7 controls and extends the existing SPoRT publisher/schedule.
+
+## Production activation update
+
+- Public maps and status: `data/sport-lis`, under `public/change`; atomic publication includes the unchanged percentile and absolute-RSM suites.
+- The existing cron-job.org job 8666661 dispatches `fetch_sport.yml` at 01:15, 07:15, 13:15 and 19:15 UTC. H7 runs during the same dispatch; no competing GitHub cron or new external job is added.
+- Numeric source versions are restored from the newest verified `sport-h7-numeric-*` artifact produced by the main-branch SPoRT workflow. The rolling cache preserves versions for at least 21 days after last verification, and snapshots have a 30-day artifact retention period. Archive paths, index membership and source checksums are verified before reuse.
+- A restored public H7 generation requires its numeric archive. A restore failure retains prior H7 maps/status and reports failure; it does not silently reset history. Numeric artifact upload precedes acceptance of new map publication.
+- Freshness is approved at 48-hour warning and 72-hour hiding, measured from ending valid time. Production has 154 controls; `?h7Review=1` now only overrides H7 data URLs for isolated bundles.
+- Local production qualification passed 38 Python tests (ingest, durable branch round trips, retention, archive corruption/path rejection and existing publication regressions), 64 display tests and the 154-layer validator.
+- Initial production publish, a subsequent numeric restore, and live browser visual qualification are rollout verification items, recorded after activation.
+
+The following initial-review notes preserve implementation history; this production update supersedes the review-only status and unimplemented-publishing statements below.
 
 ## Products
 

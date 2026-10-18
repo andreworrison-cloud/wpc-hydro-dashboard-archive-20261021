@@ -11,6 +11,8 @@ on:
       - 'tools/sport_suite.py'
       - 'tools/sport_rsm_suite.py'
       - 'tools/publish_sport.py'
+      - 'tools/sport_change_suite.py'
+      - 'tools/restore_sport_change_cache.py'
 permissions:
   contents: read
 concurrency:
@@ -21,6 +23,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
+      actions: read
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -33,11 +36,17 @@ jobs:
           node-version: '22'
       - run: python -m pip install 'numpy>=2,<3' 'rasterio>=1.4,<2' requests pillow
       - name: Check ingest and durable publication
-        run: python -m unittest tools.test_sport_suite tools.test_sport_rsm_suite tools.test_publish_sport -v
+        run: python -m unittest tools.test_sport_suite tools.test_sport_rsm_suite tools.test_publish_sport tools.test_sport_change_suite tools.test_sport_change_publish -v
       - name: Check display and approved age policy
-        run: node --test tools/test_sport_display.cjs tools/test_sport_rsm_display.cjs
+        run: node --test tools/test_sport_display.cjs tools/test_sport_rsm_display.cjs tools/test_sport_change_display.cjs
       - name: Restore durable state
         run: python tools/publish_sport.py restore --data-dir diagnostics/sport --state-file "$RUNNER_TEMP/sport-restore.json"
+      - name: Restore versioned H7 numerical history
+        id: numeric_restore
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m tools.restore_sport_change_cache --suite-dir diagnostics/sport/public/change
       - name: Ingest percentile suite
         id: percentile
         continue-on-error: true
@@ -46,11 +55,39 @@ jobs:
         id: rsm
         continue-on-error: true
         run: python -m tools.sport_rsm_suite --suite-dir diagnostics/sport/public/rsm
-      - name: Atomically publish both suites and status
-        if: always() && steps.percentile.outcome != 'skipped' && steps.rsm.outcome != 'skipped'
+      - name: Ingest H7 signed changes
+        id: change
+        if: steps.numeric_restore.outcome == 'success'
+        continue-on-error: true
+        run: python -m tools.sport_change_suite --suite-dir diagnostics/sport/public/change
+      - name: Retain H7 status on numeric-restore failure
+        if: steps.numeric_restore.outcome == 'failure'
+        run: |
+          python - <<'PYTHON'
+          import json
+          from pathlib import Path
+          from datetime import datetime,timezone
+          from tools.sport_change_suite import POLICY,freshness,iso,atomic_json
+          root=Path('diagnostics/sport/public/change');root.mkdir(parents=True,exist_ok=True)
+          p=root/'metadata.json';m=json.loads(p.read_text()) if p.exists() else {'schema_version':1,'policy':POLICY,'active':None}
+          now=datetime.now(timezone.utc);f=freshness(m['active'],now)
+          m.update(state='retained' if f['usable'] else 'expired' if m['active'] else 'unavailable',usable=f['usable'],freshness=f,last_attempt={'at':iso(now),'ok':False,'error':'Numeric history restore failed; retained prior generation'})
+          atomic_json(p,m)
+          PYTHON
+      - name: Durably retain H7 numeric versions before map publication
+        id: numeric_save
+        if: steps.numeric_restore.outcome == 'success' && hashFiles('diagnostics/sport/public/change/numeric-cache/index.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: sport-h7-numeric-${{ github.run_id }}-${{ github.run_attempt }}
+          path: diagnostics/sport/public/change/numeric-cache/
+          retention-days: 30
+          if-no-files-found: error
+      - name: Atomically publish all suites and status
+        if: always() && steps.percentile.outcome != 'skipped' && steps.rsm.outcome != 'skipped' && steps.numeric_save.outcome != 'failure'
         run: python tools/publish_sport.py publish --data-dir diagnostics/sport --state-file "$RUNNER_TEMP/sport-restore.json"
       - name: Report ingest failures after retained status is published
-        if: always() && (steps.percentile.outcome == 'failure' || steps.rsm.outcome == 'failure')
+        if: always() && (steps.percentile.outcome == 'failure' || steps.rsm.outcome == 'failure' || steps.change.outcome == 'failure' || steps.numeric_restore.outcome == 'failure')
         run: exit 1
       - name: Preserve numerical provenance and product status
         if: always()

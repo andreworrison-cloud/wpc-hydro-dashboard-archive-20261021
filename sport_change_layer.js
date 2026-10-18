@@ -16,7 +16,7 @@
             label:(retained?'Retained previous suite · ':'')+(age>=48?'Aging soil-moisture data':'Within dashboard age limit')+` · ${age.toFixed(1)} h old`};
     }
     function validate(metadata, previous) {
-        if(metadata?.schema_version!==1 || metadata.policy?.warn_age_hours!==48 || metadata.policy?.expire_age_hours!==72 || metadata.policy?.status!=='h7_review_policy_v1')throw Error('H7 policy mismatch');
+        if(metadata?.schema_version!==1 || metadata.policy?.warn_age_hours!==48 || metadata.policy?.expire_age_hours!==72 || metadata.policy?.status!=='approved_h7_policy_v1')throw Error('H7 policy mismatch');
         const a=metadata.active;if(!a)return;
         if(a.quantity!=='relative_soil_moisture_change'||a.units!=='percentage_points'||a.render_revision!=='sport-change-v1')throw Error('H7 definition mismatch');
         if(!Number.isFinite(Date.parse(a.valid_time))||!/^\d{8}-[a-f0-9]{20}-sport-change-v1$/.test(a.generation))throw Error('Invalid H7 generation');
@@ -85,7 +85,7 @@
             if(a){const p=a.products[key];html+=`<div><b>Period: ${esc(utc(p.start_time))} → ${esc(utc(p.valid_time))}</b><br>Origin: ${key==='shallow24h'?'Derived from exact-date RSM endpoints':'NASA native change product'}</div>`;
                 p.sources.forEach((source,i)=>{html+=`<p>${key==='shallow24h'?(i?'Ending':'Starting')+' source':'Native source'}<br>Source modified: ${esc(utc(source.http_modified_at))}<br>Retrieved: ${esc(utc(source.retrieved_at))}</p>`;});
                 html+=`<div>Last ingest attempt: ${esc(utc(metadata.last_attempt?.at))}<br>Mode: ${esc(a.retrieval_mode)}<br>Display cutoff: ${esc(utc(new Date(Date.parse(a.valid_time)+72*3600000).toISOString()))}</div>`;}
-            return html+'<p>Review policy: warning at 48 h; hidden at 72 h, measured from the END of the comparison period. Nominal 3-km source; bilinear display adds no scientific resolution.</p></div>';
+            return html+'<p>Dashboard policy: warning at 48 h; hidden at 72 h, measured from the END of the comparison period. Nominal 3-km source; bilinear display adds no scientific resolution.</p></div>';
         }
         function setBorders(data){if(borders&&map.hasLayer(borders))map.removeLayer(borders);borders=L.layerGroup([
             L.geoJSON(data,{pane:'mapReference',interactive:false,style:{color:'#101820',weight:2.6,opacity:.85,fill:false}}),

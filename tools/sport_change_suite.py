@@ -17,7 +17,7 @@ from tools.sport_rsm_suite import atomic_json, digest, iso, parse
 
 BASE='https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff'
 REVISION='sport-change-v1'
-POLICY={'warn_age_hours':48,'expire_age_hours':72,'status':'h7_review_policy_v1'}
+POLICY={'warn_age_hours':48,'expire_age_hours':72,'status':'approved_h7_policy_v1'}
 PRODUCTS={'shallow24h':(10,1,'derived_endpoint_difference'), 'deep7day':(200,7,'NASA_native_change'), 'deep14day':(200,14,'NASA_native_change')}
 FIELDS={'shallow':'rsm0-10cm','deep7day':'rsm0-2m_diff7day','deep14day':'rsm0-2m_diff14day'}
 COLORS=np.array([[111,59,22,235],[152,84,31,235],[189,121,62,235],[216,170,114,235],[236,211,174,235],[246,245,238,190],[204,233,238,235],[148,205,220,235],[85,168,198,235],[38,123,168,235],[18,84,121,235]],dtype=np.uint8)

@@ -27,7 +27,7 @@ jobs:
           node-version: '22'
       - name: Validate science, retention and display contracts
         run: |
-          python -m unittest tools.test_sport_change_suite -v
+          python -m unittest tools.test_sport_change_suite tools.test_sport_change_publish -v
           node --check app.js
           node --check sport_change_layer.js
           node --test tools/test_sport_change_display.cjs tools/test_sport_rsm_display.cjs tools/test_sport_display.cjs
