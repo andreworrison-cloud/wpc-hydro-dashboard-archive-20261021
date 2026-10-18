@@ -2,7 +2,8 @@
 """H8 review-only Pass 1 ingest; independent, optional same-window Pass 2.
 No production publication. Raw inputs and numerical derivatives are hash verified.
 """
-import argparse,concurrent.futures,gzip,hashlib,json,os,re,shutil,sys,tempfile
+import argparse,concurrent.futures,gzip,hashlib,json,os,re,shutil,sys,tempfile,fcntl
+from contextlib import contextmanager
 from datetime import datetime,timedelta,timezone
 from pathlib import Path
 import numpy as np
@@ -22,7 +23,7 @@ def select_common(inventories,now):
  eligible=[datetime.fromisoformat(t) for t in common if datetime.fromisoformat(t)<=now]
  if not eligible:raise ValueError('No common nonfuture QPE ending')
  t=max(eligible)
- if now-t>timedelta(hours=3):raise ValueError('Review QPE exceeds provisional 3-hour age gate')
+ if now-t>=timedelta(hours=3):raise ValueError('Review QPE exceeds provisional 3-hour age gate')
  return t
 
 def validate_qpe(d,product,end):
@@ -57,12 +58,62 @@ def verify_generation(root,m):
   if p.parent!=folder or digest(p)!=asset['sha256']:raise ValueError('Retained asset checksum mismatch')
  return m
 
+@contextmanager
+def writer_lock(root):
+ # One process owns discovery, generation creation and both publication pointers.
+ with (root/'.writer.lock').open('a') as handle:
+  try:fcntl.flock(handle,fcntl.LOCK_EX|fcntl.LOCK_NB)
+  except BlockingIOError:raise RuntimeError('Another H8 ingest owns this output directory')
+  try:yield
+  finally:fcntl.flock(handle,fcntl.LOCK_UN)
+
+def window_path(root,pass_number,end,historical):
+ return root/f'pass{pass_number}'/'windows'/('historical' if historical else 'live')/(end.astimezone(UTC).strftime('%Y%m%d%H%M%S')+'.json')
+
+def read_window(root,pass_number,end,historical):
+ p=window_path(root,pass_number,end,historical)
+ if not p.exists():return None
+ m=json.loads(p.read_text())
+ if datetime.fromisoformat(m['qpe_end'])!=end or m['historical_review']!=historical or m['pass_number']!=pass_number:raise ValueError('Window binding identity mismatch')
+ return verify_generation(root/f'pass{pass_number}',m)
+
+def bind_window(root,manifest):
+ end=datetime.fromisoformat(manifest['qpe_end']);number=manifest['pass_number'];historical=manifest['historical_review']
+ previous=read_window(root,number,end,historical)
+ if previous and previous['generation']!=manifest['generation']:raise ValueError('Source revision requires an explicit reviewed revision; frozen window preserved')
+ path=window_path(root,number,end,historical);path.parent.mkdir(parents=True,exist_ok=True)
+ if not previous:atomic(path,manifest)
+
+def resolve_ffg(root,end,historical,check_time):
+ existing=read_window(root,1,end,historical)
+ if existing:
+  meta=existing['ffg'];path=root/'pass1'/'generations'/existing['generation']/'ffg.g2'
+ else:
+  raw,_=fetch(WPC)
+  candidates=sorted(set(re.findall(r'href="(5kmffg_\d{10}\.g2)"',raw.decode())))
+  eligible=[n for n in candidates if datetime.strptime(n[7:17],'%Y%m%d%H').replace(tzinfo=UTC)<=end]
+  if not eligible:raise ValueError('No FFG snapshot at or before rainfall ending')
+  chosen=eligible[-1];snapshot=datetime.strptime(chosen[7:17],'%Y%m%d%H').replace(tzinfo=UTC)
+  data,meta=fetch(WPC+chosen);validate_grib(data);meta['snapshot_time']=snapshot.isoformat()
+  meta['first_seen_at']=meta['retrieved_at']
+  path=root/'selected_ffg.g2';path.write_bytes(data)
+ if check_time-datetime.fromisoformat(meta['snapshot_time'])>=timedelta(hours=3):raise ValueError('Frozen FFG snapshot exceeds review age gate')
+ if digest(path)!=meta['sha256']:raise ValueError('FFG source checksum mismatch')
+ return path,meta
+
 def build(root,pass_number,end,rows,ffg_path,ffg_meta,now,check_time):
  out=root/f'pass{pass_number}';(out/'generations').mkdir(parents=True,exist_ok=True)
+ historical=check_time!=now
+ snapshot=datetime.fromisoformat(ffg_meta['snapshot_time'])
+ if snapshot>end or check_time-snapshot>=timedelta(hours=3):raise ValueError('FFG snapshot outside pairing gate')
+ if pass_number==2:
+  baseline=read_window(root,1,end,historical)
+  if not baseline or baseline['ffg']['sha256']!=ffg_meta['sha256']:raise ValueError('Pass 2 requires the frozen same-window Pass 1 FFG baseline')
+ if digest(ffg_path)!=ffg_meta['sha256']:raise ValueError('FFG source checksum mismatch')
  fields,fc,ft,ref,ends=read_fields(ffg_path)
  coverage(fields,fc,ft,json.loads(BASELINE.read_text()),POLICY)
  if ref>datetime.fromisoformat(ffg_meta['snapshot_time']):raise ValueError('FFG reference after snapshot')
- if check_time-ref>timedelta(hours=9) or ref>check_time:raise ValueError('FFG reference outside review age gate')
+ if check_time-ref>=timedelta(hours=9) or ref>check_time:raise ValueError('FFG reference outside review age gate')
  inputs={};downloads=[]
  def get(h):
   product=f'MultiSensor_QPE_{h:02d}H_Pass{pass_number}';row=next(r for r in rows[product]['rows'] if r['end']==end.isoformat())
@@ -70,9 +121,11 @@ def build(root,pass_number,end,rows,ffg_path,ffg_meta,now,check_time):
   if len(data)>100_000_000:raise ValueError('GRIB exceeds bound')
   validate_grib(data);return h,product,data,raw,meta
  with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:downloads=list(pool.map(get,HOURS))
- ident={'ffg':ffg_meta['sha256'],'qpe':{str(h):m['sha256'] for h,_,_,_,m in downloads},'pass':pass_number,'revision':'h8-review-v2','historical':check_time!=now}
+ ident={'ffg':ffg_meta['sha256'],'qpe':{str(h):m['sha256'] for h,_,_,_,m in downloads},'pass':pass_number,'revision':'h8-review-v3','historical':check_time!=now}
  generation=end.strftime('%Y%m%d%H')+'-'+hashlib.sha256(json.dumps(ident,sort_keys=True).encode()).hexdigest()[:20]
- manifest=dict(schema_version=1,generation=generation,pass_number=pass_number,qpe_end=end.isoformat(),accepted_at=now.isoformat(),review_only=True,historical_review=(check_time!=now),live_age_deadline=min(end+timedelta(hours=3),datetime.fromisoformat(ffg_meta['snapshot_time'])+timedelta(hours=3),ref+timedelta(hours=9)).isoformat(),pairing='nominal end-aligned retrospective; retrieval after QPE end is disclosed, not as-issued verification',ffg=ffg_meta,ffg_reference=ref.isoformat(),ffg_encoded_ends=ends,files=[],products={})
+ previous=read_window(root,pass_number,end,historical)
+ if previous and previous['generation']!=generation:raise ValueError('Source revision requires an explicit reviewed revision; frozen window preserved')
+ manifest=dict(schema_version=2,generation=generation,pass_number=pass_number,qpe_end=end.isoformat(),accepted_at=now.isoformat(),review_only=True,historical_review=(check_time!=now),live_age_deadline=min(end+timedelta(hours=3),datetime.fromisoformat(ffg_meta['snapshot_time'])+timedelta(hours=3),ref+timedelta(hours=9)).isoformat(),pairing='window-fixed retrospective comparison' if historical else 'window-fixed operational comparison; not pre-rainfall guidance or as-issued verification',pairing_policy='h8-window-fixed-v1',paired_at=baseline['paired_at'] if pass_number==2 else datetime.now(UTC).isoformat(),ffg=ffg_meta,ffg_reference=ref.isoformat(),ffg_encoded_ends=ends,files=[],products={})
  with tempfile.TemporaryDirectory(prefix='.stage-',dir=out) as tmp:
   stage=Path(tmp);shutil.copyfile(ffg_path,stage/'ffg.g2');manifest['files'].append(dict(path='ffg.g2',sha256=digest(stage/'ffg.g2')))
   geometry=None
@@ -100,7 +153,10 @@ def build(root,pass_number,end,rows,ffg_path,ffg_meta,now,check_time):
   if target.exists():
    old=json.loads((target/'manifest.json').read_text());verify_generation(out,old);manifest=old
   else:os.replace(stage,target)
-  verify_generation(out,manifest);atomic(out/'metadata.json',manifest)
+  verify_generation(out,manifest)
+  if not historical and datetime.now(UTC)>=datetime.fromisoformat(manifest['live_age_deadline']):raise ValueError('Pair expired during processing; publication withheld')
+  bind_window(root,manifest)
+  atomic(out/'metadata.json',manifest)
  return manifest
 
 def failure_status(root,error,current):
@@ -112,8 +168,16 @@ def failure_status(root,error,current):
  except Exception as e:result['retention_check']=str(e)
  return result
 
-def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output-dir',type=Path,required=True);p.add_argument('--historical-end',help='Explicit retrospective UTC ISO ending; bypasses live age gates, never marks output current');args=p.parse_args();root=args.output_dir;root.mkdir(parents=True,exist_ok=True);now=datetime.now(UTC)
+def select_pass2_target(root,inventories,current_end,historical,now):
+ common=set.intersection(*[set(r['end'] for r in x['rows']) for x in inventories])
+ for end in sorted((datetime.fromisoformat(t) for t in common),reverse=True):
+  if end>current_end or (historical and end!=current_end):continue
+  baseline=read_window(root,1,end,historical)
+  if baseline and (historical or now<datetime.fromisoformat(baseline['live_age_deadline'])):return end
+ return None
+
+def run(args):
+ root=args.output_dir;now=datetime.now(UTC)
  inv={};status=dict(at=now.isoformat(),review_only=True,provisional_qpe_max_age_hours=3,provisional_ffg_snapshot_max_age_hours=3,provisional_ffg_reference_max_age_hours=9)
  try:
   names=[f'MultiSensor_QPE_{h:02d}H_Pass1' for h in HOURS]
@@ -124,12 +188,7 @@ def main():
   if not all(end.isoformat() in {r['end'] for r in inv[k]['rows']} for k in names):raise ValueError('Requested end missing from a Pass 1 duration')
   check_time=end if args.historical_end else now
   status['historical_review']=bool(args.historical_end)
-  raw,listing=fetch(WPC)
-  candidates=sorted(set(re.findall(r'href="(5kmffg_\d{10}\.g2)"',raw.decode())))
-  names=[n for n in candidates if datetime.strptime(n[7:17],'%Y%m%d%H').replace(tzinfo=UTC)<=end]
-  chosen=names[-1];snapshot=datetime.strptime(chosen[7:17],'%Y%m%d%H').replace(tzinfo=UTC)
-  if check_time-snapshot>timedelta(hours=3):raise ValueError('FFG snapshot exceeds review age gate')
-  data,meta=fetch(WPC+chosen);validate_grib(data);meta['snapshot_time']=snapshot.isoformat();path=root/'selected_ffg.g2';path.write_bytes(data)
+  path,meta=resolve_ffg(root,end,bool(args.historical_end),check_time)
   one=build(root,1,end,inv,path,meta,now,check_time);status['pass1']={'state':'accepted','generation':one['generation']}
  except Exception as e:
   status['pass1']=failure_status(root/'pass1',e,datetime.now(UTC));atomic(root/'attempt.json',status);raise
@@ -137,9 +196,20 @@ def main():
   names=[f'MultiSensor_QPE_{h:02d}H_Pass2' for h in HOURS]
   with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
    for x in pool.map(lambda k:inventory(k,root),names):inv[x['product']]=x
-  if not all(end.isoformat() in {r['end'] for r in inv[k]['rows']} for k in names):status['pass2']={'state':'waiting_for_same_window','target_end':end.isoformat()}
+  target=select_pass2_target(root,[inv[k] for k in names],end,bool(args.historical_end),datetime.now(UTC))
+  if target is None:status['pass2']={'state':'waiting_for_paired_window','target_end':end.isoformat(),'same_window_comparison_available':False}
   else:
-   two=build(root,2,end,inv,path,meta,now,check_time);status['pass2']={'state':'accepted','generation':two['generation']}
- except Exception as e:status['pass2']=failure_status(root/'pass2',e,datetime.now(UTC))
+   baseline_path,baseline_meta=resolve_ffg(root,target,bool(args.historical_end),check_time)
+   two=build(root,2,target,inv,baseline_path,baseline_meta,now,check_time)
+   status['pass2']={'state':'accepted' if target==end else 'accepted_prior_window','generation':two['generation'],'qpe_end':target.isoformat(),'current_pass1_end':end.isoformat(),'matches_current_pass1_window':target==end,'comparison_pass1_generation':read_window(root,1,target,bool(args.historical_end))['generation']}
+
+ except Exception as e:
+  status['pass2']=failure_status(root/'pass2',e,datetime.now(UTC))
+  status['pass2']['target_end']=end.isoformat()
+  status['pass2']['same_window_comparison_available']=False
  status['finished_at']=datetime.now(UTC).isoformat();atomic(root/'attempt.json',status);print(json.dumps(status,indent=2),flush=True)
+def main():
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output-dir',type=Path,required=True);p.add_argument('--historical-end',help='Explicit retrospective UTC ISO ending; never marks output current');args=p.parse_args()
+ args.output_dir.mkdir(parents=True,exist_ok=True)
+ with writer_lock(args.output_dir):run(args)
 if __name__=='__main__':main()
