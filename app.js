@@ -864,6 +864,13 @@ const rfcFFG = window.createRFCFFGLayers({map,
     onChange: () => updateLegends()
 });
 window.RFCFFG = rfcFFG;
+const h8Review = new URLSearchParams(location.search).get('h8Review') === '1';
+const qpeFFG = [1,2].map(passNumber=>window.createQPEFFGLayers({map,passNumber,
+    metadataURL: h8Review ? `review/qpe-ffg/pass${passNumber}/metadata.json` : `https://raw.githubusercontent.com/andreworrison-cloud/wpc-hydro-dashboard/data/qpe-ffg/public/pass${passNumber}/metadata.json`,
+    onChange:()=>updateLegends()
+}));
+window.QPEFFG=qpeFFG;
+
 
 // Approved SPoRT suites: durable products are separate from dashboard code.
 const sportReview = new URLSearchParams(location.search).get('sportReview') === '1';
@@ -902,10 +909,10 @@ fetch('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geo
     .then(data => {
         whiteBorders.addData(data);
         blackBorders.addData(data);
-        rfcFFG.setBorders(data); sportSuite?.setBorders(data); sportRSM?.setBorders(data); sportChange?.setBorders(data);
+        rfcFFG.setBorders(data); qpeFFG.forEach(x=>x.setBorders(data)); sportSuite?.setBorders(data); sportRSM?.setBorders(data); sportChange?.setBorders(data);
     }).catch(() => fetch('review/vendor/us-states.json')
         .then(response => { if (!response.ok) throw new Error('State reference unavailable'); return response.json(); })
-        .then(data => { whiteBorders.addData(data); blackBorders.addData(data); rfcFFG.setBorders(data); sportSuite?.setBorders(data); sportRSM?.setBorders(data); sportChange?.setBorders(data); })
+        .then(data => { whiteBorders.addData(data); blackBorders.addData(data); rfcFFG.setBorders(data); qpeFFG.forEach(x=>x.setBorders(data)); sportSuite?.setBorders(data); sportRSM?.setBorders(data); sportChange?.setBorders(data); })
         .catch(error => console.warn('State borders unavailable:', error)));
 
 
@@ -7237,6 +7244,7 @@ function updateLegends() {
         hasLegend = true;
     };
 
+    qpeFFG.forEach(x=>{const html=x.legendHTML();if(html)addLegendBlock(html);});
     const ffgLegend = rfcFFG.legendHTML();
     if (ffgLegend) addLegendBlock(ffgLegend);
     const changeLegend = sportChange?.legendHTML();
@@ -7715,6 +7723,10 @@ function enforceExclusiveSPoRTSelection(activeEntry) {
     });
 }
 
+function enforceExclusiveQPEFFGSelection(activeEntry) {
+    getAllDashboardLayerEntries().forEach(entry=>{if(entry!==activeEntry && entry.id?.startsWith('qpe-ffg-'))setDashboardLayerActive(entry,false);});
+}
+
 function enforceExclusiveRFCFFGSelection(activeEntry) {
     getAllDashboardLayerEntries().forEach(entry => {
         if (entry !== activeEntry && entry.id?.startsWith('rfc-ffg-')) setDashboardLayerActive(entry, false);
@@ -7807,6 +7819,18 @@ const dashboardSections = [
         id: 'antecedent',
         title: 'Antecedent Hydrologic Conditions',
         layers: [
+            {id: 'qpe-ffg-1-fine1', label: '1-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+            {id: 'qpe-ffg-1-fine3', label: '3-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+            {id: 'qpe-ffg-1-fine6', label: '6-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+            {id: 'qpe-ffg-1-coarse1', label: '1-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.coarse1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+            {id: 'qpe-ffg-1-coarse3', label: '3-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.coarse3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+            {id: 'qpe-ffg-1-coarse6', label: '6-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.coarse6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+            {id: 'qpe-ffg-2-fine1', label: '1-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+            {id: 'qpe-ffg-2-fine3', label: '3-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+            {id: 'qpe-ffg-2-fine6', label: '6-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+            {id: 'qpe-ffg-2-coarse1', label: '1-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.coarse1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+            {id: 'qpe-ffg-2-coarse3', label: '3-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.coarse3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+            {id: 'qpe-ffg-2-coarse6', label: '6-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.coarse6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
             {id: 'rfc-ffg-1h', label: 'RFC 1-Hour Flash Flood Guidance', layer: rfcFFG.layers[1], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
             {id: 'rfc-ffg-3h', label: 'RFC 3-Hour Flash Flood Guidance', layer: rfcFFG.layers[3], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
             {id: 'rfc-ffg-6h', label: 'RFC 6-Hour Flash Flood Guidance', layer: rfcFFG.layers[6], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
