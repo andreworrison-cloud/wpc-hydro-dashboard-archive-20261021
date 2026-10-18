@@ -38,3 +38,35 @@ At approximately 79.833°W, 39.649°N, the sampled 3-hour guidance decreased fro
 4. Burn-severity integration remains coordinated with Sol; accept its reviewed interface when ready.
 
 Next review milestone: tendency maps and case verification, followed by production integration only after the scientific and display behavior is settled.
+
+## Map review and rainfall consistency check
+
+All nine duration/look-back combinations have been rendered at **4,000 × 2,538 pixels**, with state boundaries and identical signed legends. These are frozen at **18 October 2026 19Z**, using the audited endpoints. Numerical differences are calculated on the native grid before bilinear Web Mercator display reprojection. Transparent overlay gaps preserve the paired-valid mask. The ivory interval is ±0.01 inch; blue means lower guidance and brown higher guidance. Source resolution remains unchanged.
+
+For the 3-hour FFG duration:
+
+| Tendency | Map |
+|---|---|
+| 6 hours | [PNG](ffg_3h_change_6h.png) |
+| 12 hours | [PNG](ffg_3h_change_12h.png) |
+| 24 hours | [PNG](ffg_3h_change_24h.png) |
+
+The equivalent 1-hour and 6-hour duration PNGs are in this directory. [Regional case panels](wv_case.png) show before/after guidance, the 06Z–07Z difference, and preceding rainfall. `ffg_tendency_review.html` embeds all nine overlays and state borders for offline pan/zoom and duration/interval selection. Automated browser verification was attempted but could not launch Chromium because the execution environment disallowed its socket creation. Interactive controls and browser projection checks therefore remain unverified; static maps were visually inspected.
+
+### Case findings
+
+The audited cell near 79.833°W, 39.649°N changed from **10.8661 to 4.8031 inches** of 3-hour FFG between 06Z and 07Z. MRMS MultiSensor 24-hour Pass 2 QPE ending 07Z averaged **0.0961 mm** onto that FFG cell with 100% valid coverage. The 24-hour QPE ending 19Z was **0.0 mm** at the same cell. Zero here is a decoded valid observation, not missing-data replacement.
+
+Within the explicitly bounded 82–78°W, 37–41°N region, 5,235 cells with a guidance decrease of at least one inch had qualified QPE coverage. Their preceding 24-hour QPE median was 0.3948 mm, 95th percentile 5.6974 mm, and 60.67% had less than 1 mm. These are unweighted descriptive cell statistics; adjacent cells are not independent samples. QPE was averaged onto the FFG grid and required at least 99% valid coverage. Source hashes, acquisition timestamps, and GRIB tags are in `case_verification.json`.
+
+The broad, sharply bounded guidance transition and very light rainfall at the extreme cell do **not** support attributing this example directly to local heavy rainfall. They do not prove the cause was a correction, model change, or other specific RFC action. The source transition is verified; the underlying RFC issuance/revision cause remains unresolved. Preserve the measured change, and label it as guidance tendency rather than soil wetting. The OHRFC definition describes FFG as based on both soil moisture and streamflow: https://www.weather.gov/ohrfc/FFG . No event-specific explanatory bulletin was established in this check.
+
+### Verification and reproducibility
+
+- All nine native paired-cell counts and min/max differences match the preceding numerical audit (within 0.000001 inch for extrema).
+- All nine presentation maps are exactly 4,000 × 2,538 pixels; no production assets were changed.
+- Raw FFG files must match the hashes in `audit.json`. MRMS files must match the fetch manifest and their decoded product, units and valid time must match the requested accumulation endpoint.
+- `tools/fetch_ffg_tendency_case.py` retrieves the fixed-date rainfall files. `tools/render_ffg_tendency_review.py` produces the maps, case metrics and offline HTML from cached, verified sources. `tools/test_ffg_tendency_review.cjs` provides the pending browser checks.
+- These rolling source files may become unavailable or revised; hashes prevent silently substituting a different revision. Raw files are not included in this repository.
+
+Priority clarification from Andrew: retain **forecast QPF minus duration-matched FFG** as a future candidate. Set aside **observed QPE minus FFG** as the retrospective product. Existing QPE/FFG ratios remain distinct.
