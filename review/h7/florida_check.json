@@ -1,0 +1,178 @@
+{
+  "checked_at": "2026-10-18T14:22:39.040064+00:00",
+  "window_start": "2026-10-17T00:00:00Z",
+  "window_end": "2026-10-18T00:00:00Z",
+  "sources": [
+    {
+      "name": "qpe.grib2.gz",
+      "url": "https://mrms.ncep.noaa.gov/2D/MultiSensor_QPE_24H_Pass2/MRMS_MultiSensor_QPE_24H_Pass2_00.00_20261018-000000.grib2.gz",
+      "bytes": 3853462,
+      "sha256": "785984b8223d7fda37c7e68d0863bcdacb71dacad52e9466cfbd007b02a24ba2",
+      "modified": "Sun, 18 Oct 2026 00:58:02 GMT"
+    },
+    {
+      "name": "20261016.tif",
+      "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-10cm/20261016_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
+      "bytes": 14342268,
+      "sha256": "0a4346e0a6ae86c1c2a0644a669118a62d52f27364f1969277b5605dd8c6de91",
+      "modified": "Sat, 17 Oct 2026 22:23:19 GMT"
+    },
+    {
+      "name": "20261017.tif",
+      "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-10cm/20261017_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
+      "bytes": 14342268,
+      "sha256": "30379127008d2d59c3d055262717caaea1af249a8102f64c00a975fa06a312d1",
+      "modified": "Sun, 18 Oct 2026 10:21:54 GMT"
+    },
+    {
+      "name": "20261018.tif",
+      "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-10cm/20261018_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
+      "bytes": 14342268,
+      "sha256": "a599bb98bcbbc4b53f6b4bcbbc2829cc7d4faf3cc641c35982ccfee46cb40d59",
+      "modified": "Sun, 18 Oct 2026 10:23:26 GMT"
+    }
+  ],
+  "rsm_hashes_match_review": {
+    "20261016": true,
+    "20261017": true,
+    "20261018": true
+  },
+  "qpe_grib_tags": {
+    "GRIB_UNIT": "[mm]",
+    "GRIB_COMMENT": "Multi-sensor accumulation 24-hour (2-hour latency) [mm]",
+    "GRIB_ELEMENT": "MultiSensor_QPE_24H_Pass2",
+    "GRIB_SHORT_NAME": "0-GPML",
+    "GRIB_REF_TIME": "1792281600",
+    "GRIB_VALID_TIME": "1792281600",
+    "GRIB_FORECAST_SECONDS": "0",
+    "GRIB_DISCIPLINE": "209",
+    "GRIB_IDS": "CENTER=161(US-OAR) SUBCENTER=0 MASTER_TABLE=255 LOCAL_TABLE=1 SIGNF_REF_TIME=3(Observation_time) REF_TIME=2026-10-18T00:00:00Z PROD_STATUS=2(Research) TYPE=7(Processed_radar_observations)",
+    "GRIB_PDS_PDTN": "0",
+    "GRIB_PDS_TEMPLATE_NUMBERS": "6 41 8 0 97 0 0 0 0 0 0 0 0 102 0 0 0 0 0 255 1 0 0 0 0",
+    "GRIB_PDS_TEMPLATE_ASSEMBLED_VALUES": "6 41 8 0 97 0 0 0 0 102 0 0 255 1 0"
+  },
+  "qpe_grid_shape": [
+    3500,
+    7000
+  ],
+  "qpe_transform": [
+    0.009999999714244895,
+    0.0,
+    -129.99999999985712,
+    0.0,
+    -0.009999999714204058,
+    54.9999999998571,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "method": "MRMS nonnegative QPE averaged onto native RSM cells; require >=99% valid QPE coverage; Florida polygon pixel-center mask; unweighted descriptive cell statistics, not independent validation or causal attribution",
+  "florida": {
+    "cells": 13828,
+    "pearson_r": 0.5441641891898246,
+    "median_qpe_mm": 0.9889182853613405,
+    "median_change_pp": -1.7889995574951172,
+    "wetting_gt_1pp_fraction": 0.33887763957188316,
+    "drying_lt_minus1pp_fraction": 0.5649407000289268
+  },
+  "south_florida_south_of_28N": {
+    "cells": 4940,
+    "pearson_r": 0.4408872301946476,
+    "median_qpe_mm": 8.105536680655492,
+    "median_change_pp": 6.723000526428223,
+    "wetting_gt_1pp_fraction": 0.6564777327935223,
+    "drying_lt_minus1pp_fraction": 0.28846153846153844
+  },
+  "qpe_bins": [
+    {
+      "lower_mm": 0,
+      "upper_mm": 1,
+      "cells": 6920,
+      "pearson_r": 0.12073607940313547,
+      "median_qpe_mm": 0.0,
+      "median_change_pp": -2.3490028381347656,
+      "wetting_gt_1pp_fraction": 0.0008670520231213873,
+      "drying_lt_minus1pp_fraction": 0.894364161849711
+    },
+    {
+      "lower_mm": 1,
+      "upper_mm": 5,
+      "cells": 2674,
+      "pearson_r": 0.0731504560963287,
+      "median_qpe_mm": 2.4334169175003684,
+      "median_change_pp": 1.0839996337890625,
+      "wetting_gt_1pp_fraction": 0.512341062079282,
+      "drying_lt_minus1pp_fraction": 0.3107703814510097
+    },
+    {
+      "lower_mm": 5,
+      "upper_mm": 10,
+      "cells": 2051,
+      "pearson_r": 0.22354260768699247,
+      "median_qpe_mm": 7.277887508210466,
+      "median_change_pp": 9.682998657226562,
+      "wetting_gt_1pp_fraction": 0.7245246221355436,
+      "drying_lt_minus1pp_fraction": 0.24329595319356412
+    },
+    {
+      "lower_mm": 10,
+      "upper_mm": 25,
+      "cells": 1512,
+      "pearson_r": 0.15171581446520435,
+      "median_qpe_mm": 13.516876290757391,
+      "median_change_pp": 14.952499389648438,
+      "wetting_gt_1pp_fraction": 0.7837301587301587,
+      "drying_lt_minus1pp_fraction": 0.1818783068783069
+    },
+    {
+      "lower_mm": 25,
+      "upper_mm": 50,
+      "cells": 495,
+      "pearson_r": 0.11206217492005212,
+      "median_qpe_mm": 32.810820754508065,
+      "median_change_pp": 20.10799789428711,
+      "wetting_gt_1pp_fraction": 0.9414141414141414,
+      "drying_lt_minus1pp_fraction": 0.03636363636363636
+    },
+    {
+      "lower_mm": 50,
+      "upper_mm": 1000,
+      "cells": 176,
+      "pearson_r": 0.09292915272327681,
+      "median_qpe_mm": 67.64397887501124,
+      "median_change_pp": 20.426002502441406,
+      "wetting_gt_1pp_fraction": 0.9829545454545454,
+      "drying_lt_minus1pp_fraction": 0.0
+    }
+  ],
+  "extremes": [
+    {
+      "label": "drying",
+      "lon": -81.06500000000003,
+      "lat": 25.855000000000015,
+      "start_rsm_percent": 98.56400299072266,
+      "end_rsm_percent": 61.842002868652344,
+      "change_pp": -36.72200012207031,
+      "previous_24h_change_pp": 56.35600280761719,
+      "qpe_cell_mean_mm": 1.8444630776151243,
+      "qpe_nearest_mm": 0.9000000953674316,
+      "qpe_coverage_fraction": 1.0,
+      "neighbor_3x3_median_qpe_mm": 7.856179307336022,
+      "neighbor_3x3_median_change_pp": -20.712997436523438
+    },
+    {
+      "label": "wetting",
+      "lon": -80.25500000000002,
+      "lat": 25.345000000000013,
+      "start_rsm_percent": 29.312002182006836,
+      "end_rsm_percent": 81.69400024414062,
+      "change_pp": 52.38199806213379,
+      "previous_24h_change_pp": -1.177999496459961,
+      "qpe_cell_mean_mm": 41.70150500301015,
+      "qpe_nearest_mm": 43.0,
+      "qpe_coverage_fraction": 1.0,
+      "neighbor_3x3_median_qpe_mm": 27.846204492665958,
+      "neighbor_3x3_median_change_pp": 44.77000045776367
+    }
+  ]
+}

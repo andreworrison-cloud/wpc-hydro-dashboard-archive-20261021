@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "state": "updated",
+  "usable": true,
+  "policy": {
+    "warn_age_hours": 72,
+    "expire_age_hours": 96,
+    "status": "provisional_review_only"
+  },
+  "freshness": {
+    "age_hours": 19.15,
+    "usable": true,
+    "status": "within_review_limits"
+  },
+  "last_attempt": {
+    "at": "2026-10-17T19:09:08.828687Z",
+    "ok": true,
+    "error": null
+  },
+  "active": {
+    "generation": "20261017-6eddab2f17af29c28398-sport-suite-rsm-v1",
+    "valid_time": "2026-10-17T00:00:00Z",
+    "accepted_at": "2026-10-17T19:09:08.828687Z",
+    "products": {
+      "10": {
+        "depth_cm": [
+          0,
+          10
+        ],
+        "valid_time": "2026-10-17T00:00:00Z",
+        "source_url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-10cm/20261017_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
+        "http_modified_at": "Sat, 17 Oct 2026 16:24:26 GMT",
+        "directory_modified_at": null,
+        "retrieved_at": "2026-10-17T19:09:15.128973Z",
+        "retrieval_mode": "live",
+        "coverage": {
+          "shape": [
+            929,
+            1929
+          ],
+          "transform": [
+            0.029999999999999985,
+            0,
+            -124.94000000000001,
+            0,
+            -0.029999999999999985,
+            52.93,
+            0,
+            0,
+            1
+          ],
+          "crs": "EPSG:4326",
+          "valid_cells": 1290511,
+          "min": 1,
+          "max": 100.00000762939453,
+          "roundoff_above_100_cells": 363
+        },
+        "source": {
+          "path": "generations/20261017-6eddab2f17af29c28398-sport-suite-rsm-v1/20261017_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
+          "sha256": "a98ef0ff9d2a29408b98b2eccd0d0a0f00718a351b9eb2dbb3015b2e49bb429d"
+        },
+        "image": {
+          "path": "generations/20261017-6eddab2f17af29c28398-sport-suite-rsm-v1/sport_rsm_0_10cm.png",
+          "sha256": "7723ebbae2d68c1a2337aed4f6185eb21a681a3a066dedfd8e5bc06bc0e56f0b",
+          "width": 4000,
+          "height": 2538,
+          "crs": "EPSG:3857",
+          "bounds": [
+            [
+              25.059074500043483,
+              -124.93999999999998
+            ],
+            [
+              52.93,
+              -67.06718689139778
+            ]
+          ],
+          "resampling": "bilinear",
+          "mask_resampling": "nearest",
+          "palette": "sport-rsm-v1"
+        }
+      },
+      "200": {
+        "depth_cm": [
+          0,
+          200
+        ],
+        "valid_time": "2026-10-17T00:00:00Z",
+        "source_url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-2m/20261017_0000_sport_lis_rsm0-2m_conus3km_float_wgs84.tif",
+        "http_modified_at": "Sat, 17 Oct 2026 16:24:28 GMT",
+        "directory_modified_at": null,
+        "retrieved_at": "2026-10-17T19:09:15.732987Z",
+        "retrieval_mode": "live",
+        "coverage": {
+          "shape": [
+            929,
+            1929
+          ],
+          "transform": [
+            0.029999999999999985,
+            0,
+            -124.94000000000001,
+            0,
+            -0.029999999999999985,
+            52.93,
+            0,
+            0,
+            1
+          ],
+          "crs": "EPSG:4326",
+          "valid_cells": 1290511,
+          "min": 1,
+          "max": 100,
+          "roundoff_above_100_cells": 0
+        },
+        "source": {
+          "path": "generations/20261017-6eddab2f17af29c28398-sport-suite-rsm-v1/20261017_0000_sport_lis_rsm0-2m_conus3km_float_wgs84.tif",
+          "sha256": "31567234253a52fe9982d9d653b67e7e8c5236bee6c5e783c7719d45e11e10f5"
+        },
+        "image": {
+          "path": "generations/20261017-6eddab2f17af29c28398-sport-suite-rsm-v1/sport_rsm_0_200cm.png",
+          "sha256": "154ed21aa774ab27b81bb7e74f3142de42bce8feefea6907d4fc837a27e48ef8",
+          "width": 4000,
+          "height": 2538,
+          "crs": "EPSG:3857",
+          "bounds": [
+            [
+              25.059074500043483,
+              -124.93999999999998
+            ],
+            [
+              52.93,
+              -67.06718689139778
+            ]
+          ],
+          "resampling": "bilinear",
+          "mask_resampling": "nearest",
+          "palette": "sport-rsm-v1"
+        }
+      }
+    },
+    "render_revision": "sport-suite-rsm-v1",
+    "quantity": "relative_soil_moisture",
+    "units": "percent between wilting and saturation",
+    "formula": "100 * (theta - theta_wilting) / (theta_saturation - theta_wilting)"
+  }
+}
