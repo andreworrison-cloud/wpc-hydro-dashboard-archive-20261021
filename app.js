@@ -874,6 +874,7 @@ window.QPEFFG=qpeFFG;
 
 // Approved SPoRT suites: durable products are separate from dashboard code.
 const sportReview = new URLSearchParams(location.search).get('sportReview') === '1';
+const hrrrGDI = window.HRRRGDI.create({map, metadataURL: 'https://raw.githubusercontent.com/andreworrison-cloud/wpc-hydro-dashboard/data/gdi/public/metadata.json', onChange: () => updateLegends()});
 const sportDataRoot = 'https://raw.githubusercontent.com/andreworrison-cloud/wpc-hydro-dashboard/data/sport-lis/public/';
 const sportSuite = window.SPoRTSuite.create({map,
     metadataURL: sportReview ? 'review/sport-suite/metadata.json' : sportDataRoot + 'percentile/metadata.json',
@@ -7251,6 +7252,8 @@ function updateLegends() {
     if (changeLegend) addLegendBlock(changeLegend);
     const rsmLegend = sportRSM?.legendHTML();
     if (rsmLegend) addLegendBlock(rsmLegend);
+    const gdiLegend = hrrrGDI.legendHTML();
+    if (gdiLegend) addLegendBlock(gdiLegend);
     const suiteLegend = sportSuite?.legendHTML();
     if (suiteLegend) addLegendBlock(suiteLegend);
 
@@ -7986,6 +7989,16 @@ const dashboardSections = [
             {id: 'rap-vort500', label: '500mb Absolute Vorticity', layer: vort500Layer, kind: 'raster'},
             {id: 'rap-diff-adv', label: '700-400mb Diff Vorticity Advection', layer: diffAdvLayer, kind: 'raster'},
             {id: 'rap-div250', label: '250mb Divergence', layer: div250Layer, kind: 'raster'}
+        ]
+    },
+    {
+        id: 'gdi',
+        title: 'GDI Thermodynamic Guidance',
+        layers: [
+            {id: 'hrrr-gdi', label: 'HRRR GDI', layer: hrrrGDI.layers.gdi, kind: 'raster'},
+            {id: 'hrrr-gdi-coverage', label: 'HRRR GDI Neighborhood Coverage', layer: hrrrGDI.layers.coverage, kind: 'raster'},
+            {id: 'hrrr-gdi-persistence', label: 'HRRR GDI Sampled Persistence', layer: hrrrGDI.layers.persistence, kind: 'raster'},
+            {id: 'hrrr-gdi-longest', label: 'HRRR GDI Longest Sampled Run', layer: hrrrGDI.layers.longest, kind: 'raster'}
         ]
     },
     {

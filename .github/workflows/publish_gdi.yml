@@ -1,0 +1,44 @@
+name: Publish HRRR GDI
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 * * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish_gdi.yml'
+      - 'tools/gdi/**'
+      - 'tools/publish_gdi.py'
+permissions:
+  contents: read
+concurrency:
+  group: hrrr-gdi-production
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy scipy pyproj pillow matplotlib eccodes
+      - name: Restore last complete publication
+        run: python tools/publish_gdi.py restore --data-dir run/gdi-data --state-file run/gdi-state.json
+      - name: Build complete HRRR cycle
+        run: python tools/gdi/run.py --data-dir run/gdi-data
+      - name: Publish atomically
+        run: python tools/publish_gdi.py publish --data-dir run/gdi-data --state-file run/gdi-state.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gdi-run-metadata
+          path: |
+            run/gdi/selection.json
+            run/gdi/*/decoded/*_DONE.json
+            run/gdi-data/public/metadata.json
+          retention-days: 14

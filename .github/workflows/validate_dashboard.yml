@@ -5,6 +5,9 @@ on:
   pull_request:
     paths:
       - 'app.js'
+      - 'gdi_layer.js'
+      - 'tools/gdi/**'
+      - 'tools/publish_gdi.py'
       - 'index.html'
       - 'style.css'
       - 'tools/validate_dashboard.py'
@@ -25,6 +28,9 @@ on:
   push:
     paths:
       - 'app.js'
+      - 'gdi_layer.js'
+      - 'tools/gdi/**'
+      - 'tools/publish_gdi.py'
       - 'index.html'
       - 'style.css'
       - 'tools/validate_dashboard.py'
@@ -66,7 +72,10 @@ jobs:
           python-version: '3.11'
 
       - name: Check JavaScript syntax
-        run: node --check app.js
+        run: |
+          node --check app.js
+          node --check gdi_layer.js
+          node tools/gdi/test_adapter.cjs
 
       - name: Check MRMS RALA Python syntax
         run: python -m py_compile fetch_mrms_rala.py fetch_mrms_rala_loop.py tools/validate_mrms_rala.py tools/validate_mrms_rala_loop.py
