@@ -1,8 +1,8 @@
 name: Publish HRRR GDI
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '23 * * * *'
+  # Scheduled by the existing cron-job.org HRRR dispatch.
+  workflow_call:
   push:
     branches: [main]
     paths:
