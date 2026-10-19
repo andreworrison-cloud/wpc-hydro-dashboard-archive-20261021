@@ -9,3 +9,9 @@ assert.equal(state({...m,active:{...m.active,ffg:{snapshot_time:'2026-10-18T18:0
 assert.equal(state({...m,active:{...m.active,pass_number:2},last_attempt:{pass2:{state:'accepted_prior_window'}}},now).label,'Pass 2 — earlier paired rainfall window');
 assert.equal(state(null,now).visible,false);
 console.log('7 H8 freshness assertions passed');
+const {qpeFFGTimingSummary:timing}=require('../qpe_ffg_layer.js');
+assert.deepEqual(timing(m,now),{through:'Rainfall through 2026-10-18 17:00Z',age:'30 min old'});
+assert.equal(timing(null,now),null);
+assert.equal(timing(m,Date.parse('2026-10-18T16:00:00Z')),null);
+assert.equal(timing({...m,last_attempt:{at:'2026-10-18T18:25:00Z'}},Date.parse('2026-10-18T18:25:00Z')).age,'1 h 25 min old');
+console.log('4 rainfall-through and observation-age assertions passed');
