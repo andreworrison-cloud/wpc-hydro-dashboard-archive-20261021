@@ -70,3 +70,9 @@ The broad, sharply bounded guidance transition and very light rainfall at the ex
 - These rolling source files may become unavailable or revised; hashes prevent silently substituting a different revision. Raw files are not included in this repository.
 
 Priority clarification from Andrew: retain **forecast QPF minus duration-matched FFG** as a future candidate. Set aside **observed QPE minus FFG** as the retrospective product. Existing QPE/FFG ratios remain distinct.
+
+## Legend refinement — 19 October 2026
+
+All nine map legends and the offline viewer now say **Lower guidance / possible wetting** and **Higher guidance / possible drying**. The qualification preserves the intended hydrologic interpretation without attributing every guidance change to soil moisture. A note identifies streamflow conditions and RFC updates as additional influences.
+
+The frozen overlay bytes, palette, endpoints and numerical evidence are unchanged. `legend_update.json` records the overlay hashes. `tools/relabel_ffg_tendency_review.py` reproduces these presentation updates directly from the embedded frozen overlays when the original rolling GRIB files are no longer accessible. The primary renderer is updated for future runs as well. This remains a review branch; tendency layers are not activated in production.
