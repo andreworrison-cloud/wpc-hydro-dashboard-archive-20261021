@@ -36,7 +36,7 @@ errors = []
 
 # Current registry total includes all existing dashboard data/config entries,
 # basemaps, and the two validated NASA NLDAS-3 static land-surface layers.
-EXPECTED_LAYER_COUNT = 167
+EXPECTED_LAYER_COUNT = 170
 LIGHTNINGCAST_LAYER_ID = "lightningcast-probability-60min"
 
 # Preserve the exact operational menu order. Dashboard Utilities is rendered
@@ -1567,6 +1567,15 @@ if "mrmsRalaBufferLayer" not in app or "loadMRMSRALAFrameIntoLayer" not in app:
     errors.append("MRMS RALA double-buffer rendering is incomplete in app.js.")
 if "dashboardRadarSpeedMode = 'iem'" not in app or "dashboardRadarSpeedMode = 'mrms'" not in app:
     errors.append("Per-feed radar speed-mode switching is incomplete in app.js.")
+
+# Model GDI updates must be dispatched by the existing cron-job.org workflows.
+for caller, callee in [('update_hrrr_tle.yml','publish_gdi.yml'),('update_rap.yml','publish_rap_gdi.yml')]:
+    caller_text=(ROOT/'.github/workflows'/caller).read_text()
+    callee_text=(ROOT/'.github/workflows'/callee).read_text()
+    if re.search(r'^\s+schedule:',callee_text,re.M):errors.append(f'{callee} must not introduce a GitHub cron')
+    if 'workflow_call:' not in callee_text or f'uses: ./.github/workflows/{callee}' not in caller_text:errors.append(f'Missing external scheduler route for {callee}')
+for label in ['RAP Analysis & Trends','HRRR · Hourly Guidance','HRRR · Six-hour Persistence']:
+    if label not in app:errors.append(f'Missing GDI menu group: {label}')
 
 if errors:
     print("Dashboard validation FAILED:")

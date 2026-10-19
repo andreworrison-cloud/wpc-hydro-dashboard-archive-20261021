@@ -879,6 +879,7 @@ window.QPEFFG=qpeFFG;
 
 // Approved SPoRT suites: durable products are separate from dashboard code.
 const sportReview = new URLSearchParams(location.search).get('sportReview') === '1';
+const rapGDI = window.GDINamedSuite.create({map, metadataURL: 'https://raw.githubusercontent.com/andreworrison-cloud/wpc-hydro-dashboard/data/rap-gdi/public/metadata.json', keys: ['analysis','change','forecast'], paneName: 'rapGDI', onChange: () => updateLegends()});
 const hrrrGDI = window.HRRRGDI.create({map, metadataURL: 'https://raw.githubusercontent.com/andreworrison-cloud/wpc-hydro-dashboard/data/gdi/public/metadata.json', onChange: () => updateLegends()});
 const sportDataRoot = 'https://raw.githubusercontent.com/andreworrison-cloud/wpc-hydro-dashboard/data/sport-lis/public/';
 const sportSuite = window.SPoRTSuite.create({map,
@@ -7258,6 +7259,8 @@ function updateLegends() {
     if (changeLegend) addLegendBlock(changeLegend);
     const rsmLegend = sportRSM?.legendHTML();
     if (rsmLegend) addLegendBlock(rsmLegend);
+    const rapGdiLegend = rapGDI.legendHTML();
+    if (rapGdiLegend) addLegendBlock(rapGdiLegend);
     const gdiLegend = hrrrGDI.legendHTML();
     if (gdiLegend) addLegendBlock(gdiLegend);
     const suiteLegend = sportSuite?.legendHTML();
@@ -7724,6 +7727,12 @@ const baseMapRegistry = [
     {id: 'none', label: 'No Basemap', layer: blankBase, borderTone: 'none'}
 ];
 
+function enforceExclusiveGDISelection(activeEntry) {
+    getAllDashboardLayerEntries().forEach(entry => {
+        if (entry !== activeEntry && entry.exclusiveGroup === 'gdi') setDashboardLayerActive(entry, false);
+    });
+}
+
 function enforceExclusiveSPoRTSelection(activeEntry) {
     getAllDashboardLayerEntries().forEach(entry => {
         if (entry !== activeEntry && (entry.id === 'sport-percentile' || entry.id?.startsWith('sport-suite-') || entry.id?.startsWith('sport-rsm-') || entry.id?.startsWith('sport-change-'))) {
@@ -8011,11 +8020,21 @@ const dashboardSections = [
     {
         id: 'gdi',
         title: 'GDI Thermodynamic Guidance',
-        layers: [
-            {id: 'hrrr-gdi', label: 'HRRR GDI', layer: hrrrGDI.layers.gdi, kind: 'raster'},
-            {id: 'hrrr-gdi-coverage', label: 'HRRR GDI Neighborhood Coverage', layer: hrrrGDI.layers.coverage, kind: 'raster'},
-            {id: 'hrrr-gdi-persistence', label: 'HRRR GDI Sampled Persistence', layer: hrrrGDI.layers.persistence, kind: 'raster'},
-            {id: 'hrrr-gdi-longest', label: 'HRRR GDI Longest Sampled Run', layer: hrrrGDI.layers.longest, kind: 'raster'}
+        layers: [],
+        groups: [
+            {id: 'gdi-rap', title: 'RAP Analysis & Trends', openByDefault: true, layers: [
+                {id: 'rap-gdi', label: 'RAP GDI · Analysis', layer: rapGDI.layers.analysis, kind: 'raster', exclusiveGroup: 'gdi', onActivate: enforceExclusiveGDISelection},
+                {id: 'rap-gdi-change', label: 'RAP GDI · 3-hour Change', layer: rapGDI.layers.change, kind: 'raster', exclusiveGroup: 'gdi', onActivate: enforceExclusiveGDISelection},
+                {id: 'rap-gdi-forecast', label: 'RAP GDI · +3-hour Forecast', layer: rapGDI.layers.forecast, kind: 'raster', exclusiveGroup: 'gdi', onActivate: enforceExclusiveGDISelection}
+            ]},
+            {id: 'gdi-hrrr', title: 'HRRR · Hourly Guidance', openByDefault: true, layers: [
+                {id: 'hrrr-gdi', label: 'HRRR GDI', layer: hrrrGDI.layers.gdi, kind: 'raster', exclusiveGroup: 'gdi', onActivate: enforceExclusiveGDISelection},
+                {id: 'hrrr-gdi-coverage', label: 'HRRR GDI · Neighborhood Coverage', layer: hrrrGDI.layers.coverage, kind: 'raster', exclusiveGroup: 'gdi', onActivate: enforceExclusiveGDISelection}
+            ]},
+            {id: 'gdi-persistence', title: 'HRRR · Six-hour Persistence', layers: [
+                {id: 'hrrr-gdi-persistence', label: 'HRRR GDI · Sampled Persistence', layer: hrrrGDI.layers.persistence, kind: 'raster', exclusiveGroup: 'gdi', onActivate: enforceExclusiveGDISelection},
+                {id: 'hrrr-gdi-longest', label: 'HRRR GDI · Longest Sampled Run', layer: hrrrGDI.layers.longest, kind: 'raster', exclusiveGroup: 'gdi', onActivate: enforceExclusiveGDISelection}
+            ]}
         ]
     },
     {

@@ -6,6 +6,11 @@ on:
     paths:
       - 'app.js'
       - 'gdi_layer.js'
+      - 'gdi_suite_layer.js'
+      - 'tools/publish_gdi_suite.py'
+      - '.github/workflows/publish_gdi.yml'
+      - '.github/workflows/publish_rap_gdi.yml'
+      - '.github/workflows/update_rap.yml'
       - 'tools/gdi/**'
       - 'tools/publish_gdi.py'
       - 'index.html'
@@ -29,6 +34,11 @@ on:
     paths:
       - 'app.js'
       - 'gdi_layer.js'
+      - 'gdi_suite_layer.js'
+      - 'tools/publish_gdi_suite.py'
+      - '.github/workflows/publish_gdi.yml'
+      - '.github/workflows/publish_rap_gdi.yml'
+      - '.github/workflows/update_rap.yml'
       - 'tools/gdi/**'
       - 'tools/publish_gdi.py'
       - 'index.html'
@@ -75,6 +85,7 @@ jobs:
         run: |
           node --check app.js
           node --check gdi_layer.js
+          node --check gdi_suite_layer.js
           node tools/gdi/test_adapter.cjs
 
       - name: Check MRMS RALA Python syntax
