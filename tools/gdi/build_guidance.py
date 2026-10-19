@@ -4,7 +4,7 @@ import numpy as np
 from scipy.ndimage import convolve
 SCRIPTS=pathlib.Path(__file__).parent
 THRESHOLDS=(30,40,50)
-SUPPORT_COLORS=['#142d41','#205269','#267991','#359fa4','#62c6b4','#a5debd','#e5efa6']
+from render import COVERAGE as SUPPORT_COLORS
 
 def ero_window(now):
  url='https://mapservices.weather.noaa.gov/vector/rest/services/hazards/wpc_precip_hazards/MapServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&f=json'
@@ -22,7 +22,7 @@ def frame(model,cycle,lead,cache,grids):
  path=cache/model/cycle.strftime('%Y%m%d%H')/f'F{lead:03d}.npz';meta=path.with_suffix('.json');path.parent.mkdir(parents=True,exist_ok=True)
  good=False
  if path.exists() and meta.exists():
-  m=json.loads(meta.read_text());good=m.get('cycle')==cycle.isoformat() and m.get('lead')==lead and m.get('sha256')==hashlib.sha256(path.read_bytes()).hexdigest()
+  m=json.loads(meta.read_text());good=m.get('model')==model and m.get('cycle')==cycle.isoformat() and m.get('lead')==lead and m.get('sha256')==hashlib.sha256(path.read_bytes()).hexdigest()
  if not good:
   subprocess.run([sys.executable,str(SCRIPTS/'decode_model.py'),'--model',model,'--cycle',cycle.strftime('%Y%m%d%H'),'--lead',str(lead),'--out',str(path)],check=True)
  m=json.loads(meta.read_text());gridpath=cache/model/(m['grid_md5']+'-grid.npz')
@@ -92,9 +92,9 @@ def main(mode,work,public,now=None):
   arrays[key]=a;products[key]={'label':label,'legend':legend,'window_start':start.isoformat(),'valid_time':valid.isoformat(),**extra}
  if mode=='nowcast':
   for h in (0,3,6):
-   product(f'rrfs{h}',selected['rrfs',h],f'RRFS GDI · +{h}h from window start','GDI −30 · −15 · 0 · 15 · 30 · 45 · 60',start+dt.timedelta(hours=h),cycle=cycles['rrfs'][0].isoformat())
+   product(f'rrfs{h}',selected['rrfs',h],f'RRFS GDI · +{h}h from window start','GDI · 5-unit color bins',start+dt.timedelta(hours=h),cycle=cycles['rrfs'][0].isoformat())
    products[f'rrfs{h}'].pop('window_start')
-   product(f'blend{h}',.5*selected['hrrr',h]+.5*selected['rrfs',h],f'HRRR/RRFS GDI · +{h}h from window start','Equal-model mean GDI · −30 to 60',start+dt.timedelta(hours=h),source_label='HRRR '+cycles['hrrr'][0].strftime('%d %HZ')+' / RRFS '+cycles['rrfs'][0].strftime('%d %HZ'))
+   product(f'blend{h}',.5*selected['hrrr',h]+.5*selected['rrfs',h],f'HRRR/RRFS GDI · +{h}h from window start','Equal-model mean GDI · 5-unit color bins',start+dt.timedelta(hours=h),source_label='HRRR '+cycles['hrrr'][0].strftime('%d %HZ')+' / RRFS '+cycles['rrfs'][0].strftime('%d %HZ'))
    products[f'blend{h}'].pop('window_start')
  label='Day 1 ERO remaining period' if mode=='ero' else 'Six-hour window'
  maxima=np.stack([m['max'] for m in members]);all_valid=np.isfinite(maxima).all(axis=0)
@@ -106,8 +106,8 @@ def main(mode,work,public,now=None):
   for m in members:
    ok=np.isfinite(m['max']);den=convolve(ok.astype('float32'),kernel,mode='constant',cval=0);num=convolve((ok&(m['max']>=t)).astype('float32'),kernel,mode='constant',cval=0)
    support.append(np.where(ok&(den>=.8*kernel.sum()),100*num/np.maximum(den,1),np.nan))
-  product(f'support{t}',np.mean(np.stack(support),axis=0),label+f' · GDI ≥{t} support','0–100% mean 15-km neighborhood coverage of member window maxima; 2 HRRR + 2 RRFS runs; not rainfall probability',colors=SUPPORT_COLORS,edges=list(np.linspace(0,100,7)))
-  product(f'persistence{t}',np.mean(np.stack([m['counts'][t] for m in members]),axis=0),label+f' · GDI ≥{t} persistence',f'Ensemble-mean qualifying hourly samples (0–{len(times)}); not continuous hours',colors=SUPPORT_COLORS,edges=list(np.linspace(0,len(times),7)))
+  product(f'support{t}',np.mean(np.stack(support),axis=0),label+f' · GDI ≥{t} support','0–100% mean 15-km neighborhood coverage of member window maxima; 2 HRRR + 2 RRFS runs; not rainfall probability',colors=SUPPORT_COLORS,edges=list(np.linspace(0,100,7)),scale_labels=['0','16.7','33.3','50','66.7','83.3','100%'])
+  product(f'persistence{t}',np.mean(np.stack([m['counts'][t] for m in members]),axis=0),label+f' · GDI ≥{t} persistence',f'Ensemble-mean qualifying hourly samples (0–{len(times)}); not continuous hours',colors=SUPPORT_COLORS,edges=list(np.linspace(0,len(times),7)),decimals=1)
  target=work/'render';target.mkdir(parents=True,exist_ok=True);np.savez_compressed(target/'fields.npz',**arrays)
  spec={'cycle':anchor.isoformat(),'model':'hrrr_rrfs','native_spacing_km':3,'products':products,'window_start':start.isoformat(),'window_end':end.isoformat(),'expires_at':end.isoformat(),'sample_count':len(times),'member_count':4,'weighting':'Each model 1/2; each of its two lagged runs 1/2 within model','ero':ero,'source_metadata':source_metadata}
  (target/'suite.json').write_text(json.dumps(spec,indent=2));subprocess.run([sys.executable,str(SCRIPTS/'render_suite.py'),'--input',str(target),'--public',str(public)],check=True)
