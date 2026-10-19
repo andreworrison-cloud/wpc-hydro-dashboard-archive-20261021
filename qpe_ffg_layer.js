@@ -4,17 +4,20 @@ function qpeFFGDisplayState(m,now=Date.now()) {
  if(!a)return unavailable;
  const q=Date.parse(a.qpe_end),s=Date.parse(a.ffg?.snapshot_time),r=Date.parse(a.ffg_reference),declared=Date.parse(a.live_age_deadline);
  if(![q,s,r,declared].every(Number.isFinite)||q>now||s>q||r>s)return unavailable;
- const expires=Math.min(q+3*3600000,s+3*3600000,r+9*3600000,declared);
- if(now>=expires)return {state:'expired',visible:false,label:'Expired — hidden',expires};
+ const extended=a.pass_number===2 && m.policy?.qpe_hours===6 && m.policy?.snapshot_hours===9 && m.policy?.reference_hours===15;
+ const limits=[[q+(extended?6:3)*3600000,'rainfall age limit'],[s+(extended?9:3)*3600000,'paired FFG snapshot age limit'],[r+(extended?15:9)*3600000,'paired RFC cycle age limit'],[declared,'pair viewing deadline']];
+ const [expires,reason]=limits.reduce((best,item)=>item[0]<best[0]?item:best);
+ if(now>=expires)return {state:'expired',visible:false,label:'Hidden — '+reason,expires};
  const attempt=m.last_attempt?.['pass'+a.pass_number];
  const retained=m.stale||!attempt||!['accepted','accepted_prior_window'].includes(attempt.state);
- return {state:retained?'retained':'current',visible:true,label:retained?'Update delayed — retaining verified pair':(attempt.state==='accepted_prior_window'?'Pass 2 — earlier paired rainfall window':'Current paired rainfall window'),expires};
+ return {state:retained?'retained':'current',visible:true,label:retained?'Update delayed — retaining verified pair':(a.pass_number===2?'Pass 2 — earlier paired rainfall window':'Current paired rainfall window'),expires};
 }
 function qpeFFGTimingSummary(m, now=Date.now()) {
  const end=Date.parse(m?.active?.qpe_end);
  if(!Number.isFinite(end)||end>now)return null;
  const mins=Math.floor((now-end)/60000);
  return {through:'Rainfall through '+new Date(end).toISOString().replace('T',' ').replace(/:00\.000Z$/, 'Z'),
+         guidance:Number.isFinite(Date.parse(m.active.ffg_reference))?'Paired RFC cycle '+new Date(m.active.ffg_reference).toISOString().replace('T',' ').replace(/:00\.000Z$/, 'Z'):'Paired RFC cycle unavailable',
          age:mins<60?`${mins} min old`:`${Math.floor(mins/60)} h ${mins%60} min old`};
 }
 if(typeof window!=='undefined')window.qpeFFGTimingSummary=qpeFFGTimingSummary;
@@ -51,7 +54,9 @@ if(typeof window!=='undefined')window.createQPEFFGLayers = function ({map, metad
     function validate(m) {
         if (m?.schema_version !== 1 || !m.policy) throw Error('Invalid FFG metadata');
         // Accepted application policy cannot be silently relaxed by a producer.
-        if (m.policy.snapshot_hours !== 3 || m.policy.reference_hours !== 9 || m.policy.qpe_hours !== 3) throw Error('FFG freshness policy mismatch');
+        const legacy=m.policy.snapshot_hours===3 && m.policy.reference_hours===9 && m.policy.qpe_hours===3;
+        const extended=passNumber===2 && m.policy.snapshot_hours===9 && m.policy.reference_hours===15 && m.policy.qpe_hours===6;
+        if (!legacy && !extended) throw Error('FFG freshness policy mismatch');
         if (!m.active) return;
         const a=m.active, l=a.legend;
         if(a.pass_number!==passNumber)throw Error('QPE pass mismatch');
@@ -59,6 +64,7 @@ if(typeof window!=='undefined')window.createQPEFFGLayers = function ({map, metad
         if (l?.crs !== 'EPSG:3857' || JSON.stringify(l.bounds_wsen)!=='[-126,24,-66,50]' || l.units!=='percent of FFG' || l.resampling!=='nearest') throw Error('Invalid FFG projection');
         if (!Array.isArray(l.class_upper_edges) || !Array.isArray(l.colors_rgb) || l.colors_rgb.length!==l.class_upper_edges.length+1 || !l.class_upper_edges.every((v,i,x)=>Number.isFinite(v)&&v>0&&(!i||v>x[i-1])) || !l.colors_rgb.every(c=>Array.isArray(c)&&c.length===3&&c.every(v=>Number.isInteger(v)&&v>=0&&v<=255))) throw Error('Invalid FFG legend');
         if (!a.generation || !hours.every(h => a.assets?.[h]?.duration_hours===Number(h.slice(-1)) && a.assets[h].method===h.slice(0,-1) && /^[a-f0-9]{64}$/.test(a.assets[h].sha256) && a.assets[h].path.startsWith(`generations/${a.generation}/`) && !a.assets[h].path.includes('..'))) throw Error('Invalid FFG asset contract');
+        if (metadata?.active?.generation === a.generation && JSON.stringify(metadata.policy)!==JSON.stringify(m.policy)) throw Error('Immutable FFG policy changed');
         if (metadata?.active?.generation === a.generation && ['assets','legend','qpe_end','ffg','ffg_reference','paired_at','live_age_deadline'].some(key=>JSON.stringify(metadata.active[key])!==JSON.stringify(a[key]))) throw Error('Immutable FFG generation changed');
         if (metadata?.active && Date.parse(a.qpe_end)<Date.parse(metadata.active.qpe_end)) throw Error('Regressing FFG product');
     }
@@ -104,7 +110,7 @@ if(typeof window!=='undefined')window.createQPEFFGLayers = function ({map, metad
         let html=`<div class="rfc-ffg-card qpe-ffg-card"><strong>${h}-hour observed rainfall / FFG · Pass ${passNumber}</strong><div>${passNumber===1?'Latest rainfall · primary real-time view':'Refined rainfall · additional gauge information'}</div><div>${fine?'MRMS QPE · ~1 km grid':'QPE averaged onto FFG grid · comparison'}</div><b>${esc(s.label)}</b>`;
         if(a){
             const timing=qpeFFGTimingSummary(metadata,now());
-            if(timing)html+=`<p class="qpe-rainfall-through"><strong>${esc(timing.through)}</strong><br>${esc(timing.age)} · ${h}-hour accumulation</p>`;
+            if(timing)html+=`<p class="qpe-rainfall-through"><strong>${esc(timing.through)}</strong><br>${esc(timing.age)} · ${h}-hour accumulation<br>${esc(timing.guidance)}</p>`;
             const l=a.legend,e=l.class_upper_edges;
             html+='<div>Percent of paired RFC guidance (%)</div>';
             l.colors_rgb.forEach((c,i)=>{const label=i===0?`0 to < ${e[0]}`:i===e.length?`≥ ${e[i-1]}`:`${e[i-1]} to < ${e[i]}`;html+=`<div><i class="rfc-ffg-swatch" style="background:rgb(${c.join(',')})"></i>${esc(label)}%</div>`;});

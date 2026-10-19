@@ -20,6 +20,7 @@ def export(root):
   if source.exists():
    m=verify_generation(base,json.loads(source.read_text()))
    if m['historical_review']:raise ValueError('Historical pairs cannot enter production exports')
+   public['policy']=m.get('freshness_policy',public['policy'])
    a={k:m[k] for k in ('generation','pass_number','qpe_end','paired_at','ffg_reference','live_age_deadline')};a['ffg']=m['ffg'];a['assets']={}
    a['legend']=dict(crs='EPSG:3857',bounds_wsen=BOUNDS,units='percent of FFG',resampling='nearest',class_upper_edges=EDGES,colors_rgb=[list(bytes.fromhex(c[1:])) for c in COLORS])
    folder=out/'generations'/m['generation'];folder.mkdir(parents=True,exist_ok=True)

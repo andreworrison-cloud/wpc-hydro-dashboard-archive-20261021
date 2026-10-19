@@ -23,3 +23,16 @@
 The workflow publishes automatically from this implementation branch to the isolated **review** data branch. On `main`, it is manual-dispatch only and uses `data/qpe-ffg`. No cron schedule is installed. Production can be initialized from the fully verified review-data commit, preserving its exact source records and original pairing timestamps. Deployment status is tracked in PR #16. Recurring scheduling remains a separate activation step; the initial products will hide at their original deadlines if no new run occurs.
 
 The ratio is observed rainfall divided by paired RFC guidance. It is not a new official RFC FFG product, a flood probability, or remaining rainfall capacity. Fine-scale QPE preserves rainfall structure without adding native FFG resolution. The Florida gauge check corroborated localized rainfall but did not definitively validate the exact maximum; those qualifications remain in the H8 science review.
+
+### Pass 2 viewing policy — 2026-10-19
+New Pass 2 generations remain viewable until the earliest of rainfall ending +6 hours,
+paired FFG snapshot +9 hours, or paired RFC reference cycle +15 hours. This is a
+dashboard viewing limit for an earlier observed-rainfall comparison, not an official
+RFC validity period. Pass 1 retains its 3/3/9-hour policy. Both menu and legend show
+the paired RFC cycle; expiry labels identify the limiting input. Pass 2 uses only
+the archived, hash-verified same-window Pass 1 guidance, never newer replacement FFG.
+Pass 1 failures no longer skip the independent Pass 2 attempt (failure still reported).
+Existing immutable generations retain their original deadlines; the extended policy
+begins with newly generated pairs. Failed updates never reset a viewing deadline.
+Six-hour archive retention plus active pairs/baselines and the 512 MiB cap are unchanged.
+Validation: 16 ingest/pairing tests, 8 storage tests, 17 display/timing assertions.

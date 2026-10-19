@@ -15,6 +15,10 @@ from tools.probe_rfc_ffg_numeric import validate_grib
 from fetch_rfc_ffg import read_fields,coverage,BASELINE,POLICY
 UTC=timezone.utc
 HOURS=(1,3,6)
+FRESHNESS={1:dict(qpe_hours=3,snapshot_hours=3,reference_hours=9),2:dict(qpe_hours=6,snapshot_hours=9,reference_hours=15)}
+def pair_deadline(end,snapshot,reference,number):
+ policy=FRESHNESS[number]
+ return min(end+timedelta(hours=policy['qpe_hours']),snapshot+timedelta(hours=policy['snapshot_hours']),reference+timedelta(hours=policy['reference_hours']))
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def atomic(path,obj):
  temp=path.with_suffix('.tmp');temp.write_text(json.dumps(obj,indent=2)+'\n');os.replace(temp,path)
@@ -84,7 +88,7 @@ def bind_window(root,manifest):
  path=window_path(root,number,end,historical);path.parent.mkdir(parents=True,exist_ok=True)
  if not previous:atomic(path,manifest)
 
-def resolve_ffg(root,end,historical,check_time):
+def resolve_ffg(root,end,historical,check_time,pass_number=1):
  existing=read_window(root,1,end,historical)
  if existing:
   meta=existing['ffg'];path=root/'pass1'/'generations'/existing['generation']/'ffg.g2'
@@ -97,7 +101,7 @@ def resolve_ffg(root,end,historical,check_time):
   data,meta=fetch(WPC+chosen);validate_grib(data);meta['snapshot_time']=snapshot.isoformat()
   meta['first_seen_at']=meta['retrieved_at']
   path=root/'selected_ffg.g2';path.write_bytes(data)
- if check_time-datetime.fromisoformat(meta['snapshot_time'])>=timedelta(hours=3):raise ValueError('Frozen FFG snapshot exceeds review age gate')
+ if check_time-datetime.fromisoformat(meta['snapshot_time'])>=timedelta(hours=FRESHNESS[pass_number]['snapshot_hours']):raise ValueError('Frozen FFG snapshot exceeds review age gate')
  if digest(path)!=meta['sha256']:raise ValueError('FFG source checksum mismatch')
  return path,meta
 
@@ -105,7 +109,7 @@ def build(root,pass_number,end,rows,ffg_path,ffg_meta,now,check_time):
  out=root/f'pass{pass_number}';(out/'generations').mkdir(parents=True,exist_ok=True)
  historical=check_time!=now
  snapshot=datetime.fromisoformat(ffg_meta['snapshot_time'])
- if snapshot>end or check_time-snapshot>=timedelta(hours=3):raise ValueError('FFG snapshot outside pairing gate')
+ if snapshot>end or check_time-snapshot>=timedelta(hours=FRESHNESS[pass_number]['snapshot_hours']):raise ValueError('FFG snapshot outside pairing gate')
  if pass_number==2:
   baseline=read_window(root,1,end,historical)
   if not baseline or baseline['ffg']['sha256']!=ffg_meta['sha256']:raise ValueError('Pass 2 requires the frozen same-window Pass 1 FFG baseline')
@@ -113,7 +117,7 @@ def build(root,pass_number,end,rows,ffg_path,ffg_meta,now,check_time):
  fields,fc,ft,ref,ends=read_fields(ffg_path)
  coverage(fields,fc,ft,json.loads(BASELINE.read_text()),POLICY)
  if ref>datetime.fromisoformat(ffg_meta['snapshot_time']):raise ValueError('FFG reference after snapshot')
- if check_time-ref>=timedelta(hours=9) or ref>check_time:raise ValueError('FFG reference outside review age gate')
+ if check_time-ref>=timedelta(hours=FRESHNESS[pass_number]['reference_hours']) or ref>check_time:raise ValueError('FFG reference outside review age gate')
  inputs={};downloads=[]
  def get(h):
   product=f'MultiSensor_QPE_{h:02d}H_Pass{pass_number}';row=next(r for r in rows[product]['rows'] if r['end']==end.isoformat())
@@ -125,7 +129,7 @@ def build(root,pass_number,end,rows,ffg_path,ffg_meta,now,check_time):
  generation=end.strftime('%Y%m%d%H')+'-'+hashlib.sha256(json.dumps(ident,sort_keys=True).encode()).hexdigest()[:20]
  previous=read_window(root,pass_number,end,historical)
  if previous and previous['generation']!=generation:raise ValueError('Source revision requires an explicit reviewed revision; frozen window preserved')
- manifest=dict(schema_version=2,generation=generation,pass_number=pass_number,qpe_end=end.isoformat(),accepted_at=now.isoformat(),review_only=True,historical_review=(check_time!=now),live_age_deadline=min(end+timedelta(hours=3),datetime.fromisoformat(ffg_meta['snapshot_time'])+timedelta(hours=3),ref+timedelta(hours=9)).isoformat(),pairing='window-fixed retrospective comparison' if historical else 'window-fixed operational comparison; not pre-rainfall guidance or as-issued verification',pairing_policy='h8-window-fixed-v1',paired_at=baseline['paired_at'] if pass_number==2 else datetime.now(UTC).isoformat(),ffg=ffg_meta,ffg_reference=ref.isoformat(),ffg_encoded_ends=ends,files=[],products={})
+ manifest=dict(schema_version=2,generation=generation,pass_number=pass_number,qpe_end=end.isoformat(),accepted_at=now.isoformat(),review_only=True,historical_review=(check_time!=now),live_age_deadline=pair_deadline(end,snapshot,ref,pass_number).isoformat(),freshness_policy=FRESHNESS[pass_number],pairing='window-fixed retrospective comparison' if historical else 'window-fixed operational comparison; not pre-rainfall guidance or as-issued verification',pairing_policy='h8-window-fixed-v1',paired_at=baseline['paired_at'] if pass_number==2 else datetime.now(UTC).isoformat(),ffg=ffg_meta,ffg_reference=ref.isoformat(),ffg_encoded_ends=ends,files=[],products={})
  with tempfile.TemporaryDirectory(prefix='.stage-',dir=out) as tmp:
   stage=Path(tmp);shutil.copyfile(ffg_path,stage/'ffg.g2');manifest['files'].append(dict(path='ffg.g2',sha256=digest(stage/'ffg.g2')))
   geometry=None
@@ -173,12 +177,17 @@ def select_pass2_target(root,inventories,current_end,historical,now):
  for end in sorted((datetime.fromisoformat(t) for t in common),reverse=True):
   if end>current_end or (historical and end!=current_end):continue
   baseline=read_window(root,1,end,historical)
-  if baseline and (historical or now<datetime.fromisoformat(baseline['live_age_deadline'])):return end
+  if baseline and (historical or now<pair_deadline(end,datetime.fromisoformat(baseline['ffg']['snapshot_time']),datetime.fromisoformat(baseline['ffg_reference']),2)):
+   previous=read_window(root,2,end,historical)
+   # Retained immutable generations keep their originally declared deadline.
+   if previous and not historical and now>=datetime.fromisoformat(previous['live_age_deadline']):continue
+   return end
  return None
 
 def run(args):
  root=args.output_dir;now=datetime.now(UTC)
- inv={};status=dict(at=now.isoformat(),review_only=True,provisional_qpe_max_age_hours=3,provisional_ffg_snapshot_max_age_hours=3,provisional_ffg_reference_max_age_hours=9)
+ inv={};end=now.replace(minute=0,second=0,microsecond=0);check_time=now
+ status=dict(freshness_by_pass=FRESHNESS,at=now.isoformat(),review_only=True,provisional_qpe_max_age_hours=3,provisional_ffg_snapshot_max_age_hours=3,provisional_ffg_reference_max_age_hours=9)
  try:
   names=[f'MultiSensor_QPE_{h:02d}H_Pass1' for h in HOURS]
   with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
@@ -191,7 +200,8 @@ def run(args):
   path,meta=resolve_ffg(root,end,bool(args.historical_end),check_time)
   one=build(root,1,end,inv,path,meta,now,check_time);status['pass1']={'state':'accepted','generation':one['generation']}
  except Exception as e:
-  status['pass1']=failure_status(root/'pass1',e,datetime.now(UTC));atomic(root/'attempt.json',status);raise
+  status['pass1']=failure_status(root/'pass1',e,datetime.now(UTC));atomic(root/'attempt.json',status)
+  if args.historical_end:raise
  try:
   names=[f'MultiSensor_QPE_{h:02d}H_Pass2' for h in HOURS]
   with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
@@ -199,7 +209,7 @@ def run(args):
   target=select_pass2_target(root,[inv[k] for k in names],end,bool(args.historical_end),datetime.now(UTC))
   if target is None:status['pass2']={'state':'waiting_for_paired_window','target_end':end.isoformat(),'same_window_comparison_available':False}
   else:
-   baseline_path,baseline_meta=resolve_ffg(root,target,bool(args.historical_end),check_time)
+   baseline_path,baseline_meta=resolve_ffg(root,target,bool(args.historical_end),check_time,pass_number=2)
    two=build(root,2,target,inv,baseline_path,baseline_meta,now,check_time)
    status['pass2']={'state':'accepted' if target==end else 'accepted_prior_window','generation':two['generation'],'qpe_end':target.isoformat(),'current_pass1_end':end.isoformat(),'matches_current_pass1_window':target==end,'comparison_pass1_generation':read_window(root,1,target,bool(args.historical_end))['generation']}
 
@@ -208,6 +218,7 @@ def run(args):
   status['pass2']['target_end']=end.isoformat()
   status['pass2']['same_window_comparison_available']=False
  status['finished_at']=datetime.now(UTC).isoformat();atomic(root/'attempt.json',status);print(json.dumps(status,indent=2),flush=True)
+ if status['pass1']['state']!='accepted':raise RuntimeError('Pass 1 failed; independent Pass 2 attempt completed; see attempt.json')
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output-dir',type=Path,required=True);p.add_argument('--historical-end',help='Explicit retrospective UTC ISO ending; never marks output current');args=p.parse_args()
  args.output_dir.mkdir(parents=True,exist_ok=True)
