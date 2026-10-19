@@ -36,7 +36,7 @@ errors = []
 
 # Current registry total includes all existing dashboard data/config entries,
 # basemaps, and the two validated NASA NLDAS-3 static land-surface layers.
-EXPECTED_LAYER_COUNT = 160
+EXPECTED_LAYER_COUNT = 164
 LIGHTNINGCAST_LAYER_ID = "lightningcast-probability-60min"
 
 # Preserve the exact operational menu order. Dashboard Utilities is rendered
@@ -49,6 +49,7 @@ required_sections = [
     "Land-Surface Runoff Sensitivity",
     "Wildfire / Burn Scar Context",
     "RAP Mesoanalysis Data",
+    "GDI Thermodynamic Guidance",
     "HRRR Flash Flood Diagnostics - Experimental",
     "HRRR-TLE Flash Flood Guidance - Experimental",
     "CAM Nowcasts (+3h to +9h)",
