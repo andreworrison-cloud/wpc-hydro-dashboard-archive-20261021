@@ -1,9 +1,10 @@
 name: Fetch Hourly NWM Soil Moisture
 
 on:
-  schedule:
-    # Runs hourly at half-past the hour.
-    - cron: '30 * * * *'
+  workflow_call:
+  push:
+    branches: [main]
+    paths: ['fetch_nwm.py', '.github/workflows/fetch_nwm.yml']
   workflow_dispatch:
 
 permissions:
@@ -35,10 +36,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Verify NWM data contract
+        run: python -m unittest discover -s tools -p test_nwm_contract.py -v
+
       - name: Run NWM script
+        id: ingest
+        continue-on-error: true
         run: python fetch_nwm.py
 
       - name: Commit and push changes
+        if: always() && steps.ingest.outcome != 'skipped'
         env:
           BRANCH_NAME: ${{ github.ref_name }}
         run: |
@@ -73,3 +80,7 @@ jobs:
 
           echo "Unable to push NWM products after three attempts."
           exit 1
+
+      - name: Report failed update after retaining previous map
+        if: always() && steps.ingest.outcome == 'failure'
+        run: exit 1

@@ -1,0 +1,12 @@
+const assert = require('node:assert/strict');
+const {state} = require('../nwm_freshness.js');
+const m = {valid_time_iso: '2026-10-19T00:00:00Z'};
+const at = h => Date.parse(m.valid_time_iso) + h*3600000;
+assert.equal(state(m,at(2)).hidden,false);
+assert.equal(state(m,at(3)).delayed,true);
+assert.equal(state(m,at(6)).hidden,true);
+assert.equal(state({...m,retrieved_time:new Date(at(8)).toISOString()},at(8)).hidden,true);
+assert.match(state({...m,update_status:'failed_retained'},at(4)).text,/Last valid map/);
+assert.equal(state(null,at(0)).hidden,true);
+assert.equal(state(m,at(-1)).hidden,true);
+console.log('NWM freshness: 7 assertions passed');
