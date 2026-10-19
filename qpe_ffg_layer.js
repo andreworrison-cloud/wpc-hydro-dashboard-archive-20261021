@@ -10,7 +10,15 @@ function qpeFFGDisplayState(m,now=Date.now()) {
  const retained=m.stale||!attempt||!['accepted','accepted_prior_window'].includes(attempt.state);
  return {state:retained?'retained':'current',visible:true,label:retained?'Update delayed — retaining verified pair':(attempt.state==='accepted_prior_window'?'Pass 2 — earlier paired rainfall window':'Current paired rainfall window'),expires};
 }
-if(typeof module!=='undefined')module.exports={qpeFFGDisplayState};
+function qpeFFGTimingSummary(m, now=Date.now()) {
+ const end=Date.parse(m?.active?.qpe_end);
+ if(!Number.isFinite(end)||end>now)return null;
+ const mins=Math.floor((now-end)/60000);
+ return {through:'Rainfall through '+new Date(end).toISOString().replace('T',' ').replace(/:00\.000Z$/, 'Z'),
+         age:mins<60?`${mins} min old`:`${Math.floor(mins/60)} h ${mins%60} min old`};
+}
+if(typeof window!=='undefined')window.qpeFFGTimingSummary=qpeFFGTimingSummary;
+if(typeof module!=='undefined')module.exports={qpeFFGDisplayState,qpeFFGTimingSummary};
 /* RFC guidance adapter: immutable, hash-verified images; all durations swap together. */
 if(typeof window!=='undefined')window.createQPEFFGLayers = function ({map, metadataURL, passNumber, onChange = () => {}, now = () => Date.now()}) {
     const hours = ['fine1','fine3','fine6','coarse1','coarse3','coarse6'], layers = {}, images = {};
@@ -93,13 +101,15 @@ if(typeof window!=='undefined')window.createQPEFFGLayers = function ({map, metad
     function legendHTML() {
         const keys=selected();if(!keys.length)return '';
         const s=state(),a=metadata?.active,key=keys[0],h=Number(key.slice(-1)),fine=key.startsWith('fine');
-        let html=`<div class="rfc-ffg-card qpe-ffg-card"><strong>${h}-hour observed rainfall / FFG · Pass ${passNumber}</strong><div>${fine?'Fine-scale QPE · leading candidate':'QPE averaged onto FFG grid · comparison'}</div><b>${esc(s.label)}</b>`;
+        let html=`<div class="rfc-ffg-card qpe-ffg-card"><strong>${h}-hour observed rainfall / FFG · Pass ${passNumber}</strong><div>${passNumber===1?'Latest rainfall · primary real-time view':'Refined rainfall · additional gauge information'}</div><div>${fine?'Fine-scale QPE':'QPE averaged onto FFG grid · comparison'}</div><b>${esc(s.label)}</b>`;
         if(a){
+            const timing=qpeFFGTimingSummary(metadata,now());
+            if(timing)html+=`<p class="qpe-rainfall-through"><strong>${esc(timing.through)}</strong><br>${esc(timing.age)} · ${h}-hour accumulation</p>`;
             const l=a.legend,e=l.class_upper_edges;
             html+='<div>Percent of paired RFC guidance (%)</div>';
             l.colors_rgb.forEach((c,i)=>{const label=i===0?`0 to < ${e[0]}`:i===e.length?`≥ ${e[i-1]}`:`${e[i-1]} to < ${e[i]}`;html+=`<div><i class="rfc-ffg-swatch" style="background:rgb(${c.join(',')})"></i>${esc(label)}%</div>`;});
             html+=`<p>Rainfall: ${esc(utc(new Date(Date.parse(a.qpe_end)-h*3600000).toISOString()))} – ${esc(utc(a.qpe_end))}<br>FFG snapshot: ${esc(utc(a.ffg.snapshot_time))}<br>FFG reference cycle: ${esc(utc(a.ffg_reference))}<br>Pair fixed: ${esc(utc(a.paired_at))}<br>Last check: ${esc(utc(metadata.last_attempt?.at))}<br>Hidden at: ${esc(utc(new Date(s.expires).toISOString()))}</p>`;
-            if(passNumber===2)html+='<p>Pass 2 is separately timed and may lag Pass 1. Compare only matching rainfall windows.</p>';
+            if(passNumber===2)html+='<p>Pass 2 refines earlier rainfall using additional gauge information; it may end earlier than the latest Pass 1. Compare revisions only for the same rainfall window and paired guidance. More gauges do not guarantee greater accuracy everywhere.</p>';
             html+='<p>Window-fixed guidance may differ from the latest RFC FFG layer. Fine QPE does not add FFG detail. Not flood probability or remaining rainfall capacity. Transparent = unavailable.</p>';
         }
         return html+'</div>';

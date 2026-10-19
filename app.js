@@ -867,7 +867,7 @@ window.RFCFFG = rfcFFG;
 const h8Review = new URLSearchParams(location.search).get('h8Review') === '1';
 const qpeFFG = [1,2].map(passNumber=>window.createQPEFFGLayers({map,passNumber,
     metadataURL: h8Review ? `review/qpe-ffg/pass${passNumber}/metadata.json` : `https://raw.githubusercontent.com/andreworrison-cloud/wpc-hydro-dashboard/data/qpe-ffg/public/pass${passNumber}/metadata.json`,
-    onChange:()=>updateLegends()
+    onChange:()=>{updateLegends();updateQPEFFGMenuStatus();}
 }));
 window.QPEFFG=qpeFFG;
 
@@ -7893,19 +7893,24 @@ const dashboardSections = [
             {
                 id: 'qpe-ffg-comparison',
                 title: 'Observed Rainfall / FFG · Comparisons',
-                layers: [
-                    {id: 'qpe-ffg-1-fine1', label: '1-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                    {id: 'qpe-ffg-1-fine3', label: '3-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                    {id: 'qpe-ffg-1-fine6', label: '6-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                    {id: 'qpe-ffg-1-coarse1', label: '1-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.coarse1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                    {id: 'qpe-ffg-1-coarse3', label: '3-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.coarse3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                    {id: 'qpe-ffg-1-coarse6', label: '6-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[0].layers.coarse6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                    {id: 'qpe-ffg-2-fine1', label: '1-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                    {id: 'qpe-ffg-2-fine3', label: '3-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                    {id: 'qpe-ffg-2-fine6', label: '6-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                    {id: 'qpe-ffg-2-coarse1', label: '1-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.coarse1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                    {id: 'qpe-ffg-2-coarse3', label: '3-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.coarse3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                    {id: 'qpe-ffg-2-coarse6', label: '6-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Window-fixed observed rainfall comparison. See legend for rainfall window, paired guidance and freshness.', layer: qpeFFG[1].layers.coarse6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection}
+                description: 'Start with Pass 1. Use Pass 2 to reassess earlier rainfall with additional gauge information.',
+                groups: [
+                    {id: 'qpe-ffg-pass1', title: 'Pass 1 · Latest rainfall', description: 'Primary view for real-time analysis; less processing delay.', qpePass: 1, openByDefault: true, layers: [
+                        {id: 'qpe-ffg-1-fine1', label: '1-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Pass 1 · Latest rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[0].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-1-fine3', label: '3-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Pass 1 · Latest rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[0].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-1-fine6', label: '6-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Pass 1 · Latest rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[0].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-1-coarse1', label: '1-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Pass 1 · Latest rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[0].layers.coarse1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-1-coarse3', label: '3-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Pass 1 · Latest rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[0].layers.coarse3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-1-coarse6', label: '6-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Pass 1 · Latest rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[0].layers.coarse6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection}
+                    ]},
+                    {id: 'qpe-ffg-pass2', title: 'Pass 2 · Refined rainfall', description: 'Check earlier rainfall with additional gauge information; available later.', qpePass: 2, openByDefault: false, layers: [
+                        {id: 'qpe-ffg-2-fine1', label: '1-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Pass 2 · Refined rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[1].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-2-fine3', label: '3-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Pass 2 · Refined rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[1].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-2-fine6', label: '6-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Pass 2 · Refined rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[1].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-2-coarse1', label: '1-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Pass 2 · Refined rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[1].layers.coarse1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-2-coarse3', label: '3-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Pass 2 · Refined rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[1].layers.coarse3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-2-coarse6', label: '6-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Pass 2 · Refined rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[1].layers.coarse6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection}
+                    ]},
                 ]
             }
         ]
@@ -8157,7 +8162,7 @@ function cleanLayerLabel(label) {
 function getSectionLayerEntries(section) {
     return [
         ...(section.layers || []),
-        ...((section.groups || []).flatMap(group => group.layers || []))
+        ...((section.groups || []).flatMap(getSectionLayerEntries))
     ];
 }
 
@@ -8275,6 +8280,46 @@ function syncSidebarWithMap() {
     });
     updateActiveLayerCount();
     if (selectedDashboardLayerId) selectDashboardLayer(selectedDashboardLayerId);
+}
+
+function updateQPEFFGMenuStatus() {
+    document.querySelectorAll('[data-qpe-pass-status]').forEach(node => {
+        const adapter = qpeFFG[Number(node.dataset.qpePassStatus) - 1];
+        const info = window.qpeFFGTimingSummary(adapter.getMetadata(), Date.now());
+        node.textContent = info ? `${info.through} · ${info.age} · ${adapter.getState().label}` : 'Rainfall time unavailable';
+    });
+}
+
+function renderDashboardLayerGroup(config) {
+    const group = document.createElement('details');
+    group.className = 'dashboard-layer-group';
+    group.dataset.groupId = config.id;
+    group.open = Boolean(config.openByDefault);
+    const summary = document.createElement('summary');
+    const heading = document.createElement('span');
+    heading.textContent = config.title;
+    if (config.description) {
+        const hint = document.createElement('small');
+        hint.className = 'group-description';
+        hint.textContent = config.description;
+        heading.append(hint);
+    }
+    if (config.qpePass) {
+        const status = document.createElement('small');
+        status.className = 'qpe-pass-time';
+        status.dataset.qpePassStatus = String(config.qpePass);
+        heading.append(status);
+    }
+    const count = document.createElement('span');
+    count.className = 'section-count';
+    count.textContent = String(getSectionLayerEntries(config).length);
+    summary.append(heading, count);
+    const body = document.createElement('div');
+    body.className = 'dashboard-layer-group-body';
+    (config.layers || []).forEach(entry => body.append(renderLayerRow(entry)));
+    (config.groups || []).forEach(child => body.append(renderDashboardLayerGroup(child)));
+    group.append(summary, body);
+    return group;
 }
 
 function renderLayerRow(entry) {
@@ -8538,25 +8583,7 @@ function renderDashboardSidebar() {
                     }
                 });
 
-                (sectionConfig.groups || []).forEach(groupConfig => {
-                    const group = document.createElement('details');
-                    group.className = 'dashboard-layer-group';
-                    group.dataset.groupId = groupConfig.id;
-                    group.open = Boolean(groupConfig.openByDefault);
-
-                    const groupSummary = document.createElement('summary');
-                    groupSummary.innerHTML = `
-                        <span>${groupConfig.title}</span>
-                        <span class="section-count">${(groupConfig.layers || []).length}</span>
-                    `;
-
-                    const groupBody = document.createElement('div');
-                    groupBody.className = 'dashboard-layer-group-body';
-                    (groupConfig.layers || []).forEach(entry => groupBody.append(renderLayerRow(entry)));
-
-                    group.append(groupSummary, groupBody);
-                    body.append(group);
-                });
+                (sectionConfig.groups || []).forEach(groupConfig => body.append(renderDashboardLayerGroup(groupConfig)));
             }
 
             section.append(summary, body);
@@ -8564,6 +8591,7 @@ function renderDashboardSidebar() {
         });
 
         renderUtilitySection(container);
+        updateQPEFFGMenuStatus();
         syncSidebarWithMap();
         applyLayerSearch();
     });
