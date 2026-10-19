@@ -704,3 +704,20 @@ body.sidebar-open .map-title {
 .ffg-tendency-control {display:flex;align-items:center;gap:8px;padding:8px 10px;font-size:12px;}
 .ffg-tendency-control select {background:#172b3b;color:#eef5fa;border:1px solid #526776;border-radius:4px;padding:5px;}
 [data-ffg-tendency-status] {display:block;padding:0 10px 8px;line-height:1.4;}
+
+/* Shared GDI legends: tick positions follow the actual discrete raster bins. */
+.gdi-legend { padding: 3px 1px 5px; line-height: 1.45; }
+.gdi-legend > strong { display:block; font-size:13px; margin-bottom:5px; }
+.gdi-time { color:#d5edff; font-variant-numeric:tabular-nums; margin-bottom:3px; }
+.gdi-note { color:#c4d0d9; font-size:11px; margin:4px 0; }
+.gdi-status { color:#ffda8d; font-size:11px; margin:5px 0; }
+.gdi-controls { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; margin:8px 0; }
+.gdi-controls label { display:flex; gap:5px; align-items:center; }
+.gdi-controls select { background:#182c3b; color:#fff; border:1px solid #607282; border-radius:4px; padding:3px 6px; }
+.gdi-scale-unit { font-size:11px; font-weight:600; margin-top:8px; margin-bottom:4px; }
+.gdi-scale { margin:0 3px 7px; }
+.gdi-scale-bar { display:flex; height:15px; border:1px solid #8c9ba7; border-radius:2px; overflow:hidden; }
+.gdi-scale-bar span { flex:1; }
+.gdi-scale-ticks { position:relative; height:23px; font-size:10px; font-variant-numeric:tabular-nums; }
+.gdi-scale-ticks span { position:absolute; top:0; padding-top:4px; white-space:nowrap; }
+.gdi-scale-ticks span::before { content:''; position:absolute; top:0; left:0; height:3px; border-left:1px solid #becbd4; }
