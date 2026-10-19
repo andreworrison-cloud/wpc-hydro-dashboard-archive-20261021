@@ -15,7 +15,7 @@ def build(work,public):
   except subprocess.CalledProcessError as e:failures.append({'cycle':cycle.isoformat(),'error':str(e)})
  else:raise RuntimeError('No complete RAP analysis/change/forecast package: '+str(failures))
  previous=pathlib.Path(public)/'metadata.json'
- if previous.exists() and json.loads(previous.read_text())['cycle']>=cycle.isoformat():print('RAP publication already current');return
+ if previous.exists() and json.loads(previous.read_text()).get('overlay_type')=='labeled_contours_v1' and json.loads(previous.read_text())['cycle']>=cycle.isoformat():print('RAP publication already current');return
  frames={k:np.load(root/(k+'.npz')) for k in ('analysis','prior','forecast')};m={k:json.loads((root/(k+'.json')).read_text()) for k in frames}
  for name,c,lead in [('analysis',cycle,0),('prior',cycle-dt.timedelta(hours=3),0),('forecast',cycle,3)]:
   if m[name]['cycle']!=c.isoformat() or m[name]['lead']!=lead or m[name]['sha256']!=hashlib.sha256((root/(name+'.npz')).read_bytes()).hexdigest():raise ValueError('RAP cached input identity mismatch')
