@@ -1,9 +1,7 @@
 name: Update MRMS FLASH 24-Hour Maxima
 
 on:
-  schedule:
-    # Offset from the top and half-hour to reduce peak GitHub scheduler load.
-    - cron: "7,37 * * * *"
+  # Scheduled by the existing cron-job.org job at :07 and :37 each hour.
   workflow_dispatch:
 
 permissions:
