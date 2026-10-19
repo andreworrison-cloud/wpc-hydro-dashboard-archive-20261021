@@ -101,7 +101,7 @@ if(typeof window!=='undefined')window.createQPEFFGLayers = function ({map, metad
     function legendHTML() {
         const keys=selected();if(!keys.length)return '';
         const s=state(),a=metadata?.active,key=keys[0],h=Number(key.slice(-1)),fine=key.startsWith('fine');
-        let html=`<div class="rfc-ffg-card qpe-ffg-card"><strong>${h}-hour observed rainfall / FFG · Pass ${passNumber}</strong><div>${passNumber===1?'Latest rainfall · primary real-time view':'Refined rainfall · additional gauge information'}</div><div>${fine?'Fine-scale QPE':'QPE averaged onto FFG grid · comparison'}</div><b>${esc(s.label)}</b>`;
+        let html=`<div class="rfc-ffg-card qpe-ffg-card"><strong>${h}-hour observed rainfall / FFG · Pass ${passNumber}</strong><div>${passNumber===1?'Latest rainfall · primary real-time view':'Refined rainfall · additional gauge information'}</div><div>${fine?'MRMS QPE · ~1 km grid':'QPE averaged onto FFG grid · comparison'}</div><b>${esc(s.label)}</b>`;
         if(a){
             const timing=qpeFFGTimingSummary(metadata,now());
             if(timing)html+=`<p class="qpe-rainfall-through"><strong>${esc(timing.through)}</strong><br>${esc(timing.age)} · ${h}-hour accumulation</p>`;
