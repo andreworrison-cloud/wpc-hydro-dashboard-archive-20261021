@@ -12,3 +12,7 @@ Both headings display the rainfall-through timestamp, age measured from that tim
 The group renderer and registry traversal now support nested groups. Existing search expands matching ancestors and children. All 166 registered dashboard layers remain present.
 
 Validation: JavaScript syntax; dashboard validator (166 layers); seven existing freshness checks; four new observation-age checks; DOM check of 12 unique nested controls, group counts, default expansion, visible Pass 2 purpose, and both timestamp slots. Browser verification is recorded separately after deployment if available. Source ingest, publication cadence, retention and expiration policies are unchanged.
+
+## Live browser verification
+
+Pages deployment 39269917575 succeeded. On 19 October 2026 around 14:34Z, the live dashboard showed Pass 1 rainfall through 14Z and Pass 2 through 13Z, with distinct observation ages. Both pass headings remained visible when collapsed. Selecting Pass 2 deselected Pass 1 and left exactly one QPE/FFG raster. Both legends showed the correct pass, accumulation duration, rainfall endpoint and guidance pairing. Searching for Pass 2 expanded the nested group and exposed all six matching controls. Screenshot: [live menu and Pass 2 legend](qpe-pass-sublayers-live.jpg).
