@@ -2,7 +2,8 @@
 import argparse, datetime as dt, hashlib, json, pathlib
 import numpy as np
 from pyproj import CRS, Transformer
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
+from contours import contour_image,CONTOUR_STYLE
 from matplotlib.colors import to_rgba
 
 COLORS=['#323232','#646464','#737373','#7e7e7e','#909090','#a3a3a3','#bcbcbc','#bbc7cb','#b2d2dd','#5acf28','#bad411','#ffcc00','#ffa900','#fc8106','#eb4722','#d8133a','#990a1d','#770022']
@@ -18,7 +19,7 @@ def render(decoded, public, cycle):
     stamp=dt.datetime.strptime(cycle,'%Y%m%d%H').replace(tzinfo=dt.timezone.utc)
     for h,m in enumerate(markers):
         if m['cycle']!=stamp.isoformat() or m['forecast_hour']!=h or m['recipe']!='pressure_terrain_v1' or m['output_sha256']!=sha(decoded/f'F{h:02d}.npz'):raise ValueError('Incomplete or inconsistent decoded cycle')
-    digest=hashlib.sha256(json.dumps(markers,sort_keys=True).encode()).hexdigest()[:12]
+    digest=hashlib.sha256(CONTOUR_STYLE.encode()+json.dumps(markers,sort_keys=True).encode()).hexdigest()[:12]
     generation=f'{cycle}-{digest}-v1';dest=public/'generations'/generation;dest.mkdir(parents=True,exist_ok=True)
     grid=np.load(decoded/'grid.npz');lat,lon=grid['latitude'],grid['longitude']
     # HRRR spherical Lambert projection. Fit array index to projected coordinates,
@@ -40,13 +41,7 @@ def render(decoded, public, cycle):
     def save(name,a,palette,edges,labels=False):
         a=sample(a);valid=np.isfinite(a)
         if labels:
-            im=Image.new('RGBA',(WIDTH,HEIGHT));draw=ImageDraw.Draw(im)
-            try:font=ImageFont.truetype('DejaVuSans.ttf',19)
-            except OSError:font=ImageFont.load_default()
-            # Actual sampled native values, not interpolated contour estimates.
-            for y in range(65,HEIGHT,110):
-                for x in range(65,WIDTH,145):
-                    if valid[y,x]:draw.text((x,y),str(round(float(a[y,x]))),font=font,fill='white',stroke_width=2,stroke_fill='#18212b',anchor='mm')
+            im=contour_image(a,range(-30,81,10))
         else:
             rgba=np.array([[round(v*255) for v in to_rgba(c)] for c in palette],dtype=np.uint8)
             idx=np.clip(np.searchsorted(edges,np.nan_to_num(a,nan=-999),side='right')-1,0,len(palette)-1)
@@ -64,7 +59,7 @@ def render(decoded, public, cycle):
         yes=stack>=threshold;count=yes.sum(axis=0);run=np.zeros(count.shape,dtype=np.uint8);longest=run.copy()
         for frame in yes:run=np.where(frame,run+1,0);longest=np.maximum(longest,run)
         for name,a in [('persistence',count),('longest',longest)]:save(f'{name}{threshold}',np.where(complete,a,np.nan),['#142d41']+COVERAGE,np.arange(8))
-    metadata={'schema_version':1,'generation':generation,'cycle':stamp.isoformat(),'valid_times':[(stamp+dt.timedelta(hours=h)).isoformat() for h in range(7)],'bounds':BOUNDS,'crs':'EPSG:3857','width':WIDTH,'height':HEIGHT,'resampling':'nearest','assets':assets,'colors':COLORS,'coverage_colors':COVERAGE,'formulation':'jose_gfs_q_theta850_additive_terrain','input_product':'HRRR wrfprs TMP/SPFH 950/850/700/500 hPa + surface PRES','sampling':'F00 through F06 inclusive: seven hourly samples; counts are not continuous duration','coverage_radius_km':15,'coverage_min_valid_fraction':0.8}
+    metadata={'schema_version':1,'overlay_type':CONTOUR_STYLE,'generation':generation,'cycle':stamp.isoformat(),'valid_times':[(stamp+dt.timedelta(hours=h)).isoformat() for h in range(7)],'bounds':BOUNDS,'crs':'EPSG:3857','width':WIDTH,'height':HEIGHT,'resampling':'nearest','assets':assets,'colors':COLORS,'coverage_colors':COVERAGE,'formulation':'jose_gfs_q_theta850_additive_terrain','input_product':'HRRR wrfprs TMP/SPFH 950/850/700/500 hPa + surface PRES','sampling':'F00 through F06 inclusive: seven hourly samples; counts are not continuous duration','coverage_radius_km':15,'coverage_min_valid_fraction':0.8}
     (dest/'provenance.json').write_text(json.dumps(markers,indent=2))
     temporary=public/'metadata.tmp';temporary.write_text(json.dumps(metadata,indent=2));temporary.replace(public/'metadata.json')
     return metadata
