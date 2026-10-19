@@ -4033,6 +4033,7 @@ window.setInterval(() => {
 
 
 let nwmLayerReady = false;
+let nwmMetadata = null;
 let sportLayerReady = false;
 let nrcsHsgReady = false;
 let nrcsHsgMetadata = null;
@@ -5944,42 +5945,41 @@ window.addEventListener('focus', checkHRRRTLEUpdatesNow);
 window.addEventListener('online', checkHRRRTLEUpdatesNow);
 
 
+function refreshNWMFreshness() {
+    const state = NWMFreshness.state(nwmMetadata);
+    nwmLayerReady = !!nwmMetadata && !state.hidden;
+    nwmValidTime = state.text;
+    nwmLayer.setOpacity(nwmLayerReady ? 1 : 0);
+    const timeBox = document.getElementById('nwm-time-box');
+    if (timeBox) {
+        timeBox.innerHTML = '<strong>NWM 0-40cm Soil Saturation</strong><br>';
+        const text = document.createElement('span');
+        text.style.color = '#ffeb3b';
+        text.textContent = state.text;
+        timeBox.appendChild(text);
+    }
+}
+setInterval(refreshNWMFreshness, 30000);
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) refreshNWMFreshness();
+});
+
 async function fetchNWMMetadata() {
     try {
-        const response = await fetch(
-            'static/nwm_metadata.json?t=' + Date.now(),
-            {cache: 'no-store'}
-        );
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
+        const response = await fetch('static/nwm_metadata.json?t=' + Date.now(), {cache: 'no-store'});
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
-
         applySoilRasterMetadata({
-            metadata: data,
-            layer: nwmLayer,
-            baseUrl: NWM_IMAGE_URL,
-            productName: "NWM soil saturation",
-            opacity: 1.0
+            metadata: data, layer: nwmLayer, baseUrl: NWM_IMAGE_URL,
+            productName: "NWM soil saturation", opacity: 0
         });
-
-        nwmLayerReady = true;
-        nwmValidTime = data.valid_time || "Unknown";
-
-        const timeBox = document.getElementById('nwm-time-box');
-        if (timeBox && timeBox.style.display === 'block') {
-            timeBox.innerHTML = `
-                <strong>NWM 0-40cm Soil Saturation</strong><br>
-                <span style="color: #ffeb3b;">${nwmValidTime}</span>
-            `;
-        }
+        nwmMetadata = data;
     } catch (error) {
-        nwmLayerReady = false;
-        nwmLayer.setOpacity(0);
+        // Retain a previously validated map, but never reset its source age.
+        if (nwmMetadata) nwmMetadata = {...nwmMetadata, update_status: 'failed_retained'};
         console.error("NWM raster metadata update failed:", error);
     }
+    refreshNWMFreshness();
 }
 
 async function fetchSPoRTMetadata() {
@@ -7465,7 +7465,7 @@ map.on('overlayadd', function(eventLayer) {
         fetchNWMMetadata();
 
         if (nwmTimeBox) {
-            nwmTimeBox.innerHTML = nwmLayerReady
+            nwmTimeBox.innerHTML = nwmMetadata
                 ? `<strong>NWM 0-40cm Soil Saturation</strong><br><span style="color: #ffeb3b;">${nwmValidTime}</span>`
                 : `<strong>NWM 0-40cm Soil Saturation</strong><br><span style="color: #ffeb3b;">Loading latest raster...</span>`;
             nwmTimeBox.style.display = 'block';

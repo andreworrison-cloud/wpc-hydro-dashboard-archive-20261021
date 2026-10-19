@@ -18,6 +18,11 @@ concurrency:
   group: qpe-ffg-${{ github.ref }}
   cancel-in-progress: false
 jobs:
+  nwm:
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/fetch_nwm.yml
   publish:
     runs-on: ubuntu-latest
     timeout-minutes: 20

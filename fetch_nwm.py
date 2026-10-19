@@ -236,6 +236,43 @@ def determine_source_crs(dataset, data_array):
     return RasterioCRS.from_wkt(fallback.to_wkt())
 
 
+def validate_source_time(dataset, expected):
+    """Require decoded time and global valid time to match the requested file."""
+    if "time" not in dataset or dataset.time.size != 1:
+        raise RuntimeError("NWM requires exactly one internal valid time")
+    actual = np.asarray(dataset.time.values).reshape(-1)[0]
+    expected64 = np.datetime64(expected.replace(tzinfo=None), "s")
+    if not np.issubdtype(np.asarray(actual).dtype, np.datetime64) or actual != expected64:
+        raise RuntimeError("NWM internal valid time differs from requested cycle")
+    def parse_attr(name):
+        value = dataset.attrs.get(name)
+        if not value:
+            raise RuntimeError(f"Missing NWM {name}")
+        return datetime.fromisoformat(str(value).replace("Z", "+00:00")).replace(tzinfo=timezone.utc)
+    if parse_attr("model_output_valid_time") != expected:
+        raise RuntimeError("NWM global valid time differs from requested cycle")
+    initialization = parse_attr("model_initialization_time")
+    if initialization > expected:
+        raise RuntimeError("NWM initialization follows valid time")
+    return initialization.isoformat().replace("+00:00", "Z")
+
+
+def saturation_percent(data_array):
+    """Decode using declared units; never infer units from a regional maximum."""
+    if str(data_array.attrs.get("units", "")).strip() != "1":
+        raise RuntimeError("SOILSAT_TOP must declare dimensionless units '1'")
+    scale = data_array.encoding.get("scale_factor")
+    offset = data_array.encoding.get("add_offset")
+    if scale is None or not np.isclose(scale, 0.001, rtol=1e-6) or offset != 0:
+        raise RuntimeError("Unexpected SOILSAT_TOP packing contract")
+    values = np.asarray(data_array.values, dtype=np.float64)
+    finite = values[np.isfinite(values)]
+    if not finite.size or finite.min() < -1e-6 or finite.max() > 1 + 1e-6:
+        raise RuntimeError("SOILSAT_TOP decoded values outside fractional saturation range")
+    # Packed 1000 * float32 scale can exceed 1 by 4.75e-8.
+    return (np.clip(values, 0, 1) * 100).astype(np.float32)
+
+
 def prepare_source_grid(dataset):
     if "SOILSAT_TOP" not in dataset.data_vars:
         raise RuntimeError(
@@ -256,10 +293,7 @@ def prepare_source_grid(dataset):
 
     data_array = data_array.transpose("y", "x")
 
-    soil_saturation = np.asarray(
-        data_array.values,
-        dtype=np.float32,
-    )
+    soil_saturation = saturation_percent(data_array)
 
     x = np.asarray(
         dataset["x"].values,
@@ -301,32 +335,6 @@ def prepare_source_grid(dataset):
             "SOILSAT_TOP shape does not match the x/y coordinate sizes: "
             f"{soil_saturation.shape} versus {(y.size, x.size)}."
         )
-
-    finite = soil_saturation[np.isfinite(soil_saturation)]
-
-    if finite.size == 0:
-        raise RuntimeError("SOILSAT_TOP contains no finite values.")
-
-    raw_max = float(np.nanmax(finite))
-
-    if raw_max <= 1.5:
-        soil_saturation *= 100.0
-    elif raw_max <= 100.5:
-        print(
-            "SOILSAT_TOP appears already scaled to percent; "
-            "not multiplying by 100."
-        )
-    else:
-        raise RuntimeError(
-            "SOILSAT_TOP has an unexpected maximum value "
-            f"of {raw_max}."
-        )
-
-    soil_saturation[
-        ~np.isfinite(soil_saturation)
-        | (soil_saturation < 0.0)
-        | (soil_saturation > 100.0)
-    ] = np.nan
 
     if x[0] > x[-1]:
         x = x[::-1]
@@ -582,6 +590,11 @@ def main():
 
     try:
         valid_time, source_url = download_latest_nwm()
+        if OUTPUT_JSON.exists():
+            previous = json.loads(OUTPUT_JSON.read_text())
+            previous_time = previous.get("valid_time_iso")
+            if previous_time and valid_time < datetime.fromisoformat(previous_time.replace("Z", "+00:00")):
+                raise RuntimeError("Refusing to replace NWM with an older source valid time")
 
         print("Opening and processing NWM NetCDF file...")
 
@@ -591,6 +604,7 @@ def main():
             decode_coords="all",
             mask_and_scale=True,
         ) as dataset:
+            initialization_time = validate_source_time(dataset, valid_time)
             (
                 source_data,
                 source_transform,
@@ -608,8 +622,9 @@ def main():
 
         rgba = create_rgba_image(destination_data)
 
+        staged_png = OUTPUT_PNG.with_suffix(".pending.png")
         Image.fromarray(rgba).save(
-            OUTPUT_PNG,
+            staged_png,
             optimize=True,
         )
 
@@ -631,6 +646,10 @@ def main():
                 ).total_seconds() / 3600.0,
                 1,
             ),
+            "model_initialization_time": initialization_time,
+            "last_attempt_time": retrieval_time.isoformat(),
+            "update_status": "success",
+            "freshness_policy": {"warn_hours": 3, "hide_hours": 6},
             "bounds": leaflet_bounds,
             "crs": "EPSG:3857",
             "image_crs": "EPSG:3857",
@@ -641,7 +660,8 @@ def main():
             "source_url": source_url,
         }
 
-        with OUTPUT_JSON.open(
+        staged_json = OUTPUT_JSON.with_suffix(".pending.json")
+        with staged_json.open(
             "w",
             encoding="utf-8",
         ) as file:
@@ -650,6 +670,9 @@ def main():
                 file,
                 indent=2,
             )
+
+        staged_png.replace(OUTPUT_PNG)
+        staged_json.replace(OUTPUT_JSON)
 
         print(f"Wrote {OUTPUT_PNG}")
         print(f"Wrote {OUTPUT_JSON}")
@@ -686,7 +709,11 @@ def main():
                 "Keeping the previous EPSG:3857-compatible "
                 "NWM dashboard layer."
             )
-            return 0
+            previous_metadata["last_attempt_time"] = datetime.now(timezone.utc).isoformat()
+            previous_metadata["update_status"] = "failed_retained"
+            previous_metadata["freshness_policy"] = {"warn_hours": 3, "hide_hours": 6}
+            OUTPUT_JSON.write_text(json.dumps(previous_metadata, indent=2) + "\n")
+            return 1
 
         print(
             "No compatible previous NWM output exists; "
