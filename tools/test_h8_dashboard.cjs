@@ -39,7 +39,7 @@ await page.route('**/*',async route=>{const u=new URL(route.request().url()),url
 await page.goto('https://h8.local/?h8Review=1');
 try{await page.waitForFunction(()=>window.QPEFFG?.every(x=>x.getState().state==='current'),{timeout:15000});}catch(e){console.log(await page.evaluate(()=>({states:window.QPEFFG?.map(x=>x.getState()),title:document.title})));throw e;}
 await page.evaluate(()=>getAllDashboardLayerEntries().forEach(e=>setDashboardLayerActive(e,false)));
-for(const n of [1,2])for(const method of ['fine','coarse'])for(const h of [1,3,6]){
+for(const n of [1,2])for(const method of ['fine'])for(const h of [1,3,6]){
  const id=`qpe-ffg-${n}-${method}${h}`;
  await page.evaluate(id=>{setDashboardLayerActive(layerEntriesById.get(id),true);selectDashboardLayer(id);},id);
  assert.equal(await page.locator('.qpe-ffg-raster').count(),1);
@@ -60,6 +60,6 @@ await page.evaluate(()=>{window.h8Now=QPEFFG[0].getState().expires;QPEFFG.forEac
 assert.equal(await page.locator('.qpe-ffg-raster').count(),0);assert.match(await page.locator('.qpe-ffg-card').innerText(),/Expired/);
 await page.screenshot({path:path.join(output,'h8-expired.png')});
 assert.deepEqual(errors,[]);
-fs.writeFileSync(path.join(output,'result.json'),JSON.stringify({result:'passed',controls:12,opacity:true,partial_batch_retained:true,outage_retained:true,expiry_hides:true,page_errors:errors,basemap_controls_tested:basemaps.length,basemaps:'overlay retained through all background controls; external tiles isolated, not a live tile-provider test'},null,2));
-console.log('12 dashboard controls, matching legends, opacity, partial batch retention, outage retention and expiration passed');await browser.close();
+fs.writeFileSync(path.join(output,'result.json'),JSON.stringify({result:'passed',controls:6,opacity:true,partial_batch_retained:true,outage_retained:true,expiry_hides:true,page_errors:errors,basemap_controls_tested:basemaps.length,basemaps:'overlay retained through all background controls; external tiles isolated, not a live tile-provider test'},null,2));
+console.log('6 dashboard controls, matching legends, opacity, partial batch retention, outage retention and expiration passed');await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});

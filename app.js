@@ -7893,23 +7893,16 @@ const dashboardSections = [
             {
                 id: 'qpe-ffg-comparison',
                 title: 'Observed Rainfall / FFG · Comparisons',
-                description: 'Start with Pass 1. Use Pass 2 to reassess earlier rainfall with additional gauge information.',
                 groups: [
                     {id: 'qpe-ffg-pass1', title: 'Pass 1 · Latest rainfall', description: 'Primary view for real-time analysis; less processing delay.', qpePass: 1, openByDefault: true, layers: [
-                        {id: 'qpe-ffg-1-fine1', label: '1-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Pass 1 · Latest rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[0].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                        {id: 'qpe-ffg-1-fine3', label: '3-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Pass 1 · Latest rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[0].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                        {id: 'qpe-ffg-1-fine6', label: '6-hour QPE / FFG · Pass 1 · Fine-scale', description: 'Pass 1 · Latest rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[0].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                        {id: 'qpe-ffg-1-coarse1', label: '1-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Pass 1 · Latest rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[0].layers.coarse1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                        {id: 'qpe-ffg-1-coarse3', label: '3-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Pass 1 · Latest rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[0].layers.coarse3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                        {id: 'qpe-ffg-1-coarse6', label: '6-hour QPE / FFG · Pass 1 · FFG-grid average', description: 'Pass 1 · Latest rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[0].layers.coarse6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection}
+                        {id: 'qpe-ffg-1-fine1', label: '1-hour QPE / FFG · Pass 1', keywords: 'fine-scale latest rainfall', layer: qpeFFG[0].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-1-fine3', label: '3-hour QPE / FFG · Pass 1', keywords: 'fine-scale latest rainfall', layer: qpeFFG[0].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-1-fine6', label: '6-hour QPE / FFG · Pass 1', keywords: 'fine-scale latest rainfall', layer: qpeFFG[0].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
                     ]},
                     {id: 'qpe-ffg-pass2', title: 'Pass 2 · Refined rainfall', description: 'Check earlier rainfall with additional gauge information; available later.', qpePass: 2, openByDefault: false, layers: [
-                        {id: 'qpe-ffg-2-fine1', label: '1-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Pass 2 · Refined rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[1].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                        {id: 'qpe-ffg-2-fine3', label: '3-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Pass 2 · Refined rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[1].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                        {id: 'qpe-ffg-2-fine6', label: '6-hour QPE / FFG · Pass 2 · Fine-scale', description: 'Pass 2 · Refined rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[1].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                        {id: 'qpe-ffg-2-coarse1', label: '1-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Pass 2 · Refined rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[1].layers.coarse1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                        {id: 'qpe-ffg-2-coarse3', label: '3-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Pass 2 · Refined rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[1].layers.coarse3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
-                        {id: 'qpe-ffg-2-coarse6', label: '6-hour QPE / FFG · Pass 2 · FFG-grid average', description: 'Pass 2 · Refined rainfall. Check rainfall-through time and paired guidance in the legend.', layer: qpeFFG[1].layers.coarse6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection}
+                        {id: 'qpe-ffg-2-fine1', label: '1-hour QPE / FFG · Pass 2', keywords: 'fine-scale refined rainfall', layer: qpeFFG[1].layers.fine1, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-2-fine3', label: '3-hour QPE / FFG · Pass 2', keywords: 'fine-scale refined rainfall', layer: qpeFFG[1].layers.fine3, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
+                        {id: 'qpe-ffg-2-fine6', label: '6-hour QPE / FFG · Pass 2', keywords: 'fine-scale refined rainfall', layer: qpeFFG[1].layers.fine6, kind: 'raster', onActivate: enforceExclusiveQPEFFGSelection},
                     ]},
                 ]
             }
