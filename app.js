@@ -8292,7 +8292,7 @@ function updateQPEFFGMenuStatus() {
     document.querySelectorAll('[data-qpe-pass-status]').forEach(node => {
         const adapter = qpeFFG[Number(node.dataset.qpePassStatus) - 1];
         const info = window.qpeFFGTimingSummary(adapter.getMetadata(), Date.now());
-        node.textContent = info ? `${info.through} · ${info.age} · ${adapter.getState().label}` : 'Rainfall time unavailable';
+        node.textContent = info ? `${info.through} · ${info.age} · ${info.guidance} · ${adapter.getState().label}` : 'Rainfall time unavailable';
     });
 }
 

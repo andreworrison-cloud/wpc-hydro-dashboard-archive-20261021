@@ -10,8 +10,17 @@ assert.equal(state({...m,active:{...m.active,pass_number:2},last_attempt:{pass2:
 assert.equal(state(null,now).visible,false);
 console.log('7 H8 freshness assertions passed');
 const {qpeFFGTimingSummary:timing}=require('../qpe_ffg_layer.js');
-assert.deepEqual(timing(m,now),{through:'Rainfall through 2026-10-18 17:00Z',age:'30 min old'});
+assert.deepEqual(timing(m,now),{through:'Rainfall through 2026-10-18 17:00Z',guidance:'Paired RFC cycle 2026-10-18 12:00Z',age:'30 min old'});
 assert.equal(timing(null,now),null);
 assert.equal(timing(m,Date.parse('2026-10-18T16:00:00Z')),null);
 assert.equal(timing({...m,last_attempt:{at:'2026-10-18T18:25:00Z'}},Date.parse('2026-10-18T18:25:00Z')).age,'1 h 25 min old');
 console.log('4 rainfall-through and observation-age assertions passed');
+
+const p2={policy:{qpe_hours:6,snapshot_hours:9,reference_hours:15},active:{...m.active,pass_number:2,live_age_deadline:'2026-10-18T23:00:00Z'},last_attempt:{pass2:{state:'accepted'}}};
+assert.equal(state(p2,Date.parse('2026-10-18T21:00:00Z')).visible,true);
+assert.equal(state(p2,Date.parse('2026-10-18T23:00:00Z')).label,'Hidden — rainfall age limit');
+assert.equal(state({...p2,active:{...p2.active,ffg:{snapshot_time:'2026-10-18T13:00:00Z'}}},Date.parse('2026-10-18T22:00:00Z')).label,'Hidden — paired FFG snapshot age limit');
+assert.equal(state({...p2,active:{...p2.active,ffg_reference:'2026-10-18T06:00:00Z'}},Date.parse('2026-10-18T21:00:00Z')).label,'Hidden — paired RFC cycle age limit');
+assert.equal(state({...p2,stale:true},Date.parse('2026-10-18T23:00:00Z')).visible,false);
+assert.equal(state({...p2,active:{...p2.active,live_age_deadline:'2026-10-18T19:00:00Z'}},Date.parse('2026-10-18T20:00:00Z')).visible,false);
+console.log('6 extended Pass 2 boundary and retention assertions passed');
