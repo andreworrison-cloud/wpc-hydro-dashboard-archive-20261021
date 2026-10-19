@@ -25,3 +25,7 @@ The data branch keeps the current and one previous generation in its working tre
 5. Products aligned to the issued Day 1 ERO valid interval and remaining interval, explicitly reporting available member/window coverage.
 
 These later products are not included in this first delivery. Forecast-skill research is separate from rollout.
+
+## Delivery checks
+
+The full seven-hour fixture rendered 41 assets with verified checksums, dimensions, and valid times. A local bare-repository exercise confirmed atomic publication, restore, and rejection of a stale publisher. A mocked Leaflet interaction check covered hour selection, numerical toggle, opacity, exclusive GDI products, and retention of the displayed image during an outage. This is not a browser screenshot check.

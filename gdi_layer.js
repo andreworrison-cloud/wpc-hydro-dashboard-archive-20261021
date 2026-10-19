@@ -36,7 +36,7 @@ function create({map,metadataURL,onChange=()=>{}}){
   names.forEach(k=>layers[k].clearLayers());loaded.forEach(url=>L.imageOverlay(url,m.bounds,{pane:'gdiFields',opacity:layers[n].options.opacity,interactive:false}).addTo(layers[n]));
   urls.forEach(URL.revokeObjectURL);urls=loaded;displayed={m,n,h,t,show};error='';onChange();
  }
- async function refresh(){try{const r=await fetch(metadataURL,{cache:'no-store'});if(!r.ok)throw Error('Metadata unavailable');const m=await r.json();validate(m,metadata);const changed=m.generation!==metadata?.generation;metadata=m;if(changed||error)await draw();}catch(e){error='Update unavailable';onChange();}}
+ async function refresh(){try{const r=await fetch(metadataURL,{cache:'no-store'});if(!r.ok)throw Error('Metadata unavailable');const m=await r.json();validate(m,metadata);const changed=m.generation!==metadata?.generation;metadata=m;if(changed||error)await draw();else onChange();}catch(e){error='Update unavailable';onChange();}}
  map.on('layeradd layerremove',e=>{const n=names.find(k=>layers[k]===e.layer);if(!n)return;if(e.type==='layeradd')names.filter(k=>k!==n).forEach(k=>{if(map.hasLayer(layers[k]))map.removeLayer(layers[k]);});draw();});
  document.addEventListener('change',e=>{const key=e.target?.dataset?.gdiControl;if(!key)return;if(key==='hour')hour=Number(e.target.value);if(key==='threshold')threshold=Number(e.target.value);if(key==='numbers')numbers=e.target.checked;draw();});
  const time=t=>new Date(t).toISOString().slice(0,16).replace('T',' ')+'Z';
