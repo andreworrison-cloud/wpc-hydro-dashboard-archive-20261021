@@ -8,7 +8,7 @@ subprocess.run([sys.executable,str(scripts/'select_cycle.py'),'--output',str(wor
 r=json.loads((work/'selection.json').read_text());cycle=r['selected_cycle']
 if not cycle:raise RuntimeError('No complete cycle; previous publication remains unchanged')
 previous=root/'metadata.json'
-if previous.exists() and json.loads(previous.read_text())['cycle']>=dt.datetime.strptime(cycle,'%Y%m%d%H').replace(tzinfo=dt.timezone.utc).isoformat():
+if previous.exists() and json.loads(previous.read_text()).get('overlay_type')=='labeled_contours_v1' and json.loads(previous.read_text())['cycle']>=dt.datetime.strptime(cycle,'%Y%m%d%H').replace(tzinfo=dt.timezone.utc).isoformat():
     print('Published cycle already current');sys.exit(0)
 decoded=work/cycle/'decoded'
 env=dict(os.environ,GDI_CYCLE=cycle,GDI_OUTPUT_DIR=str(decoded))

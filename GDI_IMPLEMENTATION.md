@@ -54,3 +54,10 @@ The menu adds RRFS & HRRR/RRFS Blend, TLE Six-hour Nowcast, and TLE Day 1 ERO Re
 - Provider fallback retains each provider's own byte offsets and validates decoded identity. Humidity fallback can use SPFH or RH from the alternate provider, with the existing documented RH-to-q conversion.
 - Fault-injection checks cover both provider orders and inventory, range, and corrupt-record failures. TLE checks cover exact common valid times, equal model/lag weights, intermittent exceedance, and missing-hour masks.
 - Absolute GDI products share the existing HRRR palette; support shares its coverage palette. Named legends expose scale values, and fractional ensemble-mean persistence labels retain one decimal place. Persistence is a sample count, not continuous duration; support is not a calibrated rainfall probability.
+
+
+### Contour and menu display update — 2026-10-19
+- GDI submenus use the same bordered, padded expandable-group styling as the antecedent menu.
+- Sampled number grids are replaced with labeled isolines. Absolute GDI contours use 10-unit intervals; change contours use 0, ±5, ±10, ±20, ±30; neighborhood support uses 10/25/50/75/90 percent; persistence contours use sample-count levels.
+- Contours use the same display field and pixel alignment as shading, with missing cells masked and no field smoothing. Labels follow contour paths and are spaced to avoid crowding.
+- Legacy `_numbers` asset keys are retained for publication compatibility, but new generations declare `overlay_type: labeled_contours_v1`. The viewer never displays old sampled-number overlays after this update. Both renderers include the contour style in immutable generation hashes.

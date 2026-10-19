@@ -29,7 +29,7 @@ function create({map,metadataURL,onChange=()=>{}}){
   const n=selected(),token=++serial;if(!n||!metadata){onChange();return;}
   const m=metadata,h=hour,t=threshold,show=numbers;
   const key=n==='gdi'?`gdi_${h}`:n==='coverage'?`coverage${t}_${h}`:`${n}${t}`;
-  const keys=[key];if(n==='gdi'&&show)keys.push(`numbers_${h}`);
+  const keys=[key];if(n==='gdi'&&show&&m.overlay_type==='labeled_contours_v1')keys.push(`numbers_${h}`);
   const results=await Promise.allSettled(keys.map(k=>image(m,k)));const loaded=results.filter(r=>r.status==='fulfilled').map(r=>r.value);
   if(token!==serial){loaded.forEach(URL.revokeObjectURL);return;}
   if(results.some(r=>r.status==='rejected')){loaded.forEach(URL.revokeObjectURL);error='Update unavailable';onChange();return;}
@@ -48,7 +48,7 @@ function create({map,metadataURL,onChange=()=>{}}){
   if(m&&Date.now()-Date.parse(m.cycle)>6*3600000)html+='<div>Older cycle · awaiting a newer complete update</div>';
   if(n==='gdi'||n==='coverage')html+='<label>Forecast <select data-gdi-control="hour">'+Array.from({length:7},(_,h)=>`<option value="${h}" ${h===hour?'selected':''}>+${h} h</option>`).join('')+'</select></label>';
   if(n!=='gdi')html+='<label> GDI ≥ <select data-gdi-control="threshold">'+[30,40,50].map(t=>`<option ${t===threshold?'selected':''}>${t}</option>`).join('')+'</select></label>';
-  else html+=` <label><input type="checkbox" data-gdi-control="numbers" ${numbers?'checked':''}> Numbers</label>`;
+  else html+=` <label><input type="checkbox" data-gdi-control="numbers" ${numbers?'checked':''}> Labeled contours</label>`;
   if(m){const c=n==='gdi'?m.colors:n==='coverage'?m.coverage_colors:['#142d41',...m.coverage_colors];html+='<div style="display:flex;height:12px;margin-top:6px">'+c.map(color=>`<span style="flex:1;background:${escape(/^#[0-9a-f]{6}$/i.test(color)?color:'#000000')}"></span>`).join('')+'</div>';
    html+='<div>'+(n==='gdi'?'−30 · −15 · 0 · 15 · 30 · 45 · ≥55':n==='coverage'?`0–100% within 15 km · GDI ≥ ${d.t}`:`0–7 hourly samples · GDI ≥ ${d.t}`)+'</div>';
    if(n==='persistence'||n==='longest')html+='<div>F00–F06 inclusive; sampled counts, not continuous hours.</div>';
