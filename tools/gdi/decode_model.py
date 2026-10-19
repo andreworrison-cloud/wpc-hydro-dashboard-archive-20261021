@@ -27,4 +27,4 @@ def decode(model,cycle,lead,out):
  out=pathlib.Path(out);out.parent.mkdir(parents=True,exist_ok=True);np.savez_compressed(out,gdi=g.astype('float32'),latitude=lat,longitude=lon)
  out.with_suffix('.json').write_text(json.dumps({'model':model,'cycle':dt.datetime.strptime(cycle,'%Y%m%d%H').replace(tzinfo=dt.timezone.utc).isoformat(),'lead':lead,'grid_md5':source.grid,'humidity_inputs':humidity,'sources':provenance,'sha256':hashlib.sha256(out.read_bytes()).hexdigest()},indent=2))
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('--model',choices=['rap','rrfs'],required=True);p.add_argument('--cycle',required=True);p.add_argument('--lead',type=int,required=True);p.add_argument('--out',required=True);a=p.parse_args();decode(a.model,a.cycle,a.lead,a.out)
+ p=argparse.ArgumentParser();p.add_argument('--model',choices=['rap','rrfs','hrrr'],required=True);p.add_argument('--cycle',required=True);p.add_argument('--lead',type=int,required=True);p.add_argument('--out',required=True);a=p.parse_args();decode(a.model,a.cycle,a.lead,a.out)
