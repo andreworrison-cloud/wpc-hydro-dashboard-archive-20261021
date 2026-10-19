@@ -36,7 +36,7 @@ errors = []
 
 # Current registry total includes all existing dashboard data/config entries,
 # basemaps, and the two validated NASA NLDAS-3 static land-surface layers.
-EXPECTED_LAYER_COUNT = 170
+EXPECTED_LAYER_COUNT = 186
 LIGHTNINGCAST_LAYER_ID = "lightningcast-probability-60min"
 
 # Preserve the exact operational menu order. Dashboard Utilities is rendered
@@ -1576,6 +1576,10 @@ for caller, callee in [('update_hrrr_tle.yml','publish_gdi.yml'),('update_rap.ym
     if 'workflow_call:' not in callee_text or f'uses: ./.github/workflows/{callee}' not in caller_text:errors.append(f'Missing external scheduler route for {callee}')
 for label in ['RAP Analysis & Trends','HRRR · Hourly Guidance','HRRR · Six-hour Persistence']:
     if label not in app:errors.append(f'Missing GDI menu group: {label}')
+
+gdi_windows=(ROOT/'.github/workflows/publish_gdi_guidance.yml').read_text()
+if re.search(r'^\s+schedule:',gdi_windows,re.M) or 'types: [requested]' not in gdi_windows or 'Update HRRR-TLE Flash Flood Guidance' not in gdi_windows:
+    errors.append('GDI windows must inherit the cron-job.org HRRR dispatch without a GitHub timer')
 
 if errors:
     print("Dashboard validation FAILED:")

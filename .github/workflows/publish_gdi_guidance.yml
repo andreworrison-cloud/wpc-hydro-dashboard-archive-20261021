@@ -1,0 +1,73 @@
+name: Publish GDI Model and Window Guidance
+on:
+  workflow_dispatch:
+  # Start from the existing cron-job.org HRRR dispatch without holding its job queue.
+  workflow_run:
+    workflows: ["Update HRRR-TLE Flash Flood Guidance"]
+    types: [requested]
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish_gdi_guidance.yml'
+      - 'tools/gdi/build_guidance.py'
+permissions:
+  contents: read
+concurrency:
+  group: gdi-model-window-production
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - mode: nowcast
+            suite: guidance
+          - mode: ero
+            suite: ero
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    env:
+      GDI_SUITE: ${{ matrix.suite }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy scipy pyproj pillow matplotlib eccodes
+      - uses: actions/cache/restore@v4
+        with:
+          path: run/gdi-window/cache
+          key: gdi-native-${{ matrix.suite }}-${{ github.run_id }}
+          restore-keys: |
+            gdi-native-${{ matrix.suite }}-
+      - name: Check member alignment and issued-window logic
+        run: python tools/gdi/test_guidance.py
+      - name: Bound native cache to recent model cycles
+        run: |
+          python - <<'PY'
+          import datetime as d,pathlib,shutil
+          cutoff=(d.datetime.now(d.timezone.utc)-d.timedelta(hours=36)).strftime('%Y%m%d%H')
+          for model in ('hrrr','rrfs'):
+              root=pathlib.Path('run/gdi-window/cache')/model
+              for p in root.glob('*'):
+                  if p.is_dir() and p.name.isdigit() and p.name<cutoff:shutil.rmtree(p)
+          PY
+      - run: python tools/publish_gdi_suite.py restore --data-dir run/gdi-window-data --state-file run/gdi-window-state.json
+      - run: python tools/gdi/build_guidance.py --mode ${{ matrix.mode }} --work run/gdi-window --public run/gdi-window-data/public
+      - run: python tools/publish_gdi_suite.py publish --data-dir run/gdi-window-data --state-file run/gdi-window-state.json
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: run/gdi-window/cache
+          key: gdi-native-${{ matrix.suite }}-${{ github.run_id }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gdi-${{ matrix.suite }}-metadata
+          path: run/gdi-window/render/suite.json
+          retention-days: 14

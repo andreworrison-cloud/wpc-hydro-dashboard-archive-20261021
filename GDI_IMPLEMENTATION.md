@@ -33,3 +33,17 @@ The full seven-hour fixture rendered 41 assets with verified checksums, dimensio
 ## RAP and menu delivery
 
 RAP analysis, current-minus-prior-analysis three-hour change, and same-cycle +3-hour forecast form one complete package in `data/rap-gdi`. Pressure-level RH is converted to specific humidity with liquid-water saturation vapor pressure (Bolton form); this conversion is recorded separately from the unchanged GDI formula. Every input carries model/cycle/lead/grid/checksum provenance. The menu separates RAP Analysis & Trends, HRRR Hourly Guidance, and HRRR Six-hour Persistence. Upcoming RRFS/blend and windowed ensemble products will be placed in their own subgroups when available.
+
+## RRFS, blend, TLE and Day 1 ERO delivery
+
+`publish_gdi_guidance.yml` responds to the **requested** event from the existing cron-job.org-dispatched HRRR workflow. It has no GitHub timer and does not hold up the original HRRR workflow's concurrency group. Its nowcast and ERO jobs publish independently to `data/guidance-gdi` and `data/ero-gdi`. The first uncached build is substantially larger than later updates; a bounded 36-hour decoded-field cache is retained between runs.
+
+RRFS uses pressure-level TMP/SPFH and companion 2dfld surface PRES, with cycle, lead, units and native grid checked together. AWS uses the current operational-feed bucket. NOMADS tries production and then parallel paths, recording actual URLs. The two grids must match explicitly before blending. This adapter does not use the retired prototype bucket.
+
+The nowcast begins at the next whole UTC hour and spans six hours, with seven inclusive hourly samples. The two newest inventory-complete HRRR runs and two newest inventory-complete RRFS runs are selected independently, then aligned to identical valid times. Each model has half the weight; each of its two lagged runs has half that model's weight. Intermediate decoded fields are mandatory before publication. HRRR/RRFS deterministic blend snapshots are the arithmetic mean of the latest run from each model at window start, +3 and +6 hours. Initialization times are recorded separately from valid times.
+
+TLE maximum is the unsmoothed maximum across members and sampled times. Threshold support at 30/40/50 is the ensemble-mean 15-km neighborhood coverage of member window maxima; it is **not a calibrated rainfall/flash-flood probability**. Persistence is the ensemble-mean number of qualifying hourly samples. All four members must be valid at a cell for combined products. Missing members are not silently replaced by zero, and weights are not silently renormalized.
+
+The ERO job reads the issued Day 1 start/end from NOAA's WPC hazard service and restricts its samples to the remaining complete-hour interval ending at that issued end. It uses extended forecast cycles that cover the whole remaining period. Both full issued times and sampled remaining times are carried in metadata. Missing or inconsistent issued times stop publication. Forecast-window layers clear after their published interval ends and state that current guidance is awaited.
+
+The menu adds RRFS & HRRR/RRFS Blend, TLE Six-hour Nowcast, and TLE Day 1 ERO Remaining Period subgroups. Startup data unavailability is reported honestly until each first complete suite publishes. The established HRRR and RAP layers continue independently if a longer window suite fails.
