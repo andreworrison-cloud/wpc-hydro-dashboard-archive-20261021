@@ -60,12 +60,21 @@ class PressureSource(HRRRSource):
    if self.grid is not None and self.grid!=sig:raise ValueError('Mixed grids')
    self.grid=sig;return sig
   finally:codes_release(h)
+ def acquire(self,provider,lead,variable,level):
+  # Providers may publish q or RH differently. Select from this provider's
+  # own inventory; decode_model uses the returned variable and converts RH.
+  if variable in ('SPFH','RH'):
+   inv=self.inventory(provider,lead)
+   if (variable,level) not in inv:
+    alternate='RH' if variable=='SPFH' else 'SPFH'
+    if (alternate,level) not in inv:raise ValueError('Missing humidity input')
+    variable=alternate
+  return super().acquire(provider,lead,variable,level)
  def tasks(self,lead):
-  # Choose moisture representation supported by both alternatives if possible.
-  inventories=[]
+  failures=[]
   for provider in self.providers:
-   try:inventories.append(self.inventory(provider,lead))
-   except Exception:pass
-  if not inventories:raise ValueError('No inventory')
-  inv=inventories[0]
-  return [(lead,'TMP',f'{p} mb') for p in LEVELS]+[(lead,'SPFH' if ('SPFH',f'{p} mb') in inv else 'RH',f'{p} mb') for p in LEVELS]+[(lead,'PRES','surface')]
+   try:
+    inv=self.inventory(provider,lead)
+    return [(lead,'TMP',f'{p} mb') for p in LEVELS]+[(lead,'SPFH' if ('SPFH',f'{p} mb') in inv else 'RH',f'{p} mb') for p in LEVELS]+[(lead,'PRES','surface')]
+   except Exception as e:failures.append({'provider':provider,'error':str(e)})
+  raise ValueError('No complete inventory: '+str(failures))

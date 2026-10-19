@@ -50,7 +50,7 @@ function create({map,metadataURL,onChange=()=>{}}){
   if(n!=='gdi')html+='<label> GDI ≥ <select data-gdi-control="threshold">'+[30,40,50].map(t=>`<option ${t===threshold?'selected':''}>${t}</option>`).join('')+'</select></label>';
   else html+=` <label><input type="checkbox" data-gdi-control="numbers" ${numbers?'checked':''}> Numbers</label>`;
   if(m){const c=n==='gdi'?m.colors:n==='coverage'?m.coverage_colors:['#142d41',...m.coverage_colors];html+='<div style="display:flex;height:12px;margin-top:6px">'+c.map(color=>`<span style="flex:1;background:${escape(/^#[0-9a-f]{6}$/i.test(color)?color:'#000000')}"></span>`).join('')+'</div>';
-   html+='<div>'+(n==='gdi'?'−30 · −15 · 0 · 15 · 30 · 45 · 60':n==='coverage'?`0–100% within 15 km · GDI ≥ ${d.t}`:`0–7 hourly samples · GDI ≥ ${d.t}`)+'</div>';
+   html+='<div>'+(n==='gdi'?'−30 · −15 · 0 · 15 · 30 · 45 · ≥55':n==='coverage'?`0–100% within 15 km · GDI ≥ ${d.t}`:`0–7 hourly samples · GDI ≥ ${d.t}`)+'</div>';
    if(n==='persistence'||n==='longest')html+='<div>F00–F06 inclusive; sampled counts, not continuous hours.</div>';
   }return html;
  }

@@ -47,3 +47,10 @@ TLE maximum is the unsmoothed maximum across members and sampled times. Threshol
 The ERO job reads the issued Day 1 start/end from NOAA's WPC hazard service and restricts its samples to the remaining complete-hour interval ending at that issued end. It uses extended forecast cycles that cover the whole remaining period. Both full issued times and sampled remaining times are carried in metadata. Missing or inconsistent issued times stop publication. Forecast-window layers clear after their published interval ends and state that current guidance is awaited.
 
 The menu adds RRFS & HRRR/RRFS Blend, TLE Six-hour Nowcast, and TLE Day 1 ERO Remaining Period subgroups. Startup data unavailability is reported honestly until each first complete suite publishes. The established HRRR and RAP layers continue independently if a longer window suite fails.
+
+
+### Provider and display audit — 2026-10-19
+- Tested current HRRR, RAP, and RRFS inventories and byte ranges independently on AWS and NOMADS. RRFS NOMADS currently responds under `rrfs/para`; the adapter checks `prod` then `para`.
+- Provider fallback retains each provider's own byte offsets and validates decoded identity. Humidity fallback can use SPFH or RH from the alternate provider, with the existing documented RH-to-q conversion.
+- Fault-injection checks cover both provider orders and inventory, range, and corrupt-record failures. TLE checks cover exact common valid times, equal model/lag weights, intermittent exceedance, and missing-hour masks.
+- Absolute GDI products share the existing HRRR palette; support shares its coverage palette. Named legends expose scale values, and fractional ensemble-mean persistence labels retain one decimal place. Persistence is a sample count, not continuous duration; support is not a calibrated rainfall probability.

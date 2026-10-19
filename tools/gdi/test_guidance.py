@@ -31,3 +31,19 @@ import io
 with mock.patch.object(build.urllib.request,'urlopen',return_value=io.StringIO(json.dumps({'features':[{'attributes':attrs}]}))):
  start,end,meta=build.ero_window(now+dt.timedelta(minutes=10));assert start.hour==17 and end==dt.datetime(2026,10,20,12,tzinfo=UTC);assert meta['issued_start']=='2026-10-19T12:00:00+00:00'
  print('Issued ERO interval and next-complete-hour remaining window pass')
+
+# A moving exceedance must count individual qualifying samples, not the
+# window maximum repeated at every time. One missing sample invalidates it.
+def evolving(model,cycle,lead,cache,grids):
+ a,m=frame(model,cycle,lead,cache,grids)
+ hour=int(((cycle+dt.timedelta(hours=lead))-now).total_seconds()/3600)
+ a[:]=50. if hour in (1,4) else 10.
+ if hour==2:a[10,10]=np.nan
+ return a,m
+with tempfile.TemporaryDirectory() as t,mock.patch.object(model_source,'PressureSource',Source),mock.patch.object(build,'frame',evolving),mock.patch.object(build.subprocess,'run'):
+ root=pathlib.Path(t);build.main('nowcast',root,root/'public',now)
+ with np.load(root/'render/fields.npz') as f:
+  assert f['maximum'][8,8]==50 and f['persistence40'][8,8]==2
+  assert np.isnan(f['maximum'][10,10]) and np.isnan(f['persistence40'][10,10])
+  assert np.isnan(f['support40'][10,10])
+ print('Intermittent exceedance and missing-hour masking pass')

@@ -46,7 +46,9 @@ jobs:
           restore-keys: |
             gdi-native-${{ matrix.suite }}-
       - name: Check member alignment and issued-window logic
-        run: python tools/gdi/test_guidance.py
+        run: |
+          python tools/gdi/test_redundancy.py
+          python tools/gdi/test_guidance.py
       - name: Bound native cache to recent model cycles
         run: |
           python - <<'PY'

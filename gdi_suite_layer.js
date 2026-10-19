@@ -25,7 +25,7 @@ function create({map,metadataURL,keys,paneName,onChange=()=>{}}){
  if(failed)html+='<div>Update unavailable · showing previous complete data</div>';
  if(Date.now()-Date.parse(m.cycle)>6*3600000)html+='<div>Older cycle · awaiting update</div>';
  html+=`<label><input type="checkbox" data-gdi-suite="${paneName}" ${numbers?'checked':''}> Numbers</label><div style="display:flex;height:12px;margin-top:6px">`;
- html+=(p.colors||[]).map(c=>`<span style="flex:1;background:${/^#[0-9a-f]{6}$/i.test(c)?c:'#000000'}"></span>`).join('')+'</div><div>'+esc(p.legend)+'</div>';return html;}
+ html+=(p.colors||[]).map(c=>`<span style="flex:1;background:${/^#[0-9a-f]{6}$/i.test(c)?c:'#000000'}"></span>`).join('')+'</div><div>'+esc((p.scale_labels||p.edges||[]).join(' · '))+'</div><div>'+esc(p.legend)+'</div>';return html;}
  refresh();setInterval(refresh,300000);return {layers,legendHTML,refresh};
 }
 root.GDINamedSuite={create,validate};
