@@ -1,0 +1,13 @@
+const assert=require('assert/strict');const {ffgTendencyState:state}=require('../ffg_tendency_layer.js');
+const a={new:{snapshot_time:'2026-10-19T15:00:00Z',reference_time:'2026-10-19T12:00:00Z'},old:{snapshot_time:'2026-10-18T15:00:00Z',reference_time:'2026-10-18T12:00:00Z'},expires_at:'2026-10-19T18:00:00Z'};
+const m={products:{24:a},last_attempt:{products:{24:{ok:true}}}};
+const now=Date.parse('2026-10-19T16:00:00Z');
+assert.equal(state(m,24,now).visible,true);
+assert.equal(state(m,6,now).visible,false);
+assert.equal(state(m,24,Date.parse('2026-10-19T18:00:00Z')).visible,false);
+assert.equal(state({...m,stale:true},24,now).state,'retained');
+assert.equal(state({...m,stale:true},24,Date.parse('2026-10-19T18:00:00Z')).visible,false);
+assert.equal(state(m,24,Date.parse('2026-10-19T17:00:00Z')).label,'Guidance update aging');
+assert.equal(state({...m,products:{24:{...a,old:{...a.old,snapshot_time:'2026-10-18T14:00:00Z'}}}},24,now).visible,false);
+assert.equal(state(m,24,Date.parse('2026-10-19T14:00:00Z')).visible,false);
+console.log('8 tendency freshness and endpoint assertions passed');

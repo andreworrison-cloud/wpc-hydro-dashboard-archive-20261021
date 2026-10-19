@@ -864,6 +864,11 @@ const rfcFFG = window.createRFCFFGLayers({map,
     onChange: () => updateLegends()
 });
 window.RFCFFG = rfcFFG;
+const ffgTendency=window.createFFGTendencyLayers({map,
+    metadataURL:'https://raw.githubusercontent.com/andreworrison-cloud/wpc-hydro-dashboard/data/ffg-tendency/public/metadata.json',
+    onChange:()=>{updateLegends();document.querySelectorAll('[data-ffg-tendency-status]').forEach(node=>{node.textContent=ffgTendency.summary();});}
+});
+window.FFGTendency=ffgTendency;
 const h8Review = new URLSearchParams(location.search).get('h8Review') === '1';
 const qpeFFG = [1,2].map(passNumber=>window.createQPEFFGLayers({map,passNumber,
     metadataURL: h8Review ? `review/qpe-ffg/pass${passNumber}/metadata.json` : `https://raw.githubusercontent.com/andreworrison-cloud/wpc-hydro-dashboard/data/qpe-ffg/public/pass${passNumber}/metadata.json`,
@@ -910,10 +915,10 @@ fetch('https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geo
     .then(data => {
         whiteBorders.addData(data);
         blackBorders.addData(data);
-        rfcFFG.setBorders(data); qpeFFG.forEach(x=>x.setBorders(data)); sportSuite?.setBorders(data); sportRSM?.setBorders(data); sportChange?.setBorders(data);
+        rfcFFG.setBorders(data); ffgTendency.setBorders(data); qpeFFG.forEach(x=>x.setBorders(data)); sportSuite?.setBorders(data); sportRSM?.setBorders(data); sportChange?.setBorders(data);
     }).catch(() => fetch('review/vendor/us-states.json')
         .then(response => { if (!response.ok) throw new Error('State reference unavailable'); return response.json(); })
-        .then(data => { whiteBorders.addData(data); blackBorders.addData(data); rfcFFG.setBorders(data); qpeFFG.forEach(x=>x.setBorders(data)); sportSuite?.setBorders(data); sportRSM?.setBorders(data); sportChange?.setBorders(data); })
+        .then(data => { whiteBorders.addData(data); blackBorders.addData(data); rfcFFG.setBorders(data); ffgTendency.setBorders(data); qpeFFG.forEach(x=>x.setBorders(data)); sportSuite?.setBorders(data); sportRSM?.setBorders(data); sportChange?.setBorders(data); })
         .catch(error => console.warn('State borders unavailable:', error)));
 
 
@@ -7246,6 +7251,7 @@ function updateLegends() {
     };
 
     qpeFFG.forEach(x=>{const html=x.legendHTML();if(html)addLegendBlock(html);});
+    const tendencyLegend=ffgTendency.legendHTML();if(tendencyLegend)addLegendBlock(tendencyLegend);
     const ffgLegend = rfcFFG.legendHTML();
     if (ffgLegend) addLegendBlock(ffgLegend);
     const changeLegend = sportChange?.legendHTML();
@@ -7730,6 +7736,9 @@ function enforceExclusiveQPEFFGSelection(activeEntry) {
     getAllDashboardLayerEntries().forEach(entry=>{if(entry!==activeEntry && entry.id?.startsWith('qpe-ffg-'))setDashboardLayerActive(entry,false);});
 }
 
+function enforceExclusiveFFGTendencySelection(activeEntry) {
+    getAllDashboardLayerEntries().forEach(entry=>{if(entry!==activeEntry && entry.id?.startsWith('ffg-tendency-'))setDashboardLayerActive(entry,false);});
+}
 function enforceExclusiveRFCFFGSelection(activeEntry) {
     getAllDashboardLayerEntries().forEach(entry => {
         if (entry !== activeEntry && entry.id?.startsWith('rfc-ffg-')) setDashboardLayerActive(entry, false);
@@ -7891,6 +7900,14 @@ const dashboardSections = [
                     {id: 'rfc-ffg-1h', label: 'RFC 1-Hour Flash Flood Guidance', layer: rfcFFG.layers[1], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
                     {id: 'rfc-ffg-3h', label: 'RFC 3-Hour Flash Flood Guidance', layer: rfcFFG.layers[3], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection},
                     {id: 'rfc-ffg-6h', label: 'RFC 6-Hour Flash Flood Guidance', layer: rfcFFG.layers[6], kind: 'raster', onActivate: enforceExclusiveRFCFFGSelection}
+                ]
+            },
+            {
+                id: 'ffg-tendencies', title: 'RFC · FFG Tendencies', ffgTendency: true,
+                layers: [
+                    {id: 'ffg-tendency-1h', label: '1-hour rainfall duration',layer:ffgTendency.layers[1],kind:'raster',onActivate:enforceExclusiveFFGTendencySelection},
+                    {id: 'ffg-tendency-3h', label: '3-hour rainfall duration',layer:ffgTendency.layers[3],kind:'raster',onActivate:enforceExclusiveFFGTendencySelection},
+                    {id: 'ffg-tendency-6h', label: '6-hour rainfall duration',layer:ffgTendency.layers[6],kind:'raster',onActivate:enforceExclusiveFFGTendencySelection}
                 ]
             },
             {
@@ -8322,6 +8339,14 @@ function renderDashboardLayerGroup(config) {
     summary.append(heading, count);
     const body = document.createElement('div');
     body.className = 'dashboard-layer-group-body';
+    if(config.ffgTendency){
+        const control=document.createElement('label');control.className='ffg-tendency-control';control.textContent='Change over ';
+        const select=document.createElement('select');select.setAttribute('aria-label','FFG tendency change interval');
+        [6,12,24].forEach(h=>{const option=document.createElement('option');option.value=String(h);option.textContent=h+' hours';select.append(option);});
+        select.value=String(ffgTendency.getLookback());select.addEventListener('change',()=>ffgTendency.setLookback(select.value));control.append(select);
+        const status=document.createElement('small');status.dataset.ffgTendencyStatus='1';status.className='qpe-pass-time';status.textContent=ffgTendency.summary();
+        body.append(control,status);
+    }
     (config.layers || []).forEach(entry => body.append(renderLayerRow(entry)));
     (config.groups || []).forEach(child => body.append(renderDashboardLayerGroup(child)));
     group.append(summary, body);

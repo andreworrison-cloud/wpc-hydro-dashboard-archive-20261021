@@ -1,0 +1,54 @@
+name: Publish FFG Tendencies
+on:
+  workflow_dispatch:
+    inputs:
+      initialize:
+        description: First creation of the isolated tendency data branch
+        type: boolean
+        default: false
+  workflow_call:
+permissions:
+  contents: read
+concurrency:
+  group: ffg-tendency-production
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy>=2,<3' 'rasterio>=1.4,<2' 'Pillow>=11,<14'
+      - name: Verify tendency contracts
+        run: |
+          python tools/test_ffg_tendency.py
+          node tools/test_ffg_tendency_display.cjs
+      - name: Restore authoritative tendency state
+        env:
+          INITIALIZE: ${{ inputs.initialize || github.event_name == 'push' }}
+        run: |
+          extra=()
+          if [ "$INITIALIZE" = true ]; then extra+=(--initialize); fi
+          python tools/publish_ffg_tendency.py restore --data-dir diagnostics/tendency --state-file "$RUNNER_TEMP/tendency-state.json" "${extra[@]}"
+      - name: Ingest exact tendency endpoints
+        id: ingest
+        continue-on-error: true
+        run: python tools/ingest_ffg_tendency.py --data-dir diagnostics/tendency
+      - name: Publish verified maps and retained status
+        if: always() && steps.ingest.outcome != 'skipped'
+        run: python tools/publish_ffg_tendency.py publish --data-dir diagnostics/tendency --state-file "$RUNNER_TEMP/tendency-state.json"
+      - name: Report partial ingest failure
+        if: always() && steps.ingest.outcome == 'failure'
+        run: exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ffg-tendency-evidence-${{ github.run_id }}
+          path: diagnostics/tendency/public/metadata.json
+          retention-days: 7
