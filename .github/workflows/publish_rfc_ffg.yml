@@ -6,6 +6,9 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/publish_rfc_ffg.yml'
+      - '.github/workflows/publish_ffg_tendency.yml'
+      - 'tools/ingest_ffg_tendency.py'
+      - 'tools/publish_ffg_tendency.py'
       - 'fetch_rfc_ffg.py'
       - 'tools/publish_rfc_ffg.py'
       - 'tools/probe_rfc_ffg_numeric.py'
@@ -57,3 +60,9 @@ jobs:
           path: diagnostics/
           if-no-files-found: warn
           retention-days: 14
+
+  tendency:
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/publish_ffg_tendency.yml
