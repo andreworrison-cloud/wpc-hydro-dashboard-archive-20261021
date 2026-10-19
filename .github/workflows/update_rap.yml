@@ -12,6 +12,12 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  rap-gdi:
+    # Receives the existing cron-job.org RAP trigger; runs independently.
+    uses: ./.github/workflows/publish_rap_gdi.yml
+    permissions:
+      contents: write
+
   update-rap:
     runs-on: ubuntu-latest
     timeout-minutes: 60

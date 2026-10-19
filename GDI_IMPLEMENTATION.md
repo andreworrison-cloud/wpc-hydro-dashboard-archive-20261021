@@ -12,7 +12,7 @@ Coverage is the fraction exceeding the chosen threshold in an 81-cell disk of no
 
 ## Automatic delivery
 
-`publish_gdi.yml` runs hourly at minute 23, on manual dispatch, and on relevant main-branch changes. GitHub scheduled starts may be delayed. It selects the newest inventory-complete F00–F06 cycle within six hours, decodes and validates all requested records, then builds all 41 images before atomic publication to the isolated `data/gdi` branch. AWS is primary; NOMADS uses its own index offsets as fallback. A failed run leaves the prior public generation intact. The browser checks forecast times, asset paths, SHA-256 hashes, and image dimensions before swapping its selected overlay. Its displayed cycle/valid time tracks the image actually shown. Cycles older than six hours are explicitly identified.
+`publish_gdi.yml` is a reusable workflow called as an independent sibling job by `update_hrrr_tle.yml`, which receives the existing cron-job.org dispatch. It has no native GitHub timer. Manual dispatch and code-change bootstrap remain available. `publish_rap_gdi.yml` similarly runs from the existing cron-job.org-triggered `update_rap.yml`. Neither GDI job waits for the parent model product-building job. It selects the newest inventory-complete F00–F06 cycle within six hours, decodes and validates all requested records, then builds all 41 images before atomic publication to the isolated `data/gdi` branch. AWS is primary; NOMADS uses its own index offsets as fallback. A failed run leaves the prior public generation intact. The browser checks forecast times, asset paths, SHA-256 hashes, and image dimensions before swapping its selected overlay. Its displayed cycle/valid time tracks the image actually shown. Cycles older than six hours are explicitly identified.
 
 The data branch keeps the current and one previous generation in its working tree. Git history still retains older assets; long-term storage growth needs operational monitoring. Native intermediate arrays stay out of Git. Workflow artifacts retain acquisition metadata for 14 days.
 
@@ -29,3 +29,7 @@ These later products are not included in this first delivery. Forecast-skill res
 ## Delivery checks
 
 The full seven-hour fixture rendered 41 assets with verified checksums, dimensions, and valid times. A local bare-repository exercise confirmed atomic publication, restore, and rejection of a stale publisher. A mocked Leaflet interaction check covered hour selection, numerical toggle, opacity, exclusive GDI products, and retention of the displayed image during an outage. This is not a browser screenshot check.
+
+## RAP and menu delivery
+
+RAP analysis, current-minus-prior-analysis three-hour change, and same-cycle +3-hour forecast form one complete package in `data/rap-gdi`. Pressure-level RH is converted to specific humidity with liquid-water saturation vapor pressure (Bolton form); this conversion is recorded separately from the unchanged GDI formula. Every input carries model/cycle/lead/grid/checksum provenance. The menu separates RAP Analysis & Trends, HRRR Hourly Guidance, and HRRR Six-hour Persistence. Upcoming RRFS/blend and windowed ensemble products will be placed in their own subgroups when available.

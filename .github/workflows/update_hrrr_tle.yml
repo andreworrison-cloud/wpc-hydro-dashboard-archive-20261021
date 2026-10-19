@@ -17,6 +17,12 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  hrrr-gdi:
+    # Independent sibling: starts with the cron-job.org dispatch, not after TLE.
+    uses: ./.github/workflows/publish_gdi.yml
+    permissions:
+      contents: write
+
   update-hrrr-tle:
     runs-on: ubuntu-latest
     timeout-minutes: 50
