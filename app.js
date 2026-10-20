@@ -7917,9 +7917,9 @@ const dashboardSections = [
             {
                 id: 'ffg-tendencies', title: 'RFC · FFG Tendencies', ffgTendency: true,
                 layers: [
-                    {id: 'ffg-tendency-1h', label: '1-hour rainfall duration',layer:ffgTendency.layers[1],kind:'raster',onActivate:enforceExclusiveFFGTendencySelection},
-                    {id: 'ffg-tendency-3h', label: '3-hour rainfall duration',layer:ffgTendency.layers[3],kind:'raster',onActivate:enforceExclusiveFFGTendencySelection},
-                    {id: 'ffg-tendency-6h', label: '6-hour rainfall duration',layer:ffgTendency.layers[6],kind:'raster',onActivate:enforceExclusiveFFGTendencySelection}
+                    {id: 'ffg-tendency-1h', label: '1-hour FFG',layer:ffgTendency.layers[1],kind:'raster',onActivate:enforceExclusiveFFGTendencySelection},
+                    {id: 'ffg-tendency-3h', label: '3-hour FFG',layer:ffgTendency.layers[3],kind:'raster',onActivate:enforceExclusiveFFGTendencySelection},
+                    {id: 'ffg-tendency-6h', label: '6-hour FFG',layer:ffgTendency.layers[6],kind:'raster',onActivate:enforceExclusiveFFGTendencySelection}
                 ]
             },
             {
