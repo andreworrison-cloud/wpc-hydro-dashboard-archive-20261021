@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "state": "retained",
+  "state": "updated",
   "usable": true,
   "policy": {
     "warn_age_hours": 48,
@@ -8,20 +8,97 @@
     "status": "approved_h7_policy_v1"
   },
   "freshness": {
-    "age_hours": 13.34,
+    "age_hours": 19.28,
     "usable": true,
     "status": "available"
   },
   "last_attempt": {
-    "at": "2026-10-20T13:20:38.467677Z",
-    "ok": false,
-    "error": "HTTPSConnectionPool(host='nssrgeo.ndc.nasa.gov', port=443): Max retries exceeded with url: /SPoRT/modeling/lis/conus3km/geotiff/rsm_0-10cm/ (Caused by NewConnectionError(\"HTTPSConnection(host='nssrgeo.ndc.nasa.gov', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable\"))",
-    "sources": []
+    "at": "2026-10-20T19:16:36.749532Z",
+    "ok": true,
+    "error": null,
+    "sources": [
+      {
+        "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-10cm/20261019_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
+        "valid_time": "2026-10-19T00:00:00Z",
+        "retrieved_at": "2026-10-20T19:16:37.487838Z",
+        "http_modified_at": "Tue, 20 Oct 2026 16:22:49 GMT",
+        "etag": "\"dad87c-65e480a9f114b\"",
+        "sha256": "6d1935c00d719d6f49ec70c1776d02abc36b2078838de07eda210db53f527ea7",
+        "filename": "20261019_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
+        "coverage": {
+          "shape": [
+            929,
+            1929
+          ],
+          "valid_cells": 1290511,
+          "min": 1.0,
+          "max": 100.0
+        },
+        "revision_check": "post_download_http_validators"
+      },
+      {
+        "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-10cm/20261020_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
+        "valid_time": "2026-10-20T00:00:00Z",
+        "retrieved_at": "2026-10-20T19:16:37.629121Z",
+        "http_modified_at": "Tue, 20 Oct 2026 16:24:21 GMT",
+        "etag": "\"dad87c-65e481023e890\"",
+        "sha256": "dc4d9bf4752bfa60af3e1d2bc95322e9e09eb584e2655c3382772068d9caff13",
+        "filename": "20261020_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
+        "coverage": {
+          "shape": [
+            929,
+            1929
+          ],
+          "valid_cells": 1290511,
+          "min": 1.0,
+          "max": 100.0
+        },
+        "revision_check": "post_download_http_validators"
+      },
+      {
+        "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-2m_diff7day/20261020_0000_sport_lis_rsm0-2m_diff7day_conus3km_float_wgs84.tif",
+        "valid_time": "2026-10-20T00:00:00Z",
+        "retrieved_at": "2026-10-20T19:16:37.839744Z",
+        "http_modified_at": "Tue, 20 Oct 2026 16:24:23 GMT",
+        "etag": "\"dad87c-65e481045b12f\"",
+        "sha256": "1a6c17660fd2c75307ac29bc067eb4905613f59c97acf6b69b9af841f3c56ee2",
+        "filename": "20261020_0000_sport_lis_rsm0-2m_diff7day_conus3km_float_wgs84.tif",
+        "coverage": {
+          "shape": [
+            929,
+            1929
+          ],
+          "valid_cells": 1290511,
+          "min": -31.980003356933594,
+          "max": 26.566871643066406
+        },
+        "revision_check": "post_download_http_validators"
+      },
+      {
+        "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-2m_diff14day/20261020_0000_sport_lis_rsm0-2m_diff14day_conus3km_float_wgs84.tif",
+        "valid_time": "2026-10-20T00:00:00Z",
+        "retrieved_at": "2026-10-20T19:16:38.002804Z",
+        "http_modified_at": "Tue, 20 Oct 2026 16:24:24 GMT",
+        "etag": "\"dad87c-65e4810523078\"",
+        "sha256": "af422fee0719ccae30330b2df93612ee2caf7a10761ef78c722903bac7ac28ca",
+        "filename": "20261020_0000_sport_lis_rsm0-2m_diff14day_conus3km_float_wgs84.tif",
+        "coverage": {
+          "shape": [
+            929,
+            1929
+          ],
+          "valid_cells": 1290511,
+          "min": -26.48999786376953,
+          "max": 25.79125213623047
+        },
+        "revision_check": "post_download_http_validators"
+      }
+    ]
   },
   "active": {
-    "generation": "20261020-3a4dbb9b70db3ab88be9-sport-change-v1",
+    "generation": "20261020-ec12338a71a24c0dcee3-sport-change-v1",
     "valid_time": "2026-10-20T00:00:00Z",
-    "accepted_at": "2026-10-20T07:16:29.589044Z",
+    "accepted_at": "2026-10-20T19:16:36.749532Z",
     "quantity": "relative_soil_moisture_change",
     "units": "percentage_points",
     "render_revision": "sport-change-v1",
@@ -39,9 +116,9 @@
           {
             "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-10cm/20261019_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
             "valid_time": "2026-10-19T00:00:00Z",
-            "retrieved_at": "2026-10-20T07:16:30.273668Z",
-            "http_modified_at": "Tue, 20 Oct 2026 04:22:55 GMT",
-            "etag": "\"dad87c-65e3dfc17d236\"",
+            "retrieved_at": "2026-10-20T19:16:37.487838Z",
+            "http_modified_at": "Tue, 20 Oct 2026 16:22:49 GMT",
+            "etag": "\"dad87c-65e480a9f114b\"",
             "sha256": "6d1935c00d719d6f49ec70c1776d02abc36b2078838de07eda210db53f527ea7",
             "filename": "20261019_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
             "coverage": {
@@ -58,10 +135,10 @@
           {
             "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-10cm/20261020_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
             "valid_time": "2026-10-20T00:00:00Z",
-            "retrieved_at": "2026-10-20T07:16:30.412818Z",
-            "http_modified_at": "Tue, 20 Oct 2026 04:24:28 GMT",
-            "etag": "\"dad87c-65e3e01a04349\"",
-            "sha256": "665e120d27e5e41432050c06e8271f7b682ec59a400d433f262fafccdd866bb5",
+            "retrieved_at": "2026-10-20T19:16:37.629121Z",
+            "http_modified_at": "Tue, 20 Oct 2026 16:24:21 GMT",
+            "etag": "\"dad87c-65e481023e890\"",
+            "sha256": "dc4d9bf4752bfa60af3e1d2bc95322e9e09eb584e2655c3382772068d9caff13",
             "filename": "20261020_0000_sport_lis_rsm0-10cm_conus3km_float_wgs84.tif",
             "coverage": {
               "shape": [
@@ -92,8 +169,8 @@
           "resampling": "bilinear",
           "mask_resampling": "nearest",
           "palette": "sport-change-v1",
-          "path": "generations/20261020-3a4dbb9b70db3ab88be9-sport-change-v1/shallow24h.png",
-          "sha256": "0a2b2c1c813161b84356113559befca9746753fc8000bf901e7b001f471cbd24"
+          "path": "generations/20261020-ec12338a71a24c0dcee3-sport-change-v1/shallow24h.png",
+          "sha256": "fca372b26ab2e406c8eb66a4e1f8cceca26d038f4394074104cb75d1fe1ebe7c"
         },
         "coverage": {
           "valid_cells": 1290511,
@@ -114,10 +191,10 @@
           {
             "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-2m_diff7day/20261020_0000_sport_lis_rsm0-2m_diff7day_conus3km_float_wgs84.tif",
             "valid_time": "2026-10-20T00:00:00Z",
-            "retrieved_at": "2026-10-20T07:16:30.587234Z",
-            "http_modified_at": "Tue, 20 Oct 2026 04:24:30 GMT",
-            "etag": "\"dad87c-65e3e01bc08ce\"",
-            "sha256": "d5f3acfc3ccbb6b1fd3c83297ae55618070609bdd9ee9d20c4e6abfb1b9266db",
+            "retrieved_at": "2026-10-20T19:16:37.839744Z",
+            "http_modified_at": "Tue, 20 Oct 2026 16:24:23 GMT",
+            "etag": "\"dad87c-65e481045b12f\"",
+            "sha256": "1a6c17660fd2c75307ac29bc067eb4905613f59c97acf6b69b9af841f3c56ee2",
             "filename": "20261020_0000_sport_lis_rsm0-2m_diff7day_conus3km_float_wgs84.tif",
             "coverage": {
               "shape": [
@@ -148,8 +225,8 @@
           "resampling": "bilinear",
           "mask_resampling": "nearest",
           "palette": "sport-change-v1",
-          "path": "generations/20261020-3a4dbb9b70db3ab88be9-sport-change-v1/deep7day.png",
-          "sha256": "db1fe356b5df0bd4410f03eef60c51d661e5f942c974345a2f601a82dca7486a"
+          "path": "generations/20261020-ec12338a71a24c0dcee3-sport-change-v1/deep7day.png",
+          "sha256": "852af5281500198cee8dfc01e5f0e0a707dd4b0b49c4d6f32ee48fa2203d7fac"
         },
         "coverage": {
           "valid_cells": 1290511,
@@ -170,10 +247,10 @@
           {
             "url": "https://nssrgeo.ndc.nasa.gov/SPoRT/modeling/lis/conus3km/geotiff/rsm_0-2m_diff14day/20261020_0000_sport_lis_rsm0-2m_diff14day_conus3km_float_wgs84.tif",
             "valid_time": "2026-10-20T00:00:00Z",
-            "retrieved_at": "2026-10-20T07:16:30.764983Z",
-            "http_modified_at": "Tue, 20 Oct 2026 04:24:31 GMT",
-            "etag": "\"dad87c-65e3e01c67ca4\"",
-            "sha256": "ee7ba8b6a5bc87ac24e9c739d73ef0bfe0095f2851f4f2e1689146afc3abc874",
+            "retrieved_at": "2026-10-20T19:16:38.002804Z",
+            "http_modified_at": "Tue, 20 Oct 2026 16:24:24 GMT",
+            "etag": "\"dad87c-65e4810523078\"",
+            "sha256": "af422fee0719ccae30330b2df93612ee2caf7a10761ef78c722903bac7ac28ca",
             "filename": "20261020_0000_sport_lis_rsm0-2m_diff14day_conus3km_float_wgs84.tif",
             "coverage": {
               "shape": [
@@ -204,8 +281,8 @@
           "resampling": "bilinear",
           "mask_resampling": "nearest",
           "palette": "sport-change-v1",
-          "path": "generations/20261020-3a4dbb9b70db3ab88be9-sport-change-v1/deep14day.png",
-          "sha256": "36f1e7ddaea60afa7f9f98de40b6f48edee26521b4767f03ac6fbae91d4d4edc"
+          "path": "generations/20261020-ec12338a71a24c0dcee3-sport-change-v1/deep14day.png",
+          "sha256": "d00380dc493acd9c1b6377201f56bd7c93d458a9969c9f67e58c0bf9aba8458a"
         },
         "coverage": {
           "valid_cells": 1290511,
