@@ -18,8 +18,10 @@ if(typeof window!=='undefined')window.createFFGTendencyLayers=function({map,meta
  const utc=v=>Number.isFinite(Date.parse(v))?new Date(v).toISOString().replace('T',' ').replace(/:00\.000Z$/,'Z'):'Unavailable';
  const state=l=>ffgTendencyState(failed&&metadata?{...metadata,stale:true}:metadata,l??lag,now());
  const selected=()=>hours.filter(h=>map.hasLayer(layers[h]));
+ // A removed Leaflet group still has _map during layerremove. Never repopulate
+ // an unselected group there: its image would be re-added as an orphan raster.
  function sync(){
-  const s=state();hours.forEach(h=>{layers[h].clearLayers();if(s.visible&&images[lag]?.[h]){images[lag][h].setOpacity(layers[h].options.opacity);layers[h].addLayer(images[lag][h]);}});
+  const s=state();hours.forEach(h=>{layers[h].clearLayers();if(map.hasLayer(layers[h])&&s.visible&&images[lag]?.[h]){images[lag][h].setOpacity(layers[h].options.opacity);layers[h].addLayer(images[lag][h]);}});
   if(borders){if(selected().length&&!map.hasLayer(borders))borders.addTo(map);if(!selected().length&&map.hasLayer(borders))map.removeLayer(borders);}onChange();
  }
  function validate(m){
@@ -53,7 +55,7 @@ if(typeof window!=='undefined')window.createFFGTendencyLayers=function({map,meta
   finally{staged.forEach(u=>URL.revokeObjectURL(u));clearTimeout(timeout);busy=false;sync();}
  }
  function summary(){const a=metadata?.products?.[lag];return a?`${utc(a.old.snapshot_time)} → ${utc(a.new.snapshot_time)} · ${state().label}`:state().label;}
- function legendHTML(){const hs=selected();if(!hs.length)return '';const a=metadata?.products?.[lag],s=state();let html=`<div class="rfc-ffg-card"><strong>${lag}-hour FFG tendency · ${hs.join(' / ')}-hour rainfall duration</strong><div>${esc(s.label)}</div>`;
+ function legendHTML(){const hs=selected();if(!hs.length)return '';const a=metadata?.products?.[lag],s=state();let html=`<div class="rfc-ffg-card"><strong>${hs.map(h=>`${h}-hour FFG`).join(' / ')} · Change over ${lag} hours</strong><div>${esc(s.label)}</div>`;
   if(a){html+=`<p>Snapshots: ${esc(utc(a.old.snapshot_time))} → ${esc(utc(a.new.snapshot_time))}<br>RFC reference cycles: ${esc(utc(a.old.reference_time))} → ${esc(utc(a.new.reference_time))}</p><strong>Guidance change · inches</strong><div>Lower guidance / possible wetting (blue)<br>Higher guidance / possible drying (brown)</div>`;
    const edges=metadata.legend.edges;metadata.legend.colors.forEach((c,i)=>{const label=i===0?`< ${edges[0]}`:i===edges.length?`≥ ${edges[i-1]}`:i===5?'−0.01 to +0.01 (near zero)':`${edges[i-1]} to ${edges[i]}`;html+=`<div><i class="rfc-ffg-swatch" style="background:${c}"></i>${label}</div>`;});
    html+=`<p>Current minus earlier RFC guidance. Streamflow conditions and RFC updates can also cause changes; tendency alone does not establish wetting or drying.</p><p>Nominal 5-km source · transparent = unavailable.<br>Mosaic times do not establish individual RFC issuance times.<br>Last source check: ${esc(utc(metadata.last_attempt?.at))}<br>Hide after: ${esc(utc(a.expires_at))}</p>`;
