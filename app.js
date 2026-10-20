@@ -8186,7 +8186,10 @@ const dashboardSections = [
 // Independent map-reference overlays. These controls are intentionally kept
 // outside the meteorological/hydrological data registry so they can be combined
 // with any basemap without changing primary data-layer counts or exclusivity.
+const rfcBoundariesLayer = window.createRFCBoundaryLayer(map);
+
 const mapReferenceOverlayConfigs = [
+    {refId: 'rfc-boundaries', label: 'RFC Boundaries', layer: rfcBoundariesLayer, defaultActive: false},
     {refId: 'state-territory-names', label: 'State / Territory Names', layer: wpcStateTerritoryNamesLayer, defaultActive: true},
     {refId: 'major-cities-places', label: 'Major Cities & Places', layer: wpcMajorCitiesPlacesLayer, defaultActive: true},
     {refId: 'major-roads', label: 'Major Roads', layer: wpcMajorRoadsLayer, defaultActive: true},
@@ -8528,6 +8531,13 @@ function renderUtilitySection(container) {
 
         const text = document.createElement('span');
         text.textContent = config.label;
+        if (config.refId === 'rfc-boundaries') {
+            const status = document.createElement('small');
+            status.id = 'rfc-boundaries-status';
+            status.style.display = 'block';
+            status.textContent = 'NOAA/NWS RFC areas of responsibility';
+            text.append(status);
+        }
         row.append(input, text);
         mapReferenceControls.append(row);
     });
