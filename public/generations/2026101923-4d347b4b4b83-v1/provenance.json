@@ -1,0 +1,1490 @@
+[
+  {
+    "recipe": "pressure_terrain_v1",
+    "cycle": "2026-10-19T23:00:00+00:00",
+    "forecast_hour": 0,
+    "shape": [
+      1059,
+      1799
+    ],
+    "bounds": [
+      -125,
+      -66,
+      24,
+      50
+    ],
+    "sampling_hours": 1,
+    "interpolation": "Model-postprocessed 950/850/700/500 hPa T/SPFH; additive terrain correction; no local extrapolation, clipping or smoothing",
+    "sources": [
+      {
+        "variable": "TMP",
+        "level": "950 mb",
+        "start": 219779139,
+        "end": 220375604,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf00.grib2",
+        "provider": "aws",
+        "forecast_hour": 0,
+        "sha256": "46ac50e349420be55104dd242ceca792aa0230c2819d71f77e2a2b4a06217fb4",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "TMP",
+        "level": "850 mb",
+        "start": 191285396,
+        "end": 191872272,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf00.grib2",
+        "provider": "aws",
+        "forecast_hour": 0,
+        "sha256": "c1c142c690a6484cdd597528d23abca4c6faa265342eafcf53c2d0a25658a86d",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "TMP",
+        "level": "700 mb",
+        "start": 151896279,
+        "end": 152458192,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf00.grib2",
+        "provider": "aws",
+        "forecast_hour": 0,
+        "sha256": "b0a955521c634cde846bffd1fddabff524ae199a546230aaf17ebd633eee3cf7",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "TMP",
+        "level": "500 mb",
+        "start": 99132776,
+        "end": 99691810,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf00.grib2",
+        "provider": "aws",
+        "forecast_hour": 0,
+        "sha256": "0879b2f8089a3c7d55e6b1292dbd6365e83c92f84162697cd9bdbe1ab6e099a7",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "SPFH",
+        "level": "950 mb",
+        "start": 222341037,
+        "end": 223831112,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf00.grib2",
+        "provider": "aws",
+        "forecast_hour": 0,
+        "sha256": "a734f616ce3c0bdc2017cb1369add52528024591dfcbcd44e8e5ea76848159e9",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "SPFH",
+        "level": "850 mb",
+        "start": 193851139,
+        "end": 195202664,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf00.grib2",
+        "provider": "aws",
+        "forecast_hour": 0,
+        "sha256": "5575e5e94275208df4897dcd78b4ea57a42492159077f7b76f9a69ae3ca1c741",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "SPFH",
+        "level": "700 mb",
+        "start": 154274031,
+        "end": 155350880,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf00.grib2",
+        "provider": "aws",
+        "forecast_hour": 0,
+        "sha256": "de90d4efa590f99a4ed21715ca901f8c8a7293f363e1927e4e710f7dc2ccd42c",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "SPFH",
+        "level": "500 mb",
+        "start": 101360833,
+        "end": 102720779,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf00.grib2",
+        "provider": "aws",
+        "forecast_hour": 0,
+        "sha256": "ca25ac5bcb4b55abc8016d06db7ffccda1a3e1ae61dcc3be3bdea51a628fe8b3",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "PRES",
+        "level": "surface",
+        "start": 282365525,
+        "end": 283867504,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf00.grib2",
+        "provider": "aws",
+        "forecast_hour": 0,
+        "sha256": "c93f5fe72cd6d870bc61c5c685f50ce82ab102aedc5583abfe494a435faccc43",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "REFC",
+        "level": "entire atmosphere",
+        "start": 274758827,
+        "end": 274977323,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf00.grib2",
+        "provider": "aws",
+        "forecast_hour": 0,
+        "sha256": "e2bd7913cb6d216d0d2fdbcdca23d3c6c4122cf9db4c4c4b6dfa7ac374935ad6",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      }
+    ],
+    "stats": {
+      "lowland": {
+        "cells": 1158220,
+        "gdi_percentiles": [
+          -33.572794391301315,
+          0.2323594118914713,
+          18.25714758424275,
+          28.197226349825936,
+          47.60626733833184
+        ],
+        "max_rh_percentiles": [
+          66.64849253939846,
+          98.89814972841087,
+          99.58735695157795,
+          131.58639350266307
+        ]
+      },
+      "elevated": {
+        "cells": 480537,
+        "gdi_percentiles": [
+          -41.88526564877721,
+          1.5081746266933962,
+          23.772710667937986,
+          33.307598147541384,
+          64.38308344956405
+        ],
+        "max_rh_percentiles": [
+          63.94367285162628,
+          87.11713784948032,
+          93.6367417642683,
+          127.05166748538791
+        ]
+      }
+    },
+    "output_sha256": "f6777f4af8f215556ec41982ce401d98107d49697232fd18e12a3bb1fe1f888a"
+  },
+  {
+    "recipe": "pressure_terrain_v1",
+    "cycle": "2026-10-19T23:00:00+00:00",
+    "forecast_hour": 1,
+    "shape": [
+      1059,
+      1799
+    ],
+    "bounds": [
+      -125,
+      -66,
+      24,
+      50
+    ],
+    "sampling_hours": 1,
+    "interpolation": "Model-postprocessed 950/850/700/500 hPa T/SPFH; additive terrain correction; no local extrapolation, clipping or smoothing",
+    "sources": [
+      {
+        "variable": "TMP",
+        "level": "950 mb",
+        "start": 231139328,
+        "end": 231736647,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf01.grib2",
+        "provider": "aws",
+        "forecast_hour": 1,
+        "sha256": "30f260f0b3b7ae3a606630b7b4d2ab0603eb7b628e2c5c641ad629031c59f8a7",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "TMP",
+        "level": "850 mb",
+        "start": 201279545,
+        "end": 201865596,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf01.grib2",
+        "provider": "aws",
+        "forecast_hour": 1,
+        "sha256": "3f64d9beb1659b5e3ca7889895686c6b8cfc58ccf0824f8f02868e1fcecbeb6b",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "TMP",
+        "level": "700 mb",
+        "start": 159680648,
+        "end": 160244370,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf01.grib2",
+        "provider": "aws",
+        "forecast_hour": 1,
+        "sha256": "8c381c6d9b6d6c2489eb7ec6a7bc8893a5930ba59cfb72eb58dd2e2f5c0cf2c4",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "TMP",
+        "level": "500 mb",
+        "start": 105106437,
+        "end": 105667804,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf01.grib2",
+        "provider": "aws",
+        "forecast_hour": 1,
+        "sha256": "6702043ebb3111adb4a12ca329ff1be0b9e046c842dc6aa6f25c366650859e96",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "SPFH",
+        "level": "950 mb",
+        "start": 233708493,
+        "end": 235184570,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf01.grib2",
+        "provider": "aws",
+        "forecast_hour": 1,
+        "sha256": "71267db3503c3feb6e0646f8e0a8172e16de04c001cf739200e39e8aa10ea8a5",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "SPFH",
+        "level": "850 mb",
+        "start": 203863700,
+        "end": 205216334,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf01.grib2",
+        "provider": "aws",
+        "forecast_hour": 1,
+        "sha256": "1a36990b598942899c8b32e3fcfdb064044b72575da179eec7598b3d37b67c3c",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "SPFH",
+        "level": "700 mb",
+        "start": 162053309,
+        "end": 163119887,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf01.grib2",
+        "provider": "aws",
+        "forecast_hour": 1,
+        "sha256": "0bfc4137731d5e214c215e4ab7bfaf25bf0f737864eb474b2d6cd6ab618a8cb9",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "SPFH",
+        "level": "500 mb",
+        "start": 107336294,
+        "end": 108700083,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf01.grib2",
+        "provider": "aws",
+        "forecast_hour": 1,
+        "sha256": "317e411eca79b5aa8d6df8fcf374e40178b8285aecd4b6135d1751123a1bf097",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "PRES",
+        "level": "surface",
+        "start": 301985303,
+        "end": 303484252,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf01.grib2",
+        "provider": "aws",
+        "forecast_hour": 1,
+        "sha256": "0b1c61330e8c9769ee51d45333813bd71091c548510eb8ccfc0535333c118b77",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "REFC",
+        "level": "entire atmosphere",
+        "start": 287287195,
+        "end": 287513942,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf01.grib2",
+        "provider": "aws",
+        "forecast_hour": 1,
+        "sha256": "5ddd6ed571ad1698bd55079794947ffd83abdf0f9c4a41d61455682a9064fbd5",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      }
+    ],
+    "stats": {
+      "lowland": {
+        "cells": 1158183,
+        "gdi_percentiles": [
+          -33.48898419193464,
+          0.23099703849950615,
+          17.970442326406538,
+          27.532809153431867,
+          70.01050925219855
+        ],
+        "max_rh_percentiles": [
+          66.46928413822633,
+          99.00429948226389,
+          99.62826847810823,
+          132.21720903126024
+        ]
+      },
+      "elevated": {
+        "cells": 480574,
+        "gdi_percentiles": [
+          -41.56578285324696,
+          1.216114302177325,
+          22.81313111093193,
+          32.18615413140366,
+          68.39604770101136
+        ],
+        "max_rh_percentiles": [
+          63.997695906380216,
+          89.45626181859019,
+          97.25148157337546,
+          140.7449235585812
+        ]
+      }
+    },
+    "output_sha256": "5d70bc2dd6aa8716370d884fc51fbbee7033bac62a159c5b255b4bc35e2e625e"
+  },
+  {
+    "recipe": "pressure_terrain_v1",
+    "cycle": "2026-10-19T23:00:00+00:00",
+    "forecast_hour": 2,
+    "shape": [
+      1059,
+      1799
+    ],
+    "bounds": [
+      -125,
+      -66,
+      24,
+      50
+    ],
+    "sampling_hours": 1,
+    "interpolation": "Model-postprocessed 950/850/700/500 hPa T/SPFH; additive terrain correction; no local extrapolation, clipping or smoothing",
+    "sources": [
+      {
+        "variable": "TMP",
+        "level": "950 mb",
+        "start": 232071617,
+        "end": 232667876,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf02.grib2",
+        "provider": "aws",
+        "forecast_hour": 2,
+        "sha256": "d16997b682614de1c7382283b1a8de34c0d2a8dd5333286e259f633e8f0e2038",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "TMP",
+        "level": "850 mb",
+        "start": 202179642,
+        "end": 202765055,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf02.grib2",
+        "provider": "aws",
+        "forecast_hour": 2,
+        "sha256": "dd21de3d3becbddb4bda53abff32e9818a34862cc4a6f7c5271c9023765f418a",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "TMP",
+        "level": "700 mb",
+        "start": 160749441,
+        "end": 161315948,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf02.grib2",
+        "provider": "aws",
+        "forecast_hour": 2,
+        "sha256": "d5c35714629975700eaf87ec2dc79f426268a3b01a166dfe386dcc9241aba45b",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "TMP",
+        "level": "500 mb",
+        "start": 105801456,
+        "end": 106365811,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf02.grib2",
+        "provider": "aws",
+        "forecast_hour": 2,
+        "sha256": "630e69da5f2d04d74360e044362c6d7d97fb1cd69f8446dbe8c473f3cb9742b8",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "SPFH",
+        "level": "950 mb",
+        "start": 234639896,
+        "end": 236125476,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf02.grib2",
+        "provider": "aws",
+        "forecast_hour": 2,
+        "sha256": "d73eb4324ce72771c9ecc3b4ad8c0108143000f9232789f2f7520bd4ecb635db",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "SPFH",
+        "level": "850 mb",
+        "start": 204751929,
+        "end": 206116189,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf02.grib2",
+        "provider": "aws",
+        "forecast_hour": 2,
+        "sha256": "0a0078e47334a404ff2291a79fdf7596a237bc8fd36ca8f1df8074d73ec10de2",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "SPFH",
+        "level": "700 mb",
+        "start": 163135968,
+        "end": 164206614,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf02.grib2",
+        "provider": "aws",
+        "forecast_hour": 2,
+        "sha256": "1cb79a9d67f61775dd28a40a21e6d03aaedda249b7726486c2aa14aa91597313",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "SPFH",
+        "level": "500 mb",
+        "start": 108048397,
+        "end": 109419931,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf02.grib2",
+        "provider": "aws",
+        "forecast_hour": 2,
+        "sha256": "582a2b7ade7fb4ba950c22686c70d0b32bda7b234462acefdfecb183f7cb5f20",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "PRES",
+        "level": "surface",
+        "start": 302774343,
+        "end": 304275715,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf02.grib2",
+        "provider": "aws",
+        "forecast_hour": 2,
+        "sha256": "9ae8f53b0a5b0a5fa2b3876b358705b91c5e9bd650ce0dad70214ee0d22430dc",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      },
+      {
+        "variable": "REFC",
+        "level": "entire atmosphere",
+        "start": 288153420,
+        "end": 288447330,
+        "url": "https://noaa-hrrr-bdp-pds.s3.amazonaws.com/hrrr.20261019/conus/hrrr.t23z.wrfprsf02.grib2",
+        "provider": "aws",
+        "forecast_hour": 2,
+        "sha256": "6a67c336f8af3157c554a2af3f1a11f5e727d8fa22514a7fd000ee281ab761b1",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": []
+      }
+    ],
+    "stats": {
+      "lowland": {
+        "cells": 1158552,
+        "gdi_percentiles": [
+          -32.71248791029964,
+          0.259018332347722,
+          16.97525342208248,
+          27.215561789707778,
+          70.81620571496633
+        ],
+        "max_rh_percentiles": [
+          66.8833985114347,
+          98.96020905719594,
+          99.66352225267568,
+          126.56650878774822
+        ]
+      },
+      "elevated": {
+        "cells": 480205,
+        "gdi_percentiles": [
+          -40.81469335198305,
+          0.7350442297348305,
+          20.861606973618336,
+          32.68274371362712,
+          65.91090764498408
+        ],
+        "max_rh_percentiles": [
+          64.50017069653671,
+          90.94758855371235,
+          97.55339206989507,
+          130.38712797348586
+        ]
+      }
+    },
+    "output_sha256": "904397cb371d9ee726b65d4dad5db16c9cdc4ca5b542a2432c7404e6e05d43eb"
+  },
+  {
+    "recipe": "pressure_terrain_v1",
+    "cycle": "2026-10-19T23:00:00+00:00",
+    "forecast_hour": 3,
+    "shape": [
+      1059,
+      1799
+    ],
+    "bounds": [
+      -125,
+      -66,
+      24,
+      50
+    ],
+    "sampling_hours": 1,
+    "interpolation": "Model-postprocessed 950/850/700/500 hPa T/SPFH; additive terrain correction; no local extrapolation, clipping or smoothing",
+    "sources": [
+      {
+        "variable": "TMP",
+        "level": "950 mb",
+        "start": 233513422,
+        "end": 234109187,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf03.grib2",
+        "provider": "nomads",
+        "forecast_hour": 3,
+        "sha256": "8dca9c2a91128a325a749b42c53ef211e30cf62ad65f9fccd1db3ac39b068077",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "TMP",
+        "level": "850 mb",
+        "start": 203457803,
+        "end": 204043252,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf03.grib2",
+        "provider": "nomads",
+        "forecast_hour": 3,
+        "sha256": "f77b936bd5a796bbb0d6319b39b4bd51c88f1a94beaedc3d65c380e1c482f02d",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "TMP",
+        "level": "700 mb",
+        "start": 161787129,
+        "end": 162355423,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf03.grib2",
+        "provider": "nomads",
+        "forecast_hour": 3,
+        "sha256": "7c4716d14c0406830c25eeca0e3bc91debf96b9c3dbeae864f612777a20b591a",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "TMP",
+        "level": "500 mb",
+        "start": 106417889,
+        "end": 106982889,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf03.grib2",
+        "provider": "nomads",
+        "forecast_hour": 3,
+        "sha256": "b0539a1733be7ed099e5b1aff4166e352994244c34f5019ae8c9b593191ca568",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "950 mb",
+        "start": 236121167,
+        "end": 237613347,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf03.grib2",
+        "provider": "nomads",
+        "forecast_hour": 3,
+        "sha256": "416152836e0933b65db8a86cc900568cbe760fdb2cb3682520a25c9e247f061a",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "850 mb",
+        "start": 206057982,
+        "end": 207433925,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf03.grib2",
+        "provider": "nomads",
+        "forecast_hour": 3,
+        "sha256": "17c2260c2471e0cc6c5a5e3dfecf385a1be26e764937164a915bc0af62a94da8",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "700 mb",
+        "start": 164185406,
+        "end": 165263002,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf03.grib2",
+        "provider": "nomads",
+        "forecast_hour": 3,
+        "sha256": "9c39ceee9bcc1cf6bb352e24fddbbb9e56934f9abcda104267f04929046d2131",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "500 mb",
+        "start": 108681446,
+        "end": 110046971,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf03.grib2",
+        "provider": "nomads",
+        "forecast_hour": 3,
+        "sha256": "0be840f65aa2488647736ff6c51a2f9f8c5e30ecf022a03b42dcccdb4723ed78",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "PRES",
+        "level": "surface",
+        "start": 304931280,
+        "end": 306432957,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf03.grib2",
+        "provider": "nomads",
+        "forecast_hour": 3,
+        "sha256": "09f85d8acd6e6d5df7952a7157f7a3de8895f94eba66bf1e72e85e1ffcceb404",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "REFC",
+        "level": "entire atmosphere",
+        "start": 289831040,
+        "end": 290157124,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf03.grib2",
+        "provider": "nomads",
+        "forecast_hour": 3,
+        "sha256": "4938b50dbd1d391a40125ca6be19bafbf5bf198dcc965e6aedb6293916a03738",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      }
+    ],
+    "stats": {
+      "lowland": {
+        "cells": 1159907,
+        "gdi_percentiles": [
+          -33.31256887060161,
+          0.2695035460992905,
+          16.25044774069213,
+          26.63841046322077,
+          55.82449854172691
+        ],
+        "max_rh_percentiles": [
+          67.03815363119327,
+          98.90843724279182,
+          99.67910764731077,
+          125.74332575631426
+        ]
+      },
+      "elevated": {
+        "cells": 478850,
+        "gdi_percentiles": [
+          -41.472824778227874,
+          0.24531118424501797,
+          19.98614301259687,
+          32.66546247762004,
+          67.5071483047203
+        ],
+        "max_rh_percentiles": [
+          64.85307098540969,
+          91.63248634309527,
+          97.9680803412426,
+          122.33034310539149
+        ]
+      }
+    },
+    "output_sha256": "0576e53f6b6e61ed55a573611e639bf5b28689b9094467dc34811e037a8c2663"
+  },
+  {
+    "recipe": "pressure_terrain_v1",
+    "cycle": "2026-10-19T23:00:00+00:00",
+    "forecast_hour": 4,
+    "shape": [
+      1059,
+      1799
+    ],
+    "bounds": [
+      -125,
+      -66,
+      24,
+      50
+    ],
+    "sampling_hours": 1,
+    "interpolation": "Model-postprocessed 950/850/700/500 hPa T/SPFH; additive terrain correction; no local extrapolation, clipping or smoothing",
+    "sources": [
+      {
+        "variable": "TMP",
+        "level": "950 mb",
+        "start": 235342306,
+        "end": 235939867,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf04.grib2",
+        "provider": "nomads",
+        "forecast_hour": 4,
+        "sha256": "6e0990736f7f9863f3e8b3cf6961facbeb72551ca7f002bcf08df038e02042f3",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "TMP",
+        "level": "850 mb",
+        "start": 205187905,
+        "end": 205773089,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf04.grib2",
+        "provider": "nomads",
+        "forecast_hour": 4,
+        "sha256": "545ead097f2cbc4ace96f77f0ba2e2932ca38530e04f81d26bcc7120af6dfc59",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "TMP",
+        "level": "700 mb",
+        "start": 163524179,
+        "end": 164092658,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf04.grib2",
+        "provider": "nomads",
+        "forecast_hour": 4,
+        "sha256": "54b8becd379cc6dc04463fd78bd04133fbd15b2076260e588fa6c65159aaae93",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "TMP",
+        "level": "500 mb",
+        "start": 107473950,
+        "end": 108040722,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf04.grib2",
+        "provider": "nomads",
+        "forecast_hour": 4,
+        "sha256": "ea66fbfb7d00fc588d5f9104b72acee09a030325ee410e68f46600dbcd376b48",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "950 mb",
+        "start": 237931732,
+        "end": 239430327,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf04.grib2",
+        "provider": "nomads",
+        "forecast_hour": 4,
+        "sha256": "f65896558898bc4d6628177b22132d6f57fc793ca7c2c8a3495025b6c50e7440",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "850 mb",
+        "start": 207798842,
+        "end": 209183329,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf04.grib2",
+        "provider": "nomads",
+        "forecast_hour": 4,
+        "sha256": "ac80fea57a6f8ddee2f6509fd21a5631416e018a11b8400c5b4f148b41cf5c8c",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "700 mb",
+        "start": 165930848,
+        "end": 167017073,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf04.grib2",
+        "provider": "nomads",
+        "forecast_hour": 4,
+        "sha256": "effcf0f37ec430c0fa426090b7f8e1b141af21dcb5ae5c29c06126623888b55b",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "500 mb",
+        "start": 109748304,
+        "end": 111120880,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf04.grib2",
+        "provider": "nomads",
+        "forecast_hour": 4,
+        "sha256": "1f596be2d53f3f469a8ab50472fc352a46a9a6bc0d5dff65bdb53a0128af359d",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "PRES",
+        "level": "surface",
+        "start": 307023807,
+        "end": 308529475,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf04.grib2",
+        "provider": "nomads",
+        "forecast_hour": 4,
+        "sha256": "b0a2c27a769d73529695fe10972aad3f03654d27bd24d90fa0b6f56331ba6c2d",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "REFC",
+        "level": "entire atmosphere",
+        "start": 291828103,
+        "end": 292184486,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf04.grib2",
+        "provider": "nomads",
+        "forecast_hour": 4,
+        "sha256": "00d3cea5c538e4dba471db7bc3620ea7eec532de974a605d453118aa2d255648",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      }
+    ],
+    "stats": {
+      "lowland": {
+        "cells": 1160340,
+        "gdi_percentiles": [
+          -33.79211775545544,
+          0.27997637330183167,
+          15.704357300892006,
+          27.322655687245803,
+          54.08512799592164
+        ],
+        "max_rh_percentiles": [
+          67.35508908406376,
+          98.73723798480786,
+          99.6772218146457,
+          125.31579374638387
+        ]
+      },
+      "elevated": {
+        "cells": 478417,
+        "gdi_percentiles": [
+          -43.63691769235733,
+          -0.12664996398800543,
+          19.471931953746918,
+          32.427658233342996,
+          55.92693077541931
+        ],
+        "max_rh_percentiles": [
+          64.99973821090039,
+          91.60658140289263,
+          98.01767740987495,
+          120.84430681305506
+        ]
+      }
+    },
+    "output_sha256": "abfb125baadaf1ede8a48b6122c9615517774185f6ef12146a20e80744d8c6a9"
+  },
+  {
+    "recipe": "pressure_terrain_v1",
+    "cycle": "2026-10-19T23:00:00+00:00",
+    "forecast_hour": 5,
+    "shape": [
+      1059,
+      1799
+    ],
+    "bounds": [
+      -125,
+      -66,
+      24,
+      50
+    ],
+    "sampling_hours": 1,
+    "interpolation": "Model-postprocessed 950/850/700/500 hPa T/SPFH; additive terrain correction; no local extrapolation, clipping or smoothing",
+    "sources": [
+      {
+        "variable": "TMP",
+        "level": "950 mb",
+        "start": 235746178,
+        "end": 236345823,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf05.grib2",
+        "provider": "nomads",
+        "forecast_hour": 5,
+        "sha256": "fa80e1be42b1b95342eaeceecfaa283dda1c91ea356e05d93794357c29ff6da7",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "TMP",
+        "level": "850 mb",
+        "start": 205483390,
+        "end": 206069780,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf05.grib2",
+        "provider": "nomads",
+        "forecast_hour": 5,
+        "sha256": "14f1199c8f6f86833b6ff18736b0b096ba8f1f467c4bccee52222bfe94870c3c",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "TMP",
+        "level": "700 mb",
+        "start": 163581121,
+        "end": 164150492,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf05.grib2",
+        "provider": "nomads",
+        "forecast_hour": 5,
+        "sha256": "9b79983bcd723b97ea9d5f8322a88b3ea6470b89d6069e2f7f6030cb52f4fdac",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "TMP",
+        "level": "500 mb",
+        "start": 107262278,
+        "end": 107828413,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf05.grib2",
+        "provider": "nomads",
+        "forecast_hour": 5,
+        "sha256": "4b5e5b0f77ab2b6c27c78ed0da60c6dc57c7cd01cff82b621ff7ea3978c5a4b7",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "950 mb",
+        "start": 238342335,
+        "end": 239845274,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf05.grib2",
+        "provider": "nomads",
+        "forecast_hour": 5,
+        "sha256": "b3acbad80cb27ef96e9d7a318fbf7ce0004ba9ebc87a607f6a08601bd36fa07d",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "850 mb",
+        "start": 208104778,
+        "end": 209498774,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf05.grib2",
+        "provider": "nomads",
+        "forecast_hour": 5,
+        "sha256": "511f83b94bd676e5e52a1888b464224ac7a6a961162cfb05c85cd53309372d77",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "700 mb",
+        "start": 166016092,
+        "end": 167113766,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf05.grib2",
+        "provider": "nomads",
+        "forecast_hour": 5,
+        "sha256": "7809892b5b95c0988cdd74bddee4629c2023532b3b9f437b38909c693769a636",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "500 mb",
+        "start": 109547529,
+        "end": 110929984,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf05.grib2",
+        "provider": "nomads",
+        "forecast_hour": 5,
+        "sha256": "20ef19422ec735de0e69470dc60b294a1d06ed31355e6710d8729ddf6ee37c25",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "PRES",
+        "level": "surface",
+        "start": 307919235,
+        "end": 309425501,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf05.grib2",
+        "provider": "nomads",
+        "forecast_hour": 5,
+        "sha256": "fb17c0a901f55e7bca28c02b4905edd0407b3d96177ed7559520e03774d394a9",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "REFC",
+        "level": "entire atmosphere",
+        "start": 292512160,
+        "end": 292881831,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf05.grib2",
+        "provider": "nomads",
+        "forecast_hour": 5,
+        "sha256": "e0fef1e8c27b0b8b004d5fc6995b3afdae98fd4fe0b77bf364c6220f7f8196c6",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      }
+    ],
+    "stats": {
+      "lowland": {
+        "cells": 1159713,
+        "gdi_percentiles": [
+          -33.41150981962516,
+          0.2729958636990375,
+          15.756025382706326,
+          27.893215657291766,
+          55.98196820650755
+        ],
+        "max_rh_percentiles": [
+          67.92059779313759,
+          98.68922785034114,
+          99.69987699985897,
+          142.50095610977564
+        ]
+      },
+      "elevated": {
+        "cells": 479044,
+        "gdi_percentiles": [
+          -43.85046201796732,
+          -0.4592191300871409,
+          18.80515637290944,
+          31.563578468594123,
+          50.152771996608564
+        ],
+        "max_rh_percentiles": [
+          65.26015673950504,
+          91.87236310039887,
+          98.00198328036389,
+          117.1458322512401
+        ]
+      }
+    },
+    "output_sha256": "480dd0c45e3fa49a088d8f927daeea5c27b7bb7d71aaee1dc87c4f5ab38ee904"
+  },
+  {
+    "recipe": "pressure_terrain_v1",
+    "cycle": "2026-10-19T23:00:00+00:00",
+    "forecast_hour": 6,
+    "shape": [
+      1059,
+      1799
+    ],
+    "bounds": [
+      -125,
+      -66,
+      24,
+      50
+    ],
+    "sampling_hours": 1,
+    "interpolation": "Model-postprocessed 950/850/700/500 hPa T/SPFH; additive terrain correction; no local extrapolation, clipping or smoothing",
+    "sources": [
+      {
+        "variable": "TMP",
+        "level": "950 mb",
+        "start": 236814554,
+        "end": 237416816,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf06.grib2",
+        "provider": "nomads",
+        "forecast_hour": 6,
+        "sha256": "c02781911c9b126690cabfbf36c2a9503498d2b498488f40c1b10ec360d77c55",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "TMP",
+        "level": "850 mb",
+        "start": 206533108,
+        "end": 207120064,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf06.grib2",
+        "provider": "nomads",
+        "forecast_hour": 6,
+        "sha256": "f6ed20f1216688b3a29e4cd748d691e8f6105b62562872077595d9b73b794edf",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "TMP",
+        "level": "700 mb",
+        "start": 164473002,
+        "end": 165041927,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf06.grib2",
+        "provider": "nomads",
+        "forecast_hour": 6,
+        "sha256": "cbee238e4a25fc74b4748f548a07e068980ca5e00c7070ef7064143465543b7e",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "TMP",
+        "level": "500 mb",
+        "start": 107894077,
+        "end": 108462026,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf06.grib2",
+        "provider": "nomads",
+        "forecast_hour": 6,
+        "sha256": "21058c98a65d22dacb70f14b38e38412d73e9e92416be1d82641d43d323b3fed",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "950 mb",
+        "start": 239418506,
+        "end": 240924169,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf06.grib2",
+        "provider": "nomads",
+        "forecast_hour": 6,
+        "sha256": "257c7f87ff84a831cc19c5d3895d2e645bcb9c9de1d3999ef1c023e794e5e8fc",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "850 mb",
+        "start": 209145962,
+        "end": 210547323,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf06.grib2",
+        "provider": "nomads",
+        "forecast_hour": 6,
+        "sha256": "2c756c14f880e0a85f9aee9ef2cf4d857d3329e1801dfaf167ccf9e28271052e",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "700 mb",
+        "start": 166918711,
+        "end": 168024825,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf06.grib2",
+        "provider": "nomads",
+        "forecast_hour": 6,
+        "sha256": "0b9e0557ffe19f213a09dd94a361425df35f392e91a1e68efc0dba1fe6bfef5e",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "SPFH",
+        "level": "500 mb",
+        "start": 110191532,
+        "end": 111585335,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf06.grib2",
+        "provider": "nomads",
+        "forecast_hour": 6,
+        "sha256": "0de7216a1d74c62ee2e454ef38a7dabd875b18affedade0b5bed95c1130572d4",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "PRES",
+        "level": "surface",
+        "start": 308999409,
+        "end": 310507661,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf06.grib2",
+        "provider": "nomads",
+        "forecast_hour": 6,
+        "sha256": "ab7cb9884b12a4d389968380be86d8be5361d45c1c02dc1431534d564fcd6784",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      },
+      {
+        "variable": "REFC",
+        "level": "entire atmosphere",
+        "start": 293453216,
+        "end": 293842388,
+        "url": "https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/hrrr.20261019/conus/hrrr.t23z.wrfprsf06.grib2",
+        "provider": "nomads",
+        "forecast_hour": 6,
+        "sha256": "a116940346e1ae0498a459fbedb7cfc917e85dc521290eb86bc3e847fa47458c",
+        "grid_md5": "78367561440d7c7b608b8532a02e4780",
+        "cache_hit": false,
+        "fallback_reasons": [
+          {
+            "provider": "aws",
+            "error": "HTTP Error 404: Not Found"
+          }
+        ]
+      }
+    ],
+    "stats": {
+      "lowland": {
+        "cells": 1157987,
+        "gdi_percentiles": [
+          -33.077950667367034,
+          0.259018332347722,
+          15.810380422894738,
+          28.151584121374412,
+          57.14845509524979
+        ],
+        "max_rh_percentiles": [
+          68.53104969076722,
+          98.67896379193085,
+          99.705893726267,
+          138.1309111551498
+        ]
+      },
+      "elevated": {
+        "cells": 480770,
+        "gdi_percentiles": [
+          -42.241032045908995,
+          -0.7208182823090411,
+          17.953423768375707,
+          30.860368376897473,
+          47.67567348879713
+        ],
+        "max_rh_percentiles": [
+          66.0043766906854,
+          91.84413004072006,
+          97.68997121724775,
+          113.48417412963681
+        ]
+      }
+    },
+    "output_sha256": "75006af1351496f607f72143f61ea4a69e46968276fed83065865e2ead56294c"
+  }
+]
