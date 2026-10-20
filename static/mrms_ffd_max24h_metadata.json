@@ -2,8 +2,8 @@
   "product": "MRMS Flash Flood Detector Rolling Maximum",
   "aggregation": "At each synchronized 10-minute analysis, diagnose the FFD category from QPE_FFGMAX, QPE_ARIMAX, CREST Unit Q, and SAC Unit Q; then retain the highest category reached at each grid cell during the rolling window.",
   "important_method_note": "The four input maxima are not independently maximized before applying the detector. Each category is calculated from inputs valid at the same analysis time.",
-  "window_start_utc": "2026-10-19T14:50:00Z",
-  "window_end_utc": "2026-10-20T14:40:00Z",
+  "window_start_utc": "2026-10-19T15:20:00Z",
+  "window_end_utc": "2026-10-20T15:10:00Z",
   "window_hours": 24,
   "expected_cycles": 144,
   "processed_cycles": 144,
@@ -69,23 +69,23 @@
   "category_statistics": {
     "total_grid_cells": 24500000,
     "counts": {
-      "None": 24491959,
-      "Monitor": 7988,
-      "Flood Advisory": 42,
+      "None": 24491961,
+      "Monitor": 7986,
+      "Flood Advisory": 43,
       "FFW Base": 7,
-      "FFW Considerable": 4,
+      "FFW Considerable": 3,
       "FFW Catastrophic": 0
     },
     "percentages": {
-      "None": 99.96717959183674,
-      "Monitor": 0.03260408163265306,
-      "Flood Advisory": 0.00017142857142857143,
+      "None": 99.96718775510205,
+      "Monitor": 0.03259591836734694,
+      "Flood Advisory": 0.00017551020408163265,
       "FFW Base": 2.857142857142857e-05,
-      "FFW Considerable": 1.6326530612244897e-05,
+      "FFW Considerable": 1.2244897959183674e-05,
       "FFW Catastrophic": 0.0
     }
   },
-  "generated_time_utc": "2026-10-20T15:20:41.170623Z",
+  "generated_time_utc": "2026-10-20T15:50:13.939832Z",
   "outputs": {
     "png": "mrms_ffd_max24h.png",
     "metadata": "mrms_ffd_max24h_metadata.json"
