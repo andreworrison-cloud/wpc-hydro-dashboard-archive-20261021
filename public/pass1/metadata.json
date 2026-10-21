@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "qpe_hours": 3,
+    "snapshot_hours": 3,
+    "reference_hours": 9
+  },
+  "last_attempt": {
+    "freshness_by_pass": {
+      "1": {
+        "qpe_hours": 3,
+        "snapshot_hours": 3,
+        "reference_hours": 9
+      },
+      "2": {
+        "qpe_hours": 6,
+        "snapshot_hours": 9,
+        "reference_hours": 15
+      }
+    },
+    "at": "2026-10-21T02:31:08.439383+00:00",
+    "review_only": true,
+    "provisional_qpe_max_age_hours": 3,
+    "provisional_ffg_snapshot_max_age_hours": 3,
+    "provisional_ffg_reference_max_age_hours": 9,
+    "historical_review": false,
+    "pass1": {
+      "state": "accepted",
+      "generation": "2026102102-5e23175b5bc18dea9e07"
+    },
+    "pass2": {
+      "state": "accepted_prior_window",
+      "generation": "2026102101-0f45ad794aa3f871e72d",
+      "qpe_end": "2026-10-21T01:00:00+00:00",
+      "current_pass1_end": "2026-10-21T02:00:00+00:00",
+      "matches_current_pass1_window": false,
+      "comparison_pass1_generation": "2026102101-058663725aaac3cd1a7c"
+    },
+    "finished_at": "2026-10-21T02:31:38.364154+00:00"
+  },
+  "active": {
+    "generation": "2026102102-5e23175b5bc18dea9e07",
+    "pass_number": 1,
+    "qpe_end": "2026-10-21T02:00:00+00:00",
+    "paired_at": "2026-10-21T02:31:10.807572+00:00",
+    "ffg_reference": "2026-10-21T00:00:00+00:00",
+    "live_age_deadline": "2026-10-21T04:00:00+00:00",
+    "ffg": {
+      "url": "https://ftp-wpc.ncep.noaa.gov/workoff/ffg/5kmffg_2026102101.g2",
+      "retrieved_at": "2026-10-21T02:31:09.846740+00:00",
+      "http_last_modified": "Wed, 21 Oct 2026 01:38:15 GMT",
+      "etag": null,
+      "bytes": 2694803,
+      "sha256": "8cee112cfa838099e5cf55e96ede628c6181d59d8a78d8e09f628d56d2ae13fd",
+      "snapshot_time": "2026-10-21T01:00:00+00:00",
+      "first_seen_at": "2026-10-21T02:31:09.846740+00:00"
+    },
+    "assets": {
+      "fine1": {
+        "path": "generations/2026102102-5e23175b5bc18dea9e07/fine1.png",
+        "sha256": "11f3e17acf3cdd4f7abd03edab9e9a655f974d1cc129e654b800ba0e9fed8e72",
+        "duration_hours": 1,
+        "method": "fine"
+      },
+      "coarse1": {
+        "path": "generations/2026102102-5e23175b5bc18dea9e07/coarse1.png",
+        "sha256": "4f8abcb83730771e0bc87fa19f28426abac0a74737120b93b4d62dff47ab341b",
+        "duration_hours": 1,
+        "method": "coarse"
+      },
+      "fine3": {
+        "path": "generations/2026102102-5e23175b5bc18dea9e07/fine3.png",
+        "sha256": "5216f464836210fffd76c38257f173e3b4732312c57abc3d6b98cd2c294b9089",
+        "duration_hours": 3,
+        "method": "fine"
+      },
+      "coarse3": {
+        "path": "generations/2026102102-5e23175b5bc18dea9e07/coarse3.png",
+        "sha256": "88bfe4c7bc1652f327718728ad9e78c3372af5c75dafdcb85f1771c7161946b9",
+        "duration_hours": 3,
+        "method": "coarse"
+      },
+      "fine6": {
+        "path": "generations/2026102102-5e23175b5bc18dea9e07/fine6.png",
+        "sha256": "9546f3bf220a376652867bb244f070abd4f4107514fd8e8f44e5d718ac80bec3",
+        "duration_hours": 6,
+        "method": "fine"
+      },
+      "coarse6": {
+        "path": "generations/2026102102-5e23175b5bc18dea9e07/coarse6.png",
+        "sha256": "1f54cd4023096c9e8db8034cb2f7bf4f18d1e9c77492e9ae78f13156ebbf3b13",
+        "duration_hours": 6,
+        "method": "coarse"
+      }
+    },
+    "legend": {
+      "crs": "EPSG:3857",
+      "bounds_wsen": [
+        -126,
+        24,
+        -66,
+        50
+      ],
+      "units": "percent of FFG",
+      "resampling": "nearest",
+      "class_upper_edges": [
+        10,
+        25,
+        50,
+        75,
+        100,
+        150,
+        200,
+        300,
+        500,
+        1000
+      ],
+      "colors_rgb": [
+        [
+          250,
+          252,
+          252
+        ],
+        [
+          220,
+          238,
+          247
+        ],
+        [
+          153,
+          206,
+          230
+        ],
+        [
+          72,
+          172,
+          190
+        ],
+        [
+          114,
+          183,
+          108
+        ],
+        [
+          229,
+          215,
+          96
+        ],
+        [
+          246,
+          164,
+          75
+        ],
+        [
+          232,
+          90,
+          70
+        ],
+        [
+          181,
+          53,
+          105
+        ],
+        [
+          113,
+          60,
+          145
+        ],
+        [
+          62,
+          35,
+          95
+        ]
+      ]
+    }
+  }
+}
