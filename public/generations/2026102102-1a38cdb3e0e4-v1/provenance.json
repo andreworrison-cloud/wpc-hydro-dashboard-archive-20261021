@@ -1,11 +1,11 @@
 {
-  "cycle": "2026-10-20T23:00:00+00:00",
+  "cycle": "2026-10-21T02:00:00+00:00",
   "model": "rap",
   "native_spacing_km": 13,
   "products": {
     "analysis": {
       "label": "RAP GDI",
-      "valid_time": "2026-10-20T23:00:00+00:00",
+      "valid_time": "2026-10-21T02:00:00+00:00",
       "legend": "GDI \u00b7 5-unit color bins",
       "colors": [
         "#323232",
@@ -59,8 +59,8 @@
     },
     "change": {
       "label": "RAP GDI \u00b7 3-hour change",
-      "valid_time": "2026-10-20T23:00:00+00:00",
-      "window_start": "2026-10-20T20:00:00+00:00",
+      "valid_time": "2026-10-21T02:00:00+00:00",
+      "window_start": "2026-10-20T23:00:00+00:00",
       "legend": "GDI change \u00b7 current analysis minus analysis 3 hours earlier",
       "colors": [
         "#053061",
@@ -104,7 +104,7 @@
     },
     "forecast": {
       "label": "RAP GDI \u00b7 +3-hour forecast",
-      "valid_time": "2026-10-21T02:00:00+00:00",
+      "valid_time": "2026-10-21T05:00:00+00:00",
       "legend": "GDI \u00b7 5-unit color bins",
       "colors": [
         "#323232",
@@ -159,6 +159,138 @@
   },
   "source_metadata": {
     "analysis": {
+      "model": "rap",
+      "cycle": "2026-10-21T02:00:00+00:00",
+      "lead": 0,
+      "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
+      "humidity_inputs": [
+        "RH (%) to q: Bolton liquid-water saturation vapor pressure, q=0.622e/(p-0.378e)",
+        "RH (%) to q: Bolton liquid-water saturation vapor pressure, q=0.622e/(p-0.378e)",
+        "RH (%) to q: Bolton liquid-water saturation vapor pressure, q=0.622e/(p-0.378e)",
+        "RH (%) to q: Bolton liquid-water saturation vapor pressure, q=0.622e/(p-0.378e)"
+      ],
+      "sources": [
+        {
+          "variable": "TMP",
+          "level": "950 mb",
+          "start": 9062010,
+          "end": 9099018,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf00.grib2",
+          "provider": "aws",
+          "forecast_hour": 0,
+          "sha256": "cfd488c72514f95c94e73fff8ac756283429211305cb005b0435f79072d6cd3b",
+          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
+          "cache_hit": false,
+          "fallback_reasons": []
+        },
+        {
+          "variable": "TMP",
+          "level": "850 mb",
+          "start": 7937620,
+          "end": 7974081,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf00.grib2",
+          "provider": "aws",
+          "forecast_hour": 0,
+          "sha256": "14491476930f609fa3b30f91d94820487e817db19ef58cac5f8f195ae76a5779",
+          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
+          "cache_hit": false,
+          "fallback_reasons": []
+        },
+        {
+          "variable": "TMP",
+          "level": "700 mb",
+          "start": 6344890,
+          "end": 6376805,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf00.grib2",
+          "provider": "aws",
+          "forecast_hour": 0,
+          "sha256": "7cf964d049f384d02e821e554f4ce409f99e99310ca7013c794bc93087864d12",
+          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
+          "cache_hit": false,
+          "fallback_reasons": []
+        },
+        {
+          "variable": "TMP",
+          "level": "500 mb",
+          "start": 4312087,
+          "end": 4341417,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf00.grib2",
+          "provider": "aws",
+          "forecast_hour": 0,
+          "sha256": "68739f2eed694fe80d7d72f66fa9df6a5e3b60ad03d0858422bcdeeefe049c62",
+          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
+          "cache_hit": false,
+          "fallback_reasons": []
+        },
+        {
+          "variable": "RH",
+          "level": "950 mb",
+          "start": 9099019,
+          "end": 9167147,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf00.grib2",
+          "provider": "aws",
+          "forecast_hour": 0,
+          "sha256": "d676f399783897986ca59c09584aa8c564af9a55a226dfc76d18cf291c7bbfb5",
+          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
+          "cache_hit": false,
+          "fallback_reasons": []
+        },
+        {
+          "variable": "RH",
+          "level": "850 mb",
+          "start": 7974082,
+          "end": 8045956,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf00.grib2",
+          "provider": "aws",
+          "forecast_hour": 0,
+          "sha256": "303f783521c014e328900cf13735112b9b79f75d97e69f8284ee9416ca2d3a5f",
+          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
+          "cache_hit": false,
+          "fallback_reasons": []
+        },
+        {
+          "variable": "RH",
+          "level": "700 mb",
+          "start": 6376806,
+          "end": 6441513,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf00.grib2",
+          "provider": "aws",
+          "forecast_hour": 0,
+          "sha256": "9807132f6e278f8fc4828fc82caea98fcb48a42223e7cde1621bb962d0bbbed8",
+          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
+          "cache_hit": false,
+          "fallback_reasons": []
+        },
+        {
+          "variable": "RH",
+          "level": "500 mb",
+          "start": 4341418,
+          "end": 4404407,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf00.grib2",
+          "provider": "aws",
+          "forecast_hour": 0,
+          "sha256": "4f464f296a6df7138be278098fcab46053f6e80ea9628a7021183443ba49a598",
+          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
+          "cache_hit": false,
+          "fallback_reasons": []
+        },
+        {
+          "variable": "PRES",
+          "level": "surface",
+          "start": 9907454,
+          "end": 9956944,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf00.grib2",
+          "provider": "aws",
+          "forecast_hour": 0,
+          "sha256": "e0c420d4d112a041732aa52df71c92f30686bf349f35b4e3e08f96a20396c3bd",
+          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
+          "cache_hit": false,
+          "fallback_reasons": []
+        }
+      ],
+      "sha256": "8ed2781c7107d5cb37d7aa2ab52cb1813d01780be038e673ff2750587069d8b5"
+    },
+    "prior": {
       "model": "rap",
       "cycle": "2026-10-20T23:00:00+00:00",
       "lead": 0,
@@ -290,141 +422,9 @@
       ],
       "sha256": "073cb59795426b590aa12abb88071a6c72b9d7f415b9237a540e0b0dad3ffda7"
     },
-    "prior": {
-      "model": "rap",
-      "cycle": "2026-10-20T20:00:00+00:00",
-      "lead": 0,
-      "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
-      "humidity_inputs": [
-        "RH (%) to q: Bolton liquid-water saturation vapor pressure, q=0.622e/(p-0.378e)",
-        "RH (%) to q: Bolton liquid-water saturation vapor pressure, q=0.622e/(p-0.378e)",
-        "RH (%) to q: Bolton liquid-water saturation vapor pressure, q=0.622e/(p-0.378e)",
-        "RH (%) to q: Bolton liquid-water saturation vapor pressure, q=0.622e/(p-0.378e)"
-      ],
-      "sources": [
-        {
-          "variable": "TMP",
-          "level": "950 mb",
-          "start": 9016433,
-          "end": 9055777,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t20z.awp130pgrbf00.grib2",
-          "provider": "aws",
-          "forecast_hour": 0,
-          "sha256": "f336e0305ae5108e8f0bb01b23d098692b545c2a49ac1bb23b0e0cf89b1e3186",
-          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
-          "cache_hit": false,
-          "fallback_reasons": []
-        },
-        {
-          "variable": "TMP",
-          "level": "850 mb",
-          "start": 7877158,
-          "end": 7914590,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t20z.awp130pgrbf00.grib2",
-          "provider": "aws",
-          "forecast_hour": 0,
-          "sha256": "1938a5c5082692aa498ff598ce86a5d4769a166537771d1ae20dcae6a5d1b25d",
-          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
-          "cache_hit": false,
-          "fallback_reasons": []
-        },
-        {
-          "variable": "TMP",
-          "level": "700 mb",
-          "start": 6288405,
-          "end": 6320381,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t20z.awp130pgrbf00.grib2",
-          "provider": "aws",
-          "forecast_hour": 0,
-          "sha256": "63f33985f8120d3ae8dc86a5d9f400ad4d3521981777247e86a93b1967ebe4d2",
-          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
-          "cache_hit": false,
-          "fallback_reasons": []
-        },
-        {
-          "variable": "TMP",
-          "level": "500 mb",
-          "start": 4286358,
-          "end": 4315464,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t20z.awp130pgrbf00.grib2",
-          "provider": "aws",
-          "forecast_hour": 0,
-          "sha256": "f3120996ac1cefb742baa647c5a14c1f4c6440c36d54415172af548490b590bd",
-          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
-          "cache_hit": false,
-          "fallback_reasons": []
-        },
-        {
-          "variable": "RH",
-          "level": "950 mb",
-          "start": 9055778,
-          "end": 9127344,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t20z.awp130pgrbf00.grib2",
-          "provider": "aws",
-          "forecast_hour": 0,
-          "sha256": "0691ab611b390fa7171c98c1181851a9b839e42b042e049c719c4668183ea81b",
-          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
-          "cache_hit": false,
-          "fallback_reasons": []
-        },
-        {
-          "variable": "RH",
-          "level": "850 mb",
-          "start": 7914591,
-          "end": 7988765,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t20z.awp130pgrbf00.grib2",
-          "provider": "aws",
-          "forecast_hour": 0,
-          "sha256": "99876073beb1ea3a5f4a05ad67dec831d54b8eaee974ce54860de908420e4252",
-          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
-          "cache_hit": false,
-          "fallback_reasons": []
-        },
-        {
-          "variable": "RH",
-          "level": "700 mb",
-          "start": 6320382,
-          "end": 6384871,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t20z.awp130pgrbf00.grib2",
-          "provider": "aws",
-          "forecast_hour": 0,
-          "sha256": "970c809ec064a957aefcf6c13c3359e8ba350d536658e14d05b11a9c7579350d",
-          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
-          "cache_hit": false,
-          "fallback_reasons": []
-        },
-        {
-          "variable": "RH",
-          "level": "500 mb",
-          "start": 4315465,
-          "end": 4377371,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t20z.awp130pgrbf00.grib2",
-          "provider": "aws",
-          "forecast_hour": 0,
-          "sha256": "9a9db702ed3ede344fc996964b1535f6c4afa80710d21ca10180a618293ab995",
-          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
-          "cache_hit": false,
-          "fallback_reasons": []
-        },
-        {
-          "variable": "PRES",
-          "level": "surface",
-          "start": 9875158,
-          "end": 9924902,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t20z.awp130pgrbf00.grib2",
-          "provider": "aws",
-          "forecast_hour": 0,
-          "sha256": "f28fb40eb339ecd1788cc6584273fe1f9df2d14a6123d38a32a21fa69090cc78",
-          "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
-          "cache_hit": false,
-          "fallback_reasons": []
-        }
-      ],
-      "sha256": "5d118c1d838284c21127937d3853e738885a311163e635fdfc8bf24d3f61dcc3"
-    },
     "forecast": {
       "model": "rap",
-      "cycle": "2026-10-20T23:00:00+00:00",
+      "cycle": "2026-10-21T02:00:00+00:00",
       "lead": 3,
       "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
       "humidity_inputs": [
@@ -437,12 +437,12 @@
         {
           "variable": "TMP",
           "level": "950 mb",
-          "start": 9192950,
-          "end": 9229929,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t23z.awp130pgrbf03.grib2",
+          "start": 9162994,
+          "end": 9200878,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf03.grib2",
           "provider": "aws",
           "forecast_hour": 3,
-          "sha256": "9653dea6c47ef9489701d0319f83919009405e7e28edb3e076253a44baed4217",
+          "sha256": "cdf455a7b0e8ccafe84ea4c8b0f7166b961deba91d20a7da7da521ce159f40c9",
           "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
           "cache_hit": false,
           "fallback_reasons": []
@@ -450,12 +450,12 @@
         {
           "variable": "TMP",
           "level": "850 mb",
-          "start": 8058849,
-          "end": 8095475,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t23z.awp130pgrbf03.grib2",
+          "start": 8035750,
+          "end": 8072244,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf03.grib2",
           "provider": "aws",
           "forecast_hour": 3,
-          "sha256": "07c45303b5f6dc94f11d424841f1a629196c2edd7e250988c300ba456010fcc1",
+          "sha256": "4aa396e6e200aee9bec7d46e481ab236c0864d745b9a94f55e39c38ab133658b",
           "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
           "cache_hit": false,
           "fallback_reasons": []
@@ -463,12 +463,12 @@
         {
           "variable": "TMP",
           "level": "700 mb",
-          "start": 6451778,
-          "end": 6484020,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t23z.awp130pgrbf03.grib2",
+          "start": 6437845,
+          "end": 6469841,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf03.grib2",
           "provider": "aws",
           "forecast_hour": 3,
-          "sha256": "712f5e6a210ba9e3442ab93bdc2019aabb1ae55a4114792bab143d5680259b8d",
+          "sha256": "0e08ec17d5c6d3d0e2afadec6bb9078bb14a0195f5493560d78680aab058508e",
           "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
           "cache_hit": false,
           "fallback_reasons": []
@@ -476,12 +476,12 @@
         {
           "variable": "TMP",
           "level": "500 mb",
-          "start": 4363344,
-          "end": 4393073,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t23z.awp130pgrbf03.grib2",
+          "start": 4383791,
+          "end": 4413448,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf03.grib2",
           "provider": "aws",
           "forecast_hour": 3,
-          "sha256": "10e24e4a310cacfb31d06c53faa88302ea8f823cd4afbb5cb2654bec2e6c1a04",
+          "sha256": "54a6605d06e45bd5bb5fef75667f74b315559e7078cad1debc6d49971069efaf",
           "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
           "cache_hit": false,
           "fallback_reasons": []
@@ -489,12 +489,12 @@
         {
           "variable": "RH",
           "level": "950 mb",
-          "start": 9229930,
-          "end": 9298522,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t23z.awp130pgrbf03.grib2",
+          "start": 9200879,
+          "end": 9269446,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf03.grib2",
           "provider": "aws",
           "forecast_hour": 3,
-          "sha256": "28fea237c61bd425226ab203e5d86ff640d2b2cfbafecc33c7924b3e77f76f9c",
+          "sha256": "f04090a2f1cdf62258b44363794df6442ba693eac3492841d83ba981c63f45b0",
           "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
           "cache_hit": false,
           "fallback_reasons": []
@@ -502,12 +502,12 @@
         {
           "variable": "RH",
           "level": "850 mb",
-          "start": 8095476,
-          "end": 8167373,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t23z.awp130pgrbf03.grib2",
+          "start": 8072245,
+          "end": 8143010,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf03.grib2",
           "provider": "aws",
           "forecast_hour": 3,
-          "sha256": "b6fe125b0c1b91932891df7b78faa0086d014ea7821babaf23631b15dea67dcf",
+          "sha256": "e508a8d169fbb97e5d2e0f980dc6370bac278eea88e6bc7aa42a326b81960cba",
           "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
           "cache_hit": false,
           "fallback_reasons": []
@@ -515,12 +515,12 @@
         {
           "variable": "RH",
           "level": "700 mb",
-          "start": 6484021,
-          "end": 6549319,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t23z.awp130pgrbf03.grib2",
+          "start": 6469842,
+          "end": 6534786,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf03.grib2",
           "provider": "aws",
           "forecast_hour": 3,
-          "sha256": "af5afbe55ad245e4996f8516bf38696cf47ac6784d7774fe83d67ac668128533",
+          "sha256": "e21bf27996e927b0bec35ee87565792e083b73b70e98cad3b55ceac91adf124a",
           "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
           "cache_hit": false,
           "fallback_reasons": []
@@ -528,12 +528,12 @@
         {
           "variable": "RH",
           "level": "500 mb",
-          "start": 4393074,
-          "end": 4457896,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t23z.awp130pgrbf03.grib2",
+          "start": 4413449,
+          "end": 4478172,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf03.grib2",
           "provider": "aws",
           "forecast_hour": 3,
-          "sha256": "df058b7d48b274d2bb2d1ee1f0146e7da1a26ca18c775810234d206e6b831b6b",
+          "sha256": "ee4fdeee86e0d70cf95d70e6eb1012734c90555000e481150158f017b4fc1eb0",
           "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
           "cache_hit": false,
           "fallback_reasons": []
@@ -541,18 +541,18 @@
         {
           "variable": "PRES",
           "level": "surface",
-          "start": 10041804,
-          "end": 10091314,
-          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261020/rap.t23z.awp130pgrbf03.grib2",
+          "start": 10019714,
+          "end": 10069181,
+          "url": "https://noaa-rap-pds.s3.amazonaws.com/rap.20261021/rap.t02z.awp130pgrbf03.grib2",
           "provider": "aws",
           "forecast_hour": 3,
-          "sha256": "de0b6d04746353d1c9065383be68b4f40924e08c4d9372bcd0c5f35e46a25520",
+          "sha256": "ee19a203d04203d1a68ae08084f86800d9e0e1f10977dffa024572a1e7637f95",
           "grid_md5": "fc615cd1d9ac6ed1cd968930cf778378",
           "cache_hit": false,
           "fallback_reasons": []
         }
       ],
-      "sha256": "633e027704c5be65a34ed66a02c3f93e04f1d6433e0ef9d8edefc47a818ea71f"
+      "sha256": "fbb3bd5481c56ddc1016289bd33901572de20f8fa4f51e75ce007bf1366169ff"
     }
   },
   "selection_failures": []
